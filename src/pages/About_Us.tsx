@@ -36,7 +36,7 @@ const MyComponent = () => {
         </div>
       </div>
       <div className=" flex justify-center ">
-        <p className=" rounded-md  bg-slate-100  py-10  px-16 text-center">
+        <p className=" rounded-md  bg-slate-100 py-20 font-bold px-20 text-center">
           The organization that aids to provide financial assistance. A death is
           assistance <br /> payable to the benificiary of a deceased person. Our
           mission is to help one another
@@ -60,7 +60,7 @@ const MyComponent = () => {
                             w-full h-64 group-hover:opacity-50"
               >
                 <p className=" uppercase mb-20 bg-yellow-300 text-center mx-2 py-2 px-5 text-white font-bold">
-                  Efficiency
+                  Trasparency
                 </p>
               </div>
               <div className="relative p-10">
@@ -73,8 +73,11 @@ const MyComponent = () => {
                                 group-hover:translate-y-0"
                   >
                     <div className="p-2">
-                      <p className="text-xl text-center text-white">
-                        rosemariego@gmail.com
+                      <p className="text-xl cursor-pointer text-center text-white">
+                        We make sure everything <br /> including transaction and
+                        <br />
+                        disbursement be transform
+                        <br /> for more trusted funding.
                       </p>
                     </div>
                   </div>
@@ -106,8 +109,11 @@ const MyComponent = () => {
                                 group-hover:translate-y-0"
                   >
                     <div className="p-2">
-                      <p className="text-xl text-center text-white">
-                        rosemariego@gmail.com
+                      <p className="text-xl cursor-pointer text-center text-white">
+                        We show how efficient this <br /> death fund
+                        organization is <br />
+                        through report of how the
+                        <br /> process are effective.
                       </p>
                     </div>
                   </div>
@@ -127,7 +133,7 @@ const MyComponent = () => {
                             w-full h-64 group-hover:opacity-50"
             >
               <p className=" uppercase mb-20 bg-yellow-300 text-center mx-2 py-2 px-5 text-white font-bold">
-                Efficiency
+                Empathy
               </p>
             </div>
             <div className="relative p-10">
@@ -140,8 +146,10 @@ const MyComponent = () => {
                                 group-hover:translate-y-0"
                 >
                   <div className="p-2">
-                    <p className="text-xl text-center text-white">
-                      rosemariego@gmail.com
+                    <p className="text-xl cursor-pointer text-center text-white">
+                      We offer understanding <br />
+                      emotional aspects as well <br />
+                      as support.
                     </p>
                   </div>
                 </div>

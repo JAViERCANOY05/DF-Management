@@ -15,27 +15,29 @@ const Home = () => {
           SERVICES
         </div>
       </div>
-      <div className=" mx-48">
-        <div className="">
-          <button className="bg-green-300  w-96 uppercase text-white font-bold p-4 rounded-md">
-            account creation and management
-          </button>
-        </div>
-        <div className="my-5">
-          <ul className="  list-disc w-96 bg-green-300  uppercase text-white font-bold p-4 rounded-md">
-            <li className=" ">
-              User registrationand account setup for <br /> individuals and
-              families
-            </li>
-            <li className=" ">
-              Personalize dashboard to manage fund <br />
-              details, benificiaries.
-            </li>
-          </ul>
-          <div className=" my-10 ">
-            <Link href="/Services">
-              <Button variant="contained"> Back</Button>
-            </Link>
+      <div className="  flex justify-center my-20">
+        <div>
+          <div className="">
+            <button className="bg-green-300  w-96 uppercase text-white font-bold p-8 rounded-md">
+              account creation and management
+            </button>
+          </div>
+          <div className="my-5">
+            <ul className="  list-disc w-96 bg-green-300  uppercase text-white font-bold p-10 rounded-md">
+              <li className=" ">
+                User registrationand account setup for <br /> individuals and
+                families
+              </li>
+              <li className=" ">
+                Personalize dashboard to manage fund <br />
+                details, benificiaries.
+              </li>
+            </ul>
+            <div className=" my-10 ">
+              <Link href="/Services">
+                <Button variant="contained"> Back</Button>
+              </Link>
+            </div>
           </div>
         </div>
       </div>

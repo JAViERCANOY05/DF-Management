@@ -32,27 +32,29 @@ const Home = () => {
           SERVICES
         </div>
       </div>
-      <div className=" mx-48 my-10">
+      <div className="  my-10  pt-10 flex justify-center">
         <div>
-          <Link href="/Account_Creation_Management">
-            <button className=" w-96 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 rounded-lg text-sm px-5 py-4 me-2 mb-2 dark:bg-blue-600 font-bold dark:hover:bg-blue-700 focus:outline-none  dark:focus:ring-blue-800 uppercase">
-              account creation and management
-            </button>
-          </Link>
-        </div>
-        <div>
-          <Link href="/Benificiary_Management">
-            <button className=" w-96 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 rounded-lg text-sm px-5 py-4 me-2 mb-2 dark:bg-blue-600 font-bold dark:hover:bg-blue-700 focus:outline-none  dark:focus:ring-blue-800 uppercase">
-              benificiary management
-            </button>
-          </Link>
-        </div>
-        <div>
-          <Link href="/Notification">
-            <button className=" w-96 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 rounded-lg text-sm px-5 py-4 me-2 mb-2 dark:bg-blue-600 font-bold dark:hover:bg-blue-700 focus:outline-none  dark:focus:ring-blue-800 uppercase">
-              notification
-            </button>
-          </Link>
+          <div>
+            <Link href="/Account_Creation_Management">
+              <button className=" w-96 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 rounded-lg text-sm px-5 py-8 my-2 dark:bg-blue-600 font-bold dark:hover:bg-blue-700 focus:outline-none  dark:focus:ring-blue-800 uppercase">
+                account creation and management
+              </button>
+            </Link>
+          </div>
+          <div>
+            <Link href="/Benificiary_Management">
+              <button className=" w-96 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 rounded-lg text-sm px-5  py-8  my-2 dark:bg-blue-600 font-bold dark:hover:bg-blue-700 focus:outline-none  dark:focus:ring-blue-800 uppercase">
+                benificiary management
+              </button>
+            </Link>
+          </div>
+          <div>
+            <Link href="/Notification">
+              <button className=" w-96 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 rounded-lg text-sm px-5  py-8  my-2 dark:bg-blue-600 font-bold dark:hover:bg-blue-700 focus:outline-none  dark:focus:ring-blue-800 uppercase">
+                notification
+              </button>
+            </Link>
+          </div>
         </div>
       </div>
     </div>

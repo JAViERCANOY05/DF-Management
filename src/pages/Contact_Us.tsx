@@ -6,7 +6,7 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 
 const MyComponent = () => {
   return (
-    <div className=" h-auto bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 px-10 py-5  ">
+    <div className=" h-screen bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 px-10 py-5  ">
       <div className="nav-bar flex justify-end  font-bold text-white ">
         <Link href="/">
           <button className="mx-3 hover:text-yellow-300">Home</button>
@@ -33,13 +33,13 @@ const MyComponent = () => {
       </div>
       <div>
         <div>
-          <p className=" text-white py-5 text-center uppercase text-base font-semibold">
+          <p className=" text-white py-5 my-10 text-center uppercase text-base font-semibold">
             if you need assistance, do not hisatate to call
             <br /> and chat with the admin
           </p>
         </div>
       </div>
-      <div className=" flex justify-center gap-10  ">
+      <div className=" flex justify-center gap-10  my-20 ">
         <div
           className="relative block rounded-lg w-1/4 h-64 
                       bg-gray-900 group"
@@ -60,7 +60,7 @@ const MyComponent = () => {
                                 group-hover:translate-y-0"
               >
                 <div className="p-2">
-                  <p className="text-xl text-center text-white">
+                  <p className="text-xl text-center cursor-pointer text-white">
                     +63-998-765-4321
                   </p>
                 </div>
@@ -89,7 +89,7 @@ const MyComponent = () => {
                                 group-hover:translate-y-0"
               >
                 <div className="p-2">
-                  <p className="text-xl text-center text-white">
+                  <p className="text-xl text-center cursor-pointer text-white">
                     rosemariego@gmail.com
                   </p>
                 </div>
@@ -118,8 +118,8 @@ const MyComponent = () => {
                                 group-hover:translate-y-0"
               >
                 <div className="p-2">
-                  <p className="text-xl text-center text-white">
-                    Purok 4 Lungsudaan,Candija, Bohol
+                  <p className="text-xl text-center cursor-pointer text-white">
+                    Purok 4 Lungsudaan,Candijay, Bohol
                   </p>
                 </div>
               </div>

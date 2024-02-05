@@ -15,24 +15,26 @@ const Home = () => {
           SERVICES
         </div>
       </div>
-      <div className=" mx-48">
-        <div className="">
-          <button className="bg-green-300  w-96 uppercase text-white font-bold p-4 rounded-md">
-            Benificiary Management
-          </button>
-        </div>
-        <div className="my-5">
-          <ul className="  list-disc w-96 bg-green-300  uppercase text-white font-bold p-4 rounded-md">
-            <li className=" ">
-              Send reminders and notification to users and their chosen
-              representative about important deadlines or action that need tobe
-              takenin the state planning process
-            </li>
-          </ul>
-          <div className=" my-10 ">
-            <Link href="/Services">
-              <Button variant="contained"> Back</Button>
-            </Link>
+      <div className=" my-20 flex justify-center">
+        <div>
+          <div className="">
+            <button className="bg-green-300  w-96 uppercase text-white font-bold p-8 rounded-md">
+              Benificiary Management
+            </button>
+          </div>
+          <div className="my-5">
+            <ul className="  list-disc w-96 bg-green-300  uppercase text-white font-bold p-10 rounded-md">
+              <li className=" ">
+                Send reminders and notification to users and their chosen
+                representative about important deadlines or action that need
+                tobe takenin the state planning process
+              </li>
+            </ul>
+            <div className=" my-10 ">
+              <Link href="/Services">
+                <Button variant="contained"> Back</Button>
+              </Link>
+            </div>
           </div>
         </div>
       </div>

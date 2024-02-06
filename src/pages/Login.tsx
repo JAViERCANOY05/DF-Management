@@ -3,9 +3,12 @@ import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import PersonIcon from "@mui/icons-material/Person";
 import * as React from "react";
+import { useRouter } from "next/navigation"; // Correct import
 
 import DiamondIcon from "@mui/icons-material/Diamond";
 const Home = () => {
+  const router = useRouter();
+
   const [formData, setFormData] = React.useState({
     email: "",
     password: "",
@@ -22,11 +25,16 @@ const Home = () => {
   const handleSubmit = (e: any) => {
     e.preventDefault();
     console.log("Submitted credentials:", formData);
+    if (formData.email === "admin@gmail.com") {
+      router.push("/admin/Main");
+    } else {
+      console.log("javier");
+    }
     // Add logic for further processing, like sending the credentials to a server
   };
   return (
     <div className=" h-screen bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 px-10    ">
-      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+      <div className="flex  min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <div className="mx-auto flex  justify-center text-white h-10 w-auto">
             <DiamondIcon />
@@ -36,7 +44,7 @@ const Home = () => {
           </h2>
         </div>
 
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <div className="mt-10  sm:mx-auto sm:w-full sm:max-w-sm">
           <form
             className="space-y-6"
             onSubmit={handleSubmit}
@@ -113,6 +121,16 @@ const Home = () => {
               Dont have an Account ? Create Account
             </a>
           </p>
+        </div>
+        <div className=" flex justify-center my-10">
+          <Link href="/">
+            <button
+              type="submit"
+              className="flex  justify-center rounded-md bg-green-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            >
+              Home Page !
+            </button>
+          </Link>
         </div>
       </div>
     </div>

@@ -35,11 +35,11 @@ const Home = () => {
   return (
     <div className=" h-screen bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 px-10    ">
       <div className="flex  min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+        <div className="sm:mx-auto sm:w-full sm:max-w-sm mb-10">
           <div className="mx-auto flex  justify-center text-white h-10 w-auto">
             <DiamondIcon />
           </div>
-          <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-white">
+          <h2 className="mt-10 text-center text-4xl font-bold leading-9 tracking-tight text-white">
             Welcome <span className=" text-blue-700"> Back !</span>
           </h2>
         </div>
@@ -80,14 +80,14 @@ const Home = () => {
                 >
                   Password
                 </label>
-                <div className="text-sm">
+                {/* <div className="text-sm">
                   <a
                     href="#"
                     className="font-semibold text-white hover:text-indigo-500"
                   >
                     Forgot password?
                   </a>
-                </div>
+                </div> */}
               </div>
               <div className="mt-2">
                 <input
@@ -114,21 +114,20 @@ const Home = () => {
           </form>
 
           <p className="mt-10 text-center text-sm text-gray-500">
-            <a
-              href="#"
-              className="font-semibold leading-6 text-white hover:text-black"
-            >
-              Dont have an Account ? Create Account
-            </a>
+            <Link href="/Create_Account">
+              <button className="font-semibold leading-6 text-white hover:text-black">
+                Dont have an Account ? Create Account
+              </button>
+            </Link>
           </p>
         </div>
         <div className=" flex justify-center my-10">
           <Link href="/">
             <button
               type="submit"
-              className="flex  justify-center rounded-md bg-green-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              className="flex   justify-center rounded-md bg-green-600 px-5 py-3 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
-              Home Page !
+              Home Page
             </button>
           </Link>
         </div>

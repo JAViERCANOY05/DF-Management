@@ -45,16 +45,23 @@ const MyComponent = () => {
                       bg-gray-900 group"
         >
           <div
-            className="absolute rounded-lg  text-center pt-28 bg-blue-700 inset-0 
+            className="absolute rounded-lg cursor-pointer  text-center pt-28 bg-blue-700 inset-0 
                             w-full h-64 group-hover:opacity-50"
           >
-            <LocalPhoneIcon className=" text-white" />
+            <LocalPhoneIcon
+              className=" text-white"
+              sx={{
+                fontSize: 40, // Set the font size to control the height
+              }}
+            />
           </div>
           <div className="relative p-10">
             <div className="mt-2">
               {/* Hidden content */}
               <div
-                className="transition-all transform 
+                className="transition-all
+                 transform 
+                 bg-blue-700
                                 translate-y-8 opacity-0 
                                 group-hover:opacity-100 
                                 group-hover:translate-y-0"
@@ -70,14 +77,19 @@ const MyComponent = () => {
           </div>
         </div>
         <div
-          className="relative block w-1/4 rounded-lg  h-64 
+          className="relative block w-1/4 rounded-lg  h-64  cursor-pointer
                       bg-gray-900 group"
         >
           <div
             className="absolute text-center rounded-lg  pt-28  bg-blue-700 inset-0 
                             w-full h-64 group-hover:opacity-50"
           >
-            <EmailIcon className=" text-white" />
+            <EmailIcon
+              className=" text-white"
+              sx={{
+                fontSize: 40, // Set the font size to control the height
+              }}
+            />
           </div>
           <div className="relative p-10">
             <div className="mt-2">
@@ -86,10 +98,16 @@ const MyComponent = () => {
                 className="transition-all transform 
                                 translate-y-8 opacity-0 
                                 group-hover:opacity-100 
-                                group-hover:translate-y-0"
+                                group-hover:translate-y-0
+                                bg-blue-700
+                                "
               >
                 <div className="p-2">
-                  <p className="text-xl text-center cursor-pointer text-white">
+                  <p
+                    className="text-xl text-center cursor-pointer text-white
+                  
+                  "
+                  >
                     rosemariego@gmail.com
                   </p>
                 </div>
@@ -99,14 +117,19 @@ const MyComponent = () => {
           </div>
         </div>
         <div
-          className="relative block w-1/4  rounded-lg   h-64 
+          className="relative block w-1/4 cursor-pointer rounded-lg   h-64 
                       bg-gray-900 group"
         >
           <div
             className="absolute rounded-lg  text-center pt-28  bg-blue-700 inset-0 
                             w-full h-64 group-hover:opacity-50"
           >
-            <LocationOnIcon className=" text-white" />
+            <LocationOnIcon
+              className=" text-white"
+              sx={{
+                fontSize: 40, // Set the font size to control the height
+              }}
+            />
           </div>
           <div className="relative p-10">
             <div className="mt-2">
@@ -115,7 +138,8 @@ const MyComponent = () => {
                 className="transition-all transform 
                                 translate-y-8 opacity-0 
                                 group-hover:opacity-100 
-                                group-hover:translate-y-0"
+                                group-hover:translate-y-0
+                                bg-blue-700"
               >
                 <div className="p-2">
                   <p className="text-xl text-center cursor-pointer text-white">

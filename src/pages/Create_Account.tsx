@@ -1,7 +1,11 @@
 import React, { useRef } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import Link from "next/link";
-
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
+import PaidIcon from "@mui/icons-material/Paid";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -13,14 +17,34 @@ type Inputs = {
   email: string;
   password: string;
   confirmPassword: string;
-  fee: number;
+  fee: string;
   gender: string;
 
   exampleRequired: string;
 };
+const style = {
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  boxShadow: 24,
+  p: 4,
+  borderRadius: 5,
+};
 
 export default function App() {
   const router = useRouter();
+
+  const [open, setOpen] = React.useState(false);
+  const [data, setData] = React.useState({});
+
+  const handleOpen = (e: any) => {
+    e.preventDefault();
+    setOpen(true);
+  };
+  const handleClose = () => setOpen(false);
 
   const {
     register,
@@ -30,6 +54,11 @@ export default function App() {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
+    console.log(data, "created account");
+    setData(data);
+    setOpen(true);
+  };
+  const handlerCreateAccount = () => {
     toast.success("Account Created", {
       position: "top-right",
       autoClose: 5000,
@@ -40,9 +69,10 @@ export default function App() {
       progress: undefined,
       theme: "light",
     });
-    console.log(data, "created account");
-    // Delay route push by 3 seconds
+    console.log(data, "2");
+    //  Delay route push by 3 seconds
     setTimeout(() => {
+      setOpen(true);
       router.push("/SuccessCreatedAccount");
     }, 3000);
   };
@@ -58,7 +88,7 @@ export default function App() {
         </h2>
       </div>
       <div className=" flex justify-center ">
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form>
           {/* register your input into the hook by invoking the "register" function */}
 
           {/* include validation with required or other standard HTML validation rules */}
@@ -165,13 +195,60 @@ export default function App() {
                 Back
               </button>
             </Link>
-            <input
+            <button
+              // onClick={handleOpen}
+              onClick={handleSubmit(onSubmit)}
+              className="  hover:bg-blue-800 rounded-md bg-blue-600 py-3 px-5 text-white"
+            >
+              Continue
+            </button>
+            {/* <input
               className=" cursor-pointer hover:bg-blue-800 rounded-md bg-blue-600 py-3 px-5 text-white"
               type="submit"
-            />
+            /> */}
+          </div>
+          <div>
+            <Modal
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box sx={style}>
+                <div className=" flex justify-center">
+                  <Typography
+                    id="modal-modal-title"
+                    variant="h6"
+                    component="h2"
+                  >
+                    <p className=" font-bold text-2xl">Registration Fee</p>
+                  </Typography>
+                </div>
+                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                  <div className=" flex justify-center">
+                    <PaidIcon /> <span className=" font-bold">20</span>
+                  </div>
+                  <div className=" my-5 flex justify-center gap-5">
+                    <button
+                      onClick={handlerCreateAccount}
+                      className="  hover:bg-green-800 rounded-md bg-green-600 py-3 px-5 text-white"
+                    >
+                      Cash
+                    </button>
+                    <button
+                      onClick={handlerCreateAccount}
+                      className="  hover:bg-blue-800 rounded-md bg-blue-600 py-3 px-5 text-white"
+                    >
+                      GCash
+                    </button>
+                  </div>
+                </Typography>
+              </Box>
+            </Modal>
           </div>
         </form>
       </div>
+
       <ToastContainer />
     </div>
   );

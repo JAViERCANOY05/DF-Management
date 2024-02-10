@@ -27,8 +27,8 @@ const Home = () => {
     console.log("Submitted credentials:", formData);
     if (formData.email === "admin@gmail.com") {
       router.push("/admin/Main");
-    } else {
-      console.log("javier");
+    } else if (formData.email === "user@gmail.com") {
+      router.push("/user");
     }
     // Add logic for further processing, like sending the credentials to a server
   };

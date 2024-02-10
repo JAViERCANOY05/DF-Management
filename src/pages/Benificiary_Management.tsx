@@ -18,12 +18,15 @@ const Home = () => {
       <div className=" flex justify-center my-20">
         <div>
           <div className="">
-            <button className="bg-green-300  w-96 uppercase text-white font-bold p-8 rounded-md">
-              Benificiary Management
+            <button className="bg-green-300  uppercase text-white font-bold  py-10 px-44 rounded-md">
+              account creation and management
             </button>
+            {/* <button className="bg-green-300   uppercase text-white font-bold py-10 px-32 rounded-md">
+              Benificiary Management
+            </button> */}
           </div>
           <div className="my-5">
-            <ul className="  list-disc w-96 bg-green-300  uppercase text-white font-bold p-10 rounded-md">
+            <ul className="  list-disc  bg-green-300  uppercase text-white font-bold py-20 px-20  rounded-md">
               <li className=" ">
                 Option to update benificiary information as needed
               </li>

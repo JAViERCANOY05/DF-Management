@@ -15,19 +15,19 @@ const Home = () => {
           SERVICES
         </div>
       </div>
-      <div className=" my-20 flex justify-center">
+      <div className=" flex justify-center my-20">
         <div>
           <div className="">
-            <button className="bg-green-300  w-96 uppercase text-white font-bold p-8 rounded-md">
-              Benificiary Management
+            <button className="bg-green-300  uppercase text-white font-bold  py-10 px-72 rounded-md">
+              Notification
             </button>
           </div>
           <div className="my-5">
-            <ul className="  list-disc w-96 bg-green-300  uppercase text-white font-bold p-10 rounded-md">
-              <li className=" ">
-                Send reminders and notification to users and their chosen
-                representative about important deadlines or action that need
-                tobe takenin the state planning process
+            <ul className="  list-disc  bg-green-300  uppercase text-white font-bold py-20 px-20  rounded-md">
+              <li className=" text-center ">
+                Send reminders and notification to users <br /> and their chosen
+                representative about <br /> important deadlines or action that
+                need to <br /> be takenin the state planning process
               </li>
             </ul>
             <div className=" my-10 ">

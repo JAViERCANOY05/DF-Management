@@ -8,8 +8,10 @@ import Modal from "@mui/material/Modal";
 import PaidIcon from "@mui/icons-material/Paid";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { notifyError, notifySuccess } from "./Notifications";
 
 import { useRouter } from "next/navigation"; // Correct import
+import CreateAccount from "./api/create_account";
 
 type Inputs = {
   firtName: string;
@@ -38,7 +40,13 @@ export default function App() {
   const router = useRouter();
 
   const [open, setOpen] = React.useState(false);
-  const [data, setData] = React.useState({});
+  const [data, setData] = React.useState({
+    email: "",
+    password: "",
+    gender: "",
+    firstName: "",
+    lastName: "",
+  });
 
   const handleOpen = (e: any) => {
     e.preventDefault();
@@ -54,31 +62,38 @@ export default function App() {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data, "created account");
-    setData(data);
+    const accountCreated = {
+      email: data.email,
+      password: data.password,
+      gender: data.gender,
+      firstName: data.firtName,
+      lastName: data.firtName,
+    };
+
+    setData(accountCreated);
     setOpen(true);
   };
-  const handlerCreateAccount = () => {
-    toast.success("Account Created", {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
-    console.log(data, "2");
-    //  Delay route push by 3 seconds
-    setTimeout(() => {
-      setOpen(true);
-      router.push("/SuccessCreatedAccount");
-    }, 3000);
+  const handlerCreateAccount = async () => {
+    try {
+      const response = await CreateAccount.create(data);
+      if (response) {
+        notifySuccess("Account Created !");
+        //  Delay route push by 3 seconds
+        setTimeout(() => {
+          setOpen(true);
+          router.push("/SuccessCreatedAccount");
+        }, 2000);
+      } else {
+        notifyError("Error Creating Account !");
+
+        console.log(data, "2");
+      }
+    } catch (error: any) {
+      notifyError("Network Error !");
+    }
   };
   const password = useRef({});
   password.current = watch("password");
-  // console.log(watch("firtName"));
 
   return (
     <div className=" h-screen bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 px-10 py-5  ">

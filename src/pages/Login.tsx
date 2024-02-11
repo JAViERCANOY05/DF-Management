@@ -32,7 +32,7 @@ const Home = () => {
 
     try {
       const response = await LoginAPI.logIn(formData);
-      if (response.email === "admin@bisu.com") {
+      if (response.email === "admin@bisu") {
         console.log("Welcome :12", response.email);
         router.push("/admin/Main");
       } else {

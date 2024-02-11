@@ -4,6 +4,7 @@ import Button from "@mui/material/Button";
 import PersonIcon from "@mui/icons-material/Person";
 import * as React from "react";
 import { useRouter } from "next/navigation"; // Correct import
+import LoginAPI from "./api/logi_Api";
 
 import DiamondIcon from "@mui/icons-material/Diamond";
 const Home = () => {
@@ -22,15 +23,50 @@ const Home = () => {
     }));
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     console.log("Submitted credentials:", formData);
-    if (formData.email === "admin@gmail.com") {
-      router.push("/admin/Main");
-    } else if (formData.email === "user@gmail.com") {
-      router.push("/user");
+
+    const data = {
+      email: formData.email,
+      password: formData.password,
+    };
+
+    console.log(data, "1111");
+    // if (formData.email === "admin@gmail.com") {
+    //   router.push("/admin/Main");
+    // } else if (formData.email === "user@gmail.com") {
+    //   router.push("/user");
+    // }
+    try {
+      const response = await LoginAPI.logIn(data);
+      console.log(response, " 222");
+
+      if (response) {
+        console.log(response, " ajajja");
+        //   const role = response.user.role;
+        //   const token = response.token;
+        //   if (role === "SUPER_ADMIN") {
+        //     console.log("Welcome :12", role);
+        //     localStorage.setItem("token", token);
+        //     router.push("/page/super-admin");
+        //   } else if (response.user.role === "PROPERTY_MANAGER") {
+        //     console.log("Welcome : ", response.user.role);
+        //     localStorage.setItem("token", token);
+        //     router.push("../page/properties");
+        //   } else if (response.user.role === "COMPANY_ADMIN") {
+        //     console.log("Welcome :", role);
+        //     localStorage.setItem("token", token);
+        //     router.push("/page/company");
+        //   } else {
+        //     console.log("Something went wrong", response);
+        //   }
+      } else {
+        console.log("Invalid response data:");
+      }
+    } catch (err: any) {
+      console.log("Wrong credentials");
     }
-    // Add logic for further processing, like sending the credentials to a server
   };
   return (
     <div className=" h-screen bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 px-10    ">
@@ -64,7 +100,6 @@ const Home = () => {
                   onChange={handleChange}
                   id="email"
                   name="email"
-                  type="email"
                   autoComplete="email"
                   required
                   className="block font-bold px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"

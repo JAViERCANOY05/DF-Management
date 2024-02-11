@@ -5,8 +5,11 @@ import PersonIcon from "@mui/icons-material/Person";
 import * as React from "react";
 import { useRouter } from "next/navigation"; // Correct import
 import LoginAPI from "./api/logi_api";
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import DiamondIcon from "@mui/icons-material/Diamond";
+import { notifyError, notifySuccess, notifyWarning } from "./Notifications";
+
 const Home = () => {
   const router = useRouter();
 
@@ -27,44 +30,17 @@ const Home = () => {
     e.preventDefault();
     console.log("Submitted credentials:", formData);
 
-    const data = {
-      email: formData.email,
-      password: formData.password,
-    };
-
-    console.log(data, "1111");
-    // if (formData.email === "admin@gmail.com") {
-    //   router.push("/admin/Main");
-    // } else if (formData.email === "user@gmail.com") {
-    //   router.push("/user");
-    // }
     try {
-      const response = await LoginAPI.logIn(data);
-      console.log(response, " 222");
-
-      if (response) {
-        console.log(response, " ajajja");
-        //   const role = response.user.role;
-        //   const token = response.token;
-        //   if (role === "SUPER_ADMIN") {
-        //     console.log("Welcome :12", role);
-        //     localStorage.setItem("token", token);
-        //     router.push("/page/super-admin");
-        //   } else if (response.user.role === "PROPERTY_MANAGER") {
-        //     console.log("Welcome : ", response.user.role);
-        //     localStorage.setItem("token", token);
-        //     router.push("../page/properties");
-        //   } else if (response.user.role === "COMPANY_ADMIN") {
-        //     console.log("Welcome :", role);
-        //     localStorage.setItem("token", token);
-        //     router.push("/page/company");
-        //   } else {
-        //     console.log("Something went wrong", response);
-        //   }
+      const response = await LoginAPI.logIn(formData);
+      if (response.email === "admin@bisu.com") {
+        console.log("Welcome :12", response.email);
+        router.push("/admin/Main");
       } else {
-        console.log("Invalid response data:");
+        console.log("Welcome : ", response.email);
+        router.push("/user");
       }
     } catch (err: any) {
+      notifyError("Wrong credentials");
       console.log("Wrong credentials");
     }
   };
@@ -167,6 +143,7 @@ const Home = () => {
           </Link>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

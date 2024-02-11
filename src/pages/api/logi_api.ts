@@ -4,7 +4,6 @@ const LoginAPI = {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
         method: "POST",
-        mode: "no-cors", // Set the request mode to 'no-cors'
         headers: {
           "Content-Type": "application/json",
         },

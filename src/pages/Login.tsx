@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import PersonIcon from "@mui/icons-material/Person";
 import * as React from "react";
 import { useRouter } from "next/navigation"; // Correct import
-import LoginAPI from "./api/logi_Api";
+import LoginAPI from "./api/logi_api";
 
 import DiamondIcon from "@mui/icons-material/Diamond";
 const Home = () => {

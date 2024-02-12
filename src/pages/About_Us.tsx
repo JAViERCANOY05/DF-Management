@@ -30,13 +30,13 @@ const MyComponent = () => {
       </div>
       <div>
         <div>
-          <p className=" text-yellow-300 py-5 text-center uppercase text-base font-semibold">
+          <p className=" text-yellow-300 py-5 text-center uppercase text-xl font-semibold">
             In your darkest Times, we offer you our helping hand.
           </p>
         </div>
       </div>
       <div className=" flex justify-center ">
-        <p className=" rounded-md  bg-slate-100 py-20 font-bold px-20 text-center">
+        <p className=" rounded-md  bg-slate-100 py-20 font-bold text-xl px-20 text-center">
           The organization that aids to provide financial assistance. A death is
           assistance <br /> payable to the benificiary of a deceased person. Our
           mission is to help one another
@@ -44,7 +44,7 @@ const MyComponent = () => {
         </p>
       </div>
       <div className=" flex justify-center my-10">
-        <button className=" bg-yellow-300 rounded-full  font-bold hover:text-white px-5">
+        <button className=" bg-yellow-300 py-2.5 px-6 rounded-full  font-bold hover:text-white ">
           More info
         </button>
       </div>

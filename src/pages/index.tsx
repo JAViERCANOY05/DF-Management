@@ -30,13 +30,13 @@ const Home = () => {
       </div>
       <div>
         <div>
-          <p className=" text-yellow-300 py-5 text-center uppercase text-base font-semibold">
+          <p className=" text-yellow-300 text-2xl py-5 text-center uppercase  font-semibold">
             In your darkest Times, we offer you our helping hand.
           </p>
         </div>
       </div>
       <div className=" flex justify-center my-20 ">
-        <p className=" rounded-md font-bold   bg-slate-100  py-20  px-20 text-center">
+        <p className=" rounded-md font-bold  text-xl  bg-slate-100  py-20  px-20 text-center">
           We have grown the intial 38 members to 413 members.
           <br />
           As a trusted organizatio, we proud that wehave already helped

@@ -33,7 +33,7 @@ const MyComponent = () => {
       </div>
       <div>
         <div>
-          <p className=" text-white py-5 my-10 text-center uppercase text-base font-semibold">
+          <p className=" text-white  text-xl py-5 my-10 text-center uppercase  font-semibold">
             if you need assistance, do not hisatate to call
             <br /> and chat with the admin
           </p>

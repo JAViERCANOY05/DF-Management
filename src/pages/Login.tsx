@@ -32,7 +32,7 @@ const Home = () => {
 
     try {
       const response = await LoginAPI.logIn(formData);
-      if (response.email === "admin@bisu") {
+      if (response.email === "admin") {
         localStorage.setItem("id", response._id);
         console.log("Welcome :12", response.email);
         router.push("/admin/Main");

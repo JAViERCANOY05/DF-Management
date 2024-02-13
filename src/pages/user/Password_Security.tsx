@@ -17,11 +17,13 @@ import InboxIcon from "@mui/icons-material/MoveToInbox";
 import Dashboard from "./Dashboard";
 import { useForm, SubmitHandler } from "react-hook-form";
 import React, { useRef } from "react";
+import { notifySuccess, notifyWarning, notifyError } from "../Notifications";
 
 import { useState } from "react";
 import Link from "next/link";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import ChangePass from "../api/change_password";
 
 const drawerWidth = 240;
 
@@ -159,11 +161,28 @@ export default function MiniDrawer() {
     }));
   };
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const userId = localStorage.getItem("id");
 
-    console.log("submit");
-    console.log("submit", userId, data);
+    const newPassword = {
+      currentPassword: data.currentPassword,
+      newPassword: data.newPassword,
+    };
+    console.log("submit", newPassword);
+
+    try {
+      const response = await ChangePass.changePassword(newPassword, userId);
+      console.log("response", response);
+
+      if (response) {
+        notifySuccess("Change Successsfuly!");
+      } else {
+        notifyError("Something Went Wrong !");
+      }
+    } catch (err: any) {
+      notifyError("Something Went Wrong !");
+      console.log("Something Went Wrong ! ");
+    }
   };
 
   const newPassword = useRef({});

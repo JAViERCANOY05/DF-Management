@@ -178,153 +178,161 @@ export default function MiniDrawer() {
   };
 
   return (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
-      <AppBar position="fixed" open={open}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{
-              marginRight: 5,
-              ...(open && { display: "none" }),
-            }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <div className=" flex gap-96">
-            <Typography variant="h6" noWrap component="div">
-              Web-Based Death Fund Management
-            </Typography>
-            <div className="  ml-96 ">
-              <div>
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    textAlign: "center",
-                  }}
-                >
-                  <Tooltip title="Account settings">
-                    <IconButton
-                      onClick={handleClick}
-                      size="small"
-                      sx={{ ml: 2 }}
-                      aria-controls={open1 ? "account-menu" : undefined}
-                      aria-haspopup="true"
-                      aria-expanded={open1 ? "true" : undefined}
-                    >
-                      <Avatar sx={{ width: 32, height: 32 }}></Avatar>
-                    </IconButton>
-                  </Tooltip>
-                </Box>
-              </div>
-              <Menu
-                anchorEl={anchorEl}
-                id="account-menu"
-                open={open1}
-                onClose={handleClose}
-                onClick={handleClose}
-                PaperProps={{
-                  elevation: 0,
-                  sx: {
-                    overflow: "visible",
-                    filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-                    mt: 1.5,
-                    "& .MuiAvatar-root": {
-                      width: 32,
-                      height: 32,
-                      ml: -0.5,
-                      mr: 1,
-                    },
-                    "&::before": {
-                      content: '""',
-                      display: "block",
-                      position: "absolute",
-                      top: 0,
-                      right: 14,
-                      width: 10,
-                      height: 10,
-                      bgcolor: "background.paper",
-                      transform: "translateY(-50%) rotate(45deg)",
-                      zIndex: 0,
-                    },
-                  },
-                }}
-                transformOrigin={{ horizontal: "right", vertical: "top" }}
-                anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-              >
-                <MenuItem onClick={handleClose}>
-                  <Link href="/Login">
-                    <ListItemIcon>
-                      <Logout fontSize="small" />
-                    </ListItemIcon>
-                    Logout
-                  </Link>
-                </MenuItem>
-              </Menu>
-            </div>
-          </div>
-        </Toolbar>
-      </AppBar>
-      <Drawer variant="permanent" open={open}>
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "rtl" ? (
-              <ChevronRightIcon />
-            ) : (
-              <ChevronLeftIcon />
-            )}
-          </IconButton>
-        </DrawerHeader>
-        <Divider />
-        <List>
-          {component.map((text, index) => (
-            <ListItem key={index + 1} disablePadding sx={{ display: "block" }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                }}
-              >
-                <button
-                  className="  flex justify-center items-center  "
-                  onClick={() => {
-                    handlerClick(text.href);
-                  }}
-                >
-                  <ListItemIcon
-                    className={
-                      open ? "mx-0  text-[#03396C]" : "   hover:text-[#03396C]"
-                    }
+    <div className=" h-screen">
+      <Box sx={{ display: "flex" }}>
+        <CssBaseline />
+        <AppBar position="fixed" open={open}>
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              sx={{
+                marginRight: 5,
+                ...(open && { display: "none" }),
+              }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <div className=" flex gap-96">
+              <Typography variant="h6" noWrap component="div">
+                Web-Based Death Fund Management
+              </Typography>
+              <div className="  ml-96 ">
+                <div>
+                  <Box
                     sx={{
-                      minWidth: 0,
-                      mr: open ? 1 : 0,
-                      justifyContent: "center ",
+                      display: "flex",
+                      alignItems: "center",
+                      textAlign: "center",
                     }}
                   >
-                    {text.icon}
-                  </ListItemIcon>
-                  <ListItemText
-                    className={open ? "mx-8 " : "mx-0"}
-                    primary={text.name}
-                    sx={{ opacity: open ? 1 : 0 }}
-                    style={{ display: open ? "block" : "none " }}
-                  />
-                </button>
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-      </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        <DrawerHeader />
-        {displayComponent}
+                    <Tooltip title="Account settings">
+                      <IconButton
+                        onClick={handleClick}
+                        size="small"
+                        sx={{ ml: 2 }}
+                        aria-controls={open1 ? "account-menu" : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open1 ? "true" : undefined}
+                      >
+                        <Avatar sx={{ width: 32, height: 32 }}></Avatar>
+                      </IconButton>
+                    </Tooltip>
+                  </Box>
+                </div>
+                <Menu
+                  anchorEl={anchorEl}
+                  id="account-menu"
+                  open={open1}
+                  onClose={handleClose}
+                  onClick={handleClose}
+                  PaperProps={{
+                    elevation: 0,
+                    sx: {
+                      overflow: "visible",
+                      filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                      mt: 1.5,
+                      "& .MuiAvatar-root": {
+                        width: 32,
+                        height: 32,
+                        ml: -0.5,
+                        mr: 1,
+                      },
+                      "&::before": {
+                        content: '""',
+                        display: "block",
+                        position: "absolute",
+                        top: 0,
+                        right: 14,
+                        width: 10,
+                        height: 10,
+                        bgcolor: "background.paper",
+                        transform: "translateY(-50%) rotate(45deg)",
+                        zIndex: 0,
+                      },
+                    },
+                  }}
+                  transformOrigin={{ horizontal: "right", vertical: "top" }}
+                  anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+                >
+                  <MenuItem onClick={handleClose}>
+                    <Link href="/Login">
+                      <ListItemIcon>
+                        <Logout fontSize="small" />
+                      </ListItemIcon>
+                      Logout
+                    </Link>
+                  </MenuItem>
+                </Menu>
+              </div>
+            </div>
+          </Toolbar>
+        </AppBar>
+        <Drawer variant="permanent" open={open}>
+          <DrawerHeader>
+            <IconButton onClick={handleDrawerClose}>
+              {theme.direction === "rtl" ? (
+                <ChevronRightIcon />
+              ) : (
+                <ChevronLeftIcon />
+              )}
+            </IconButton>
+          </DrawerHeader>
+          <Divider />
+          <List>
+            {component.map((text, index) => (
+              <ListItem
+                key={index + 1}
+                disablePadding
+                sx={{ display: "block" }}
+              >
+                <ListItemButton
+                  sx={{
+                    minHeight: 48,
+                    justifyContent: open ? "initial" : "center",
+                    px: 2.5,
+                  }}
+                >
+                  <button
+                    className="  flex justify-center items-center  "
+                    onClick={() => {
+                      handlerClick(text.href);
+                    }}
+                  >
+                    <ListItemIcon
+                      className={
+                        open
+                          ? "mx-0  text-[#03396C]"
+                          : "   hover:text-[#03396C]"
+                      }
+                      sx={{
+                        minWidth: 0,
+                        mr: open ? 1 : 0,
+                        justifyContent: "center ",
+                      }}
+                    >
+                      {text.icon}
+                    </ListItemIcon>
+                    <ListItemText
+                      className={open ? "mx-8 " : "mx-0"}
+                      primary={text.name}
+                      sx={{ opacity: open ? 1 : 0 }}
+                      style={{ display: open ? "block" : "none " }}
+                    />
+                  </button>
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+          <Divider />
+        </Drawer>
+        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+          <DrawerHeader />
+          {displayComponent}
+        </Box>
       </Box>
-    </Box>
+    </div>
   );
 }

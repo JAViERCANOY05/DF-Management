@@ -4,7 +4,7 @@ import Link from "next/link";
 const MyComponent = () => {
   return (
     <div className=" h-auto bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 px-10 py-5  ">
-      <div className="nav-bar flex justify-end  font-bold text-white ">
+      <div className="nav-bar  flex justify-end  font-bold text-white ">
         <Link href="/">
           <button className="mx-3 hover:text-yellow-300">Home</button>
         </Link>

@@ -33,10 +33,12 @@ const Home = () => {
     try {
       const response = await LoginAPI.logIn(formData);
       if (response.email === "admin@bisu") {
+        localStorage.setItem("id", response._id);
         console.log("Welcome :12", response.email);
         router.push("/admin/Main");
       } else {
-        console.log("Welcome : ", response.email);
+        localStorage.setItem("id", response._id);
+        console.log("Welcome : ", response._id);
         router.push("/user");
       }
     } catch (err: any) {

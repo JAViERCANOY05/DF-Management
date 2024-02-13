@@ -1,13 +1,14 @@
 const ChangePass = {
   //change pass for user  !
-  changePassword: async (newPassword: any, user_id: any) => {
+  changePassword: async (newPassword: any, token: any) => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/changePassword/${user_id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/changePassword`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(newPassword),
         }

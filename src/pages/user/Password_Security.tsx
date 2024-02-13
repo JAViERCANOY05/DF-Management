@@ -24,6 +24,9 @@ import Link from "next/link";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import ChangePass from "../api/change_password";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from "react-toastify";
+import { useRouter } from "next/navigation"; // Correct import
 
 const drawerWidth = 240;
 
@@ -131,6 +134,8 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function MiniDrawer() {
+  const router = useRouter();
+
   const [formData, setFormData] = React.useState({
     email: "",
     password: "",
@@ -162,7 +167,7 @@ export default function MiniDrawer() {
   };
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    const userId = localStorage.getItem("id");
+    const token = localStorage.getItem("token");
 
     const newPassword = {
       currentPassword: data.currentPassword,
@@ -171,14 +176,12 @@ export default function MiniDrawer() {
     console.log("submit", newPassword);
 
     try {
-      const response = await ChangePass.changePassword(newPassword, userId);
-      console.log("response", response);
-
-      if (response) {
-        notifySuccess("Change Successsfuly!");
-      } else {
-        notifyError("Something Went Wrong !");
-      }
+      const response = await ChangePass.changePassword(newPassword, token);
+      console.log("response", response.message);
+      notifySuccess("Password changed successfully.");
+      setTimeout(() => {
+        router.push("/user");
+      }, 2000);
     } catch (err: any) {
       notifyError("Something Went Wrong !");
       console.log("Something Went Wrong ! ");
@@ -366,6 +369,7 @@ export default function MiniDrawer() {
           </div>
         </Box>
       </Box>
+      <ToastContainer />
     </div>
   );
 }

@@ -2,7 +2,6 @@ import React, { useRef } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import Link from "next/link";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import PaidIcon from "@mui/icons-material/Paid";
@@ -92,6 +91,7 @@ export default function App() {
       notifyError("Network Error !");
     }
   };
+  
   const password = useRef({});
   password.current = watch("password");
 

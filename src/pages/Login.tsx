@@ -34,11 +34,25 @@ const Home = () => {
       const response = await LoginAPI.logIn(formData);
       if (response.user.email === "admin@admin.com") {
         localStorage.setItem("id", response.user._id);
-        console.log("Welcome : ", response.user.email);
+        console.log(
+          "Welcome : ",
+          response.user.email,
+          " token ",
+          response.token
+        );
+
+        localStorage.setItem("token", response.token);
         router.push("/admin/Main");
       } else {
-        localStorage.setItem("id", response.user._id);
-        console.log("Welcome : ", response.user._id);
+        localStorage.setItem("token", response.token);
+
+        console.log(
+          "Welcome : ",
+          response.user.email,
+          " token ",
+          response.token
+        );
+
         router.push("/user");
       }
     } catch (err: any) {

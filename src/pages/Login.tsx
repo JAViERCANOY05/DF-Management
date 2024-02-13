@@ -32,13 +32,13 @@ const Home = () => {
 
     try {
       const response = await LoginAPI.logIn(formData);
-      if (response.email === "admin@admin.bisu") {
-        localStorage.setItem("id", response._id);
-        console.log("Welcome :12", response.email);
+      if (response.user.email === "admin@admin.com") {
+        localStorage.setItem("id", response.user._id);
+        console.log("Welcome : ", response.user.email);
         router.push("/admin/Main");
       } else {
-        localStorage.setItem("id", response._id);
-        console.log("Welcome : ", response._id);
+        localStorage.setItem("id", response.user._id);
+        console.log("Welcome : ", response.user._id);
         router.push("/user");
       }
     } catch (err: any) {

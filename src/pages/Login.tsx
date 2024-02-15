@@ -45,14 +45,12 @@ const Home = () => {
         router.push("/admin/Main");
       } else {
         localStorage.setItem("token", response.token);
-
         console.log(
           "Welcome : ",
           response.user.email,
           " token ",
           response.token
         );
-
         router.push("/user");
       }
     } catch (err: any) {

@@ -32,7 +32,7 @@ const Home = () => {
 
     try {
       const response = await LoginAPI.logIn(formData);
-      if (response.user.email === "admin@admin.com") {
+      if (response.user.role === "admin") {
         localStorage.setItem("id", response.user._id);
         console.log(
           "Welcome : ",
@@ -43,7 +43,7 @@ const Home = () => {
 
         localStorage.setItem("token", response.token);
         router.push("/admin/Main");
-      } else {
+      } else if (response.user.role === "user") {
         localStorage.setItem("token", response.token);
         console.log(
           "Welcome : ",
@@ -60,17 +60,17 @@ const Home = () => {
   };
   return (
     <div className=" h-screen bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 px-10    ">
-      <div className="flex  min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm mb-10">
-          <div className="mx-auto flex  justify-center text-white h-10 w-auto">
-            <DiamondIcon />
+      <div className="flex  min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 ">
+        <div className="mt-10  sm:mx-auto sm:w-full sm:max-w-sm px-5  rounded-xl py-10 bg-purple-700">
+          <div className="sm:mx-auto sm:w-full sm:max-w-sm mb-10">
+            <div className="mx-auto flex  justify-center text-white h-10 w-auto">
+              <DiamondIcon />
+            </div>
+            <h2 className="mt-10 text-center text-4xl font-bold leading-9 tracking-tight text-white animate-bounce">
+              Welcome
+              <span className=" text-[#D74CB6] "> Back !</span>
+            </h2>
           </div>
-          <h2 className="mt-10 text-center text-4xl font-bold leading-9 tracking-tight text-white">
-            Welcome <span className=" text-blue-700"> Back !</span>
-          </h2>
-        </div>
-
-        <div className="mt-10  sm:mx-auto sm:w-full sm:max-w-sm">
           <form
             className="space-y-6"
             onSubmit={handleSubmit}
@@ -80,7 +80,7 @@ const Home = () => {
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-medium leading-6 text-gray-900"
+                className="block text-sm font-medium leading-6 text-white"
               >
                 Email address
               </label>
@@ -101,7 +101,7 @@ const Home = () => {
               <div className="flex items-center justify-between">
                 <label
                   htmlFor="password"
-                  className="block text-sm font-medium leading-6 text-gray-900"
+                  className="block text-sm font-medium leading-6 text-white"
                 >
                   Password
                 </label>

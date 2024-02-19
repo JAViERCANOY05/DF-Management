@@ -12,12 +12,19 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-
+import AddContribution from "../api/addContribution";
 import { useForm, SubmitHandler } from "react-hook-form";
+import GetContribution from "../api/getcontribution";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { notifyError, notifySuccess } from "../Notifications";
 
 type Inputs = {
-  example: string;
-  exampleRequired: string;
+  firstName: string;
+  lastName: string;
+  born: string;
+  age: string;
+  died: string;
 };
 
 const style = {
@@ -32,29 +39,59 @@ const style = {
   borderRadius: 3, // Adjust the value to change the border radius
 };
 
-function createData(name: string, date: number, status: string) {
-  return { name, date, status };
-}
-
-const rows = [
-  createData("Frozen yoghurt", 159, "Pending"),
-  createData("Ice cream sandwich", 152, "Paid"),
-  createData("Eclair", 262, "Paid"),
-  createData("Cupcake", 305, "Pending"),
-  createData("Gingerbread", 356, "Pending"),
-];
-
 export default function BasicTable() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [data, setData] = React.useState([]);
+  console.log(data, "ss");
   const {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors },
   } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await AddContribution.add(token, data);
+      if (response.status) {
+        getData();
+        console.log("Created Successfully !");
+        setOpen(false);
+        notifySuccess("Created Successfully !");
+      } else {
+        console.log("Error");
+      }
+    } catch (error) {
+      console.log("Error 1 ");
+      notifyError("Something went wrong!");
+    }
+
+    console.log(data);
+  };
+
+  const getData = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await GetContribution.get(token);
+      if (response.status) {
+        reset();
+        console.log("data is here ! ");
+        console.log(response.response);
+        setData(response.response);
+      } else {
+        console.log("error ");
+      }
+    } catch (error) {
+      console.log("error ", error);
+    }
+  };
+
+  React.useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <div className=" h-screen">
@@ -70,21 +107,23 @@ export default function BasicTable() {
           <TableHead>
             <TableRow>
               <TableCell>Name</TableCell>
-              <TableCell align="right">Date</TableCell>
-              <TableCell align="right">Status</TableCell>
+              <TableCell align="right">Born</TableCell>
+              <TableCell align="right">Die</TableCell>
+              <TableCell align="right">Age</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {data.map((data: any, index = 0) => (
               <TableRow
-                key={row.name}
+                key={index++}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
-                  {row.name}
+                  {data.firstName}
                 </TableCell>
-                <TableCell align="right">{row.date}</TableCell>
-                <TableCell align="right">{row.status}</TableCell>
+                <TableCell align="right">{data.born}</TableCell>
+                <TableCell align="right">{data.died}</TableCell>
+                <TableCell align="right">{data.age}</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -101,48 +140,62 @@ export default function BasicTable() {
             <div>
               <div className=" flex gap-5">
                 <div>
-                  <p className=" mx-2  ">Last Name</p>
+                  <p className=" mx-2  ">First Name</p>
+
                   <input
-                    defaultValue="test"
                     className=" rounded-md my-2 py-2"
-                    {...register("example")}
+                    {...register("firstName", { required: true })}
                   />
+                  {errors.firstName && (
+                    <span className=" text-white">This field is required</span>
+                  )}
                 </div>
                 <div>
                   <p className=" mx-2  ">Last Name</p>
 
                   <input
                     className=" rounded-md my-2 py-2"
-                    {...register("exampleRequired", { required: true })}
+                    {...register("lastName", { required: true })}
                   />
+                  {errors.lastName && (
+                    <span className=" text-white">This field is required</span>
+                  )}
                 </div>
               </div>
               <div className=" flex gap-5">
                 <div>
                   <p className=" mx-2  ">Last Name</p>
-
                   <input
                     className=" rounded-md my-2 py-2"
-                    {...register("exampleRequired", { required: true })}
+                    {...register("born", { required: true })}
                   />
+                  {errors.born && (
+                    <span className=" text-white">This field is required</span>
+                  )}
                 </div>
                 <div>
-                  <p className=" mx-2  ">Last Name</p>
+                  <p className=" mx-2  ">Died</p>
 
                   <input
                     className=" rounded-md my-2 py-2"
-                    {...register("exampleRequired", { required: true })}
+                    {...register("died", { required: true })}
                   />
+                  {errors.died && (
+                    <span className=" text-white">This field is required</span>
+                  )}
                 </div>
               </div>
               <div className=" flex justify-center">
-                <div>
-                  <p className=" mx-2 text-center  ">Last Name</p>
+                <div className="">
+                  <p className=" mx-2 text-center  ">Age</p>
 
                   <input
                     className=" rounded-md my-2 py-2"
-                    {...register("exampleRequired", { required: true })}
+                    {...register("age", { required: true })}
                   />
+                  {errors.age && (
+                    <div className=" text-white">This field is required</div>
+                  )}
                 </div>
               </div>
               <div className=" flex justify-end">
@@ -157,6 +210,7 @@ export default function BasicTable() {
           </form>
         </Box>
       </Modal>
+      <ToastContainer />
     </div>
   );
 }

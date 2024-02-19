@@ -28,12 +28,16 @@ import Manage_User from "./Manage_User";
 import Record_Member from "./Record_Member";
 import Settings from "./Settings";
 import Transaction from "./Transaction";
+import { useRouter } from "next/navigation"; // Correct import
 
-import Avatar from "@mui/material/Avatar";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import Tooltip from "@mui/material/Tooltip";
-import Logout from "@mui/icons-material/Logout";
+import { MdDashboardCustomize } from "react-icons/md";
+import { RiHeartAddFill } from "react-icons/ri";
+import { MdOutlineHistoryEdu } from "react-icons/md";
+import { MdManageAccounts } from "react-icons/md";
+import { MdOutlineSettings } from "react-icons/md";
+import { GrAnnounce } from "react-icons/gr";
+import { GrTransaction } from "react-icons/gr";
+import { GiExitDoor } from "react-icons/gi";
 
 const drawerWidth = 240;
 
@@ -46,39 +50,43 @@ interface display {
 const component: display[] = [
   {
     name: "Dashboard",
-    icon: <InboxIcon />,
+    icon: (
+      <MdDashboardCustomize style={{ fontSize: "1.5em", color: "#1976D2" }} />
+    ),
     href: "Dashboard",
   },
 
   {
     name: "Add_Contribution",
-    icon: <InboxIcon />,
+    icon: <RiHeartAddFill style={{ fontSize: "1.5em", color: "#1976D2" }} />,
     href: "Add_Contribution",
   },
   {
     name: "Record_Member",
-    icon: <InboxIcon />,
+    icon: (
+      <MdOutlineHistoryEdu style={{ fontSize: "1.5em", color: "#1976D2" }} />
+    ),
     href: "Record_Member",
   },
   {
     name: "Manage_User",
-    icon: <InboxIcon />,
+    icon: <MdManageAccounts style={{ fontSize: "1.5em", color: "#1976D2" }} />,
     href: "Manage_User",
   },
 
   {
     name: "Settings",
-    icon: <InboxIcon />,
+    icon: <MdOutlineSettings style={{ fontSize: "1.5em", color: "#1976D2" }} />,
     href: "Settings",
   },
   {
     name: "Announcement",
-    icon: <InboxIcon />,
+    icon: <GrAnnounce style={{ fontSize: "1.5em", color: "#1976D2" }} />,
     href: "Announcement",
   },
   {
     name: "Transaction",
-    icon: <InboxIcon />,
+    icon: <GrTransaction style={{ fontSize: "1.5em", color: "#1976D2" }} />,
     href: "Transaction",
   },
 
@@ -158,6 +166,7 @@ export default function MiniDrawer() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [displayComponent, setDisplayComponent] = useState(<Dashboard />);
+  const router = useRouter();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -193,6 +202,12 @@ export default function MiniDrawer() {
     setAnchorEl(null);
   };
 
+  const handlrLogOut = () => {
+    console.log("Log-out");
+    localStorage.clear();
+    router.push("/");
+  };
+
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -211,77 +226,14 @@ export default function MiniDrawer() {
             <MenuIcon />
           </IconButton>
           <div className=" flex gap-96">
-            <Typography variant="h6" noWrap component="div">
+            <Typography
+              variant="h6"
+              noWrap
+              component="div"
+              className=" flex gap-5"
+            >
               Web-Based Death Fund Management
             </Typography>
-            <div className="  ml-96 ">
-              <div>
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    textAlign: "center",
-                  }}
-                >
-                  <Tooltip title="Account settings">
-                    <IconButton
-                      onClick={handleClick}
-                      size="small"
-                      sx={{ ml: 2 }}
-                      aria-controls={open1 ? "account-menu" : undefined}
-                      aria-haspopup="true"
-                      aria-expanded={open1 ? "true" : undefined}
-                    >
-                      <Avatar sx={{ width: 32, height: 32 }}></Avatar>
-                    </IconButton>
-                  </Tooltip>
-                </Box>
-              </div>
-              <Menu
-                anchorEl={anchorEl}
-                id="account-menu"
-                open={open1}
-                onClose={handleClose}
-                onClick={handleClose}
-                PaperProps={{
-                  elevation: 0,
-                  sx: {
-                    overflow: "visible",
-                    filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-                    mt: 1.5,
-                    "& .MuiAvatar-root": {
-                      width: 32,
-                      height: 32,
-                      ml: -0.5,
-                      mr: 1,
-                    },
-                    "&::before": {
-                      content: '""',
-                      display: "block",
-                      position: "absolute",
-                      top: 0,
-                      right: 14,
-                      width: 10,
-                      height: 10,
-                      bgcolor: "background.paper",
-                      transform: "translateY(-50%) rotate(45deg)",
-                      zIndex: 0,
-                    },
-                  },
-                }}
-                transformOrigin={{ horizontal: "right", vertical: "top" }}
-                anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-              >
-                <MenuItem onClick={handleClose}>
-                  <Link href="/Login">
-                    <ListItemIcon>
-                      <Logout fontSize="small" />
-                    </ListItemIcon>
-                    Logout
-                  </Link>
-                </MenuItem>
-              </Menu>
-            </div>
           </div>
         </Toolbar>
       </AppBar>
@@ -336,6 +288,39 @@ export default function MiniDrawer() {
           ))}
         </List>
         <Divider />
+        <ListItem disablePadding sx={{ display: "block" }}>
+          <ListItemButton
+            sx={{
+              minHeight: 48,
+              justifyContent: open ? "initial" : "center",
+              px: 2.5,
+            }}
+          >
+            <button
+              onClick={handlrLogOut}
+              className="  flex justify-center items-center  "
+            >
+              <ListItemIcon
+                className={
+                  open ? "mx-0  text-[#03396C]" : "   hover:text-[#03396C]"
+                }
+                sx={{
+                  minWidth: 0,
+                  mr: open ? 1 : 0,
+                  justifyContent: "center ",
+                }}
+              >
+                <GiExitDoor style={{ fontSize: "1.5em", color: "#1976D2" }} />
+              </ListItemIcon>
+              <ListItemText
+                className={open ? "mx-8 " : "mx-0"}
+                primary="Logout"
+                sx={{ opacity: open ? 1 : 0 }}
+                style={{ display: open ? "block" : "none " }}
+              />
+            </button>
+          </ListItemButton>
+        </ListItem>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />

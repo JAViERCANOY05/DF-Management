@@ -18,6 +18,7 @@ import GetContribution from "../api/getcontribution";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { notifyError, notifySuccess } from "../Notifications";
+import DeleteContribution from "../api/deleteContrinbution";
 
 type Inputs = {
   firstName: string;
@@ -40,11 +41,18 @@ const style = {
 };
 
 export default function BasicTable() {
+  const [formData, setFormData] = React.useState({
+    age: "",
+    born: "",
+    died: "",
+    firstName: "",
+    lastName: "",
+  });
+
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [data, setData] = React.useState([]);
-  console.log(data, "ss");
   const {
     register,
     handleSubmit,
@@ -88,7 +96,27 @@ export default function BasicTable() {
       console.log("error ", error);
     }
   };
+  const handleUpdate = (id: any) => {
+    setFormData(id);
+    console.log(id, "update");
+  };
+  const deleteCont = async (id: any) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await DeleteContribution.delete(token, id);
+      if (response.status) {
+        getData();
+        notifySuccess("Successfully Delete ! ");
+      } else {
+        notifyError("Something went wrong!");
+      }
+    } catch (error) {
+      notifyError("Something went wrong!");
+      console.log(error);
+    }
+  };
 
+  console.log(formData.firstName, "2323");
   React.useEffect(() => {
     getData();
   }, []);
@@ -110,22 +138,47 @@ export default function BasicTable() {
               <TableCell align="right">Born</TableCell>
               <TableCell align="right">Die</TableCell>
               <TableCell align="right">Age</TableCell>
+              <TableCell align="right">Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((data: any, index = 0) => (
-              <TableRow
-                key={index++}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  {data.firstName}
+            {data.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={5} align="center">
+                  No data collected
                 </TableCell>
-                <TableCell align="right">{data.born}</TableCell>
-                <TableCell align="right">{data.died}</TableCell>
-                <TableCell align="right">{data.age}</TableCell>
               </TableRow>
-            ))}
+            ) : (
+              data.map((data: any, index = 0) => (
+                <TableRow
+                  key={index++}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    {data.firstName}
+                  </TableCell>
+                  <TableCell align="right">{data.born}</TableCell>
+                  <TableCell align="right">{data.died}</TableCell>
+                  <TableCell align="right">{data.age}</TableCell>
+
+                  <TableCell align="right">
+                    <button
+                      onClick={() => handleUpdate(data)}
+                      className="btn btn-active btn-primary mr-3"
+                    >
+                      Update
+                    </button>
+
+                    <button
+                      onClick={() => deleteCont(data._id)}
+                      className="btn btn-error text-white"
+                    >
+                      Delete
+                    </button>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </TableContainer>
@@ -138,6 +191,9 @@ export default function BasicTable() {
         <Box sx={style}>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div>
+              <h2 className=" text-center bg-[#0C3B68] text-white rounded-lg py-3 my-3">
+                Fill up this form
+              </h2>
               <div className=" flex gap-5">
                 <div>
                   <p className=" mx-2  ">First Name</p>
@@ -164,7 +220,7 @@ export default function BasicTable() {
               </div>
               <div className=" flex gap-5">
                 <div>
-                  <p className=" mx-2  ">Last Name</p>
+                  <p className=" mx-2  ">Date Born</p>
                   <input
                     className=" rounded-md my-2 py-2"
                     {...register("born", { required: true })}
@@ -174,7 +230,7 @@ export default function BasicTable() {
                   )}
                 </div>
                 <div>
-                  <p className=" mx-2  ">Died</p>
+                  <p className=" mx-2  ">Date Death</p>
 
                   <input
                     className=" rounded-md my-2 py-2"
@@ -198,7 +254,13 @@ export default function BasicTable() {
                   )}
                 </div>
               </div>
-              <div className=" flex justify-end">
+              <div className=" flex justify-end gap-3 mt-3">
+                <button
+                  onClick={() => setOpen(false)}
+                  className="btn btn-error text-white"
+                >
+                  Back
+                </button>
                 <button
                   // onClick={handleOpen}
                   className="btn btn-active btn-accent text-white"

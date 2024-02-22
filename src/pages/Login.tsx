@@ -34,12 +34,7 @@ const Home = () => {
       const response = await LoginAPI.logIn(formData);
       if (response.user.role === "admin") {
         localStorage.setItem("id", response.user._id);
-        console.log(
-          "Welcome : ",
-          response.user.email,
-          " token ",
-          response.token
-        );
+        console.log("Welcome : ", response);
 
         localStorage.setItem("token", response.token);
         router.push("/admin/Main");

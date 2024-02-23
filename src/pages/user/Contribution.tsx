@@ -20,7 +20,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { notifyError, notifySuccess } from "../Notifications";
 import DeleteContribution from "../api/deleteContrinbution";
 import DatePicker from "react-multi-date-picker";
-
+import UpdateContribution from "../api/updateContribution";
 type Inputs = {
   firstName: string;
   lastName: string;
@@ -46,21 +46,32 @@ const style = {
 
 export default function BasicTable() {
   const [formData, setFormData] = React.useState({
+    _id: "",
     age: "",
     born: "",
     died: "",
     firstName: "",
     lastName: "",
+    dateBorn: "",
+    dateDie: "",
+    deadLine: "",
   });
-
+  const [defaultDate, setDefaultDate] = React.useState(new Date());
   const [open, setOpen] = React.useState(false);
+  const [openUpdate, setOpenUpdate] = React.useState(false);
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const handleOpenUpdate = () => setOpenUpdate(true);
+  const handleCloseUpdate = () => {
+    reset();
+    setOpenUpdate(false);
+  };
   const [data, setData] = React.useState([]);
   const {
     register,
     handleSubmit,
-    watch,
     reset,
     control,
     formState: { errors },
@@ -114,6 +125,25 @@ export default function BasicTable() {
       notifyError("Something went wrong!");
     }
   };
+  const onSubmitUpdate: SubmitHandler<Inputs> = async (data) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await UpdateContribution.update(
+        token,
+        data,
+        formData._id
+      );
+      if (response.status) {
+        getData();
+        setOpenUpdate(false);
+        notifySuccess(response.response.message);
+      } else {
+        notifyError("Something went wrong!");
+      }
+    } catch (error) {
+      notifyError("Something went wrong!");
+    }
+  };
 
   const getData = async () => {
     try {
@@ -132,6 +162,7 @@ export default function BasicTable() {
     }
   };
   const handleUpdate = (id: any) => {
+    handleOpenUpdate();
     setFormData(id);
     console.log(id, "update");
   };
@@ -151,7 +182,6 @@ export default function BasicTable() {
     }
   };
 
-  console.log(formData.firstName, "2323");
   React.useEffect(() => {
     getData();
   }, []);
@@ -169,17 +199,21 @@ export default function BasicTable() {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell align="right">Born</TableCell>
-              <TableCell align="right">Die</TableCell>
+              <TableCell>Firs Namet</TableCell>
+              <TableCell align="right">Last Name</TableCell>
               <TableCell align="right">Age</TableCell>
+
+              <TableCell align="right">Date Born</TableCell>
+              <TableCell align="right">Date Die</TableCell>
+              <TableCell align="right">Date Deadline</TableCell>
+
               <TableCell align="right">Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {data.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={5} align="center">
+                <TableCell colSpan={7} align="center">
                   No data collected
                 </TableCell>
               </TableRow>
@@ -192,6 +226,11 @@ export default function BasicTable() {
                   <TableCell component="th" scope="row">
                     {data.firstName}
                   </TableCell>
+                  <TableCell align="right" component="th" scope="row">
+                    {data.lastName}
+                  </TableCell>
+                  <TableCell align="right">{data.age}</TableCell>
+
                   <TableCell align="right">
                     {new Date(data.born).toLocaleDateString("en-US", {
                       year: "numeric",
@@ -206,7 +245,13 @@ export default function BasicTable() {
                       day: "2-digit",
                     })}
                   </TableCell>
-                  <TableCell align="right">{data.age}</TableCell>
+                  <TableCell align="right">
+                    {new Date(data.deadLine).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "2-digit",
+                    })}
+                  </TableCell>
 
                   <TableCell align="right">
                     <button
@@ -381,6 +426,142 @@ export default function BasicTable() {
               <div className=" flex justify-end gap-3 mt-3">
                 <button
                   onClick={() => setOpen(false)}
+                  className="btn btn-error text-white"
+                >
+                  Back
+                </button>
+                <button
+                  // onClick={handleOpen}
+                  className="btn btn-active btn-accent text-white"
+                >
+                  Confirm
+                </button>
+              </div>
+            </div>
+          </form>
+        </Box>
+      </Modal>
+
+      <Modal
+        className="update-modal"
+        open={openUpdate}
+        onClose={handleCloseUpdate}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <form onSubmit={handleSubmit(onSubmitUpdate)}>
+            <div className="">
+              <h2 className=" text-center bg-green-400 text-black rounded-lg py-3 my-3">
+                Update Information
+              </h2>
+              <div className=" flex justify-center gap-5 mt-5">
+                <div>
+                  <p className=" mx-2  ">First Name</p>
+
+                  <input
+                    className=" rounded-md my-2 py-2 "
+                    {...register("firstName", { required: true })}
+                    defaultValue={formData.firstName}
+                  />
+                </div>
+                <div>
+                  <p className=" mx-2  ">Last Name</p>
+
+                  <input
+                    className=" rounded-md my-2 py-2"
+                    {...register("lastName", { required: true })}
+                    defaultValue={formData.lastName}
+                  />
+                </div>
+                <div className="">
+                  <p className=" mx-2 text-center  ">Age</p>
+
+                  <input
+                    className=" rounded-md my-2 py-2"
+                    {...register("age", { required: true })}
+                    defaultValue={formData.age}
+                  />
+                </div>
+              </div>
+              <div className=" flex gap-5 justify-center">
+                <div>
+                  <p className=" mx-2  ">Date Born</p>
+                  <Controller
+                    control={control}
+                    name="dateBorn"
+                    defaultValue={formData.born}
+                    rules={{ required: true }} //optional
+                    render={({
+                      field: { onChange, name, value },
+                      fieldState: { invalid, isDirty }, //optional
+                      formState: { errors }, //optional, but necessary if you want to show an error message
+                    }) => (
+                      <DatePicker
+                        value={value}
+                        onChange={(date: any) => {
+                          onChange(date?.isValid ? date : "");
+                        }}
+                        // Add margin and padding to the input field
+                        style={{ padding: "20px" }}
+                      />
+                    )}
+                  />
+                </div>
+                <div>
+                  <p className=" mx-2  ">Date Death</p>
+
+                  <Controller
+                    control={control}
+                    name="dateDie"
+                    defaultValue={formData.died}
+                    rules={{ required: true }} //optional
+                    render={({
+                      field: { onChange, name, value },
+                      fieldState: { invalid, isDirty }, //optional
+                      formState: { errors }, //optional, but necessary if you want to show an error message
+                    }) => (
+                      <DatePicker
+                        value={value}
+                        onChange={(date: any) => {
+                          onChange(date?.isValid ? date : "");
+                        }}
+                        // Add margin and padding to the input field
+                        style={{ padding: "20px" }}
+                      />
+                    )}
+                  />
+                </div>
+              </div>
+              <div className=" flex justify-center">
+                <div className=" mt-5">
+                  <p className=" mx-2 text-center  ">Deadline</p>
+
+                  <Controller
+                    control={control}
+                    name="deadLine"
+                    defaultValue={formData.deadLine}
+                    rules={{ required: true }} //optional
+                    render={({
+                      field: { onChange, name, value },
+                      fieldState: { invalid, isDirty }, //optional
+                      formState: { errors }, //optional, but necessary if you want to show an error message
+                    }) => (
+                      <DatePicker
+                        value={value}
+                        onChange={(date: any) => {
+                          onChange(date?.isValid ? date : "");
+                        }}
+                        // Add margin and padding to the input field
+                        style={{ padding: "20px" }}
+                      />
+                    )}
+                  />
+                </div>
+              </div>
+              <div className=" flex justify-end gap-3 mt-3">
+                <button
+                  onClick={() => setOpenUpdate(false)}
                   className="btn btn-error text-white"
                 >
                   Back

@@ -13,12 +13,13 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import AddContribution from "../api/addContribution";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import GetContribution from "../api/getcontribution";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { notifyError, notifySuccess } from "../Notifications";
 import DeleteContribution from "../api/deleteContrinbution";
+import DatePicker from "react-multi-date-picker";
 
 type Inputs = {
   firstName: string;
@@ -26,14 +27,17 @@ type Inputs = {
   born: string;
   age: string;
   died: string;
+  dateBorn: string;
+  dateDie: string;
+  deadLine: string;
 };
-
+const language: string = "en";
 const style = {
   position: "absolute" as "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 500,
+  width: 800,
   bgcolor: "#1976D2",
   boxShadow: 24,
   p: 4,
@@ -58,12 +62,45 @@ export default function BasicTable() {
     handleSubmit,
     watch,
     reset,
+    control,
     formState: { errors },
   } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    const date1 = new Date(data.dateBorn);
+    const date2 = new Date(data.dateDie);
+    const date3 = new Date(data.deadLine);
+
+    // Assuming you have a date object
+    const formattedDateBorn = date1.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+    const formattedDateDie = date2.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+
+    const formattedDateLine = date3.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+
+    const fillForm = {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      born: formattedDateBorn,
+      died: formattedDateDie,
+      age: data.age,
+      deadLine: formattedDateLine,
+    };
+    console.log(fillForm);
+
     try {
       const token = localStorage.getItem("token");
-      const response = await AddContribution.add(token, data);
+      const response = await AddContribution.add(token, fillForm);
       if (response.status) {
         getData();
         console.log("Created Successfully !");
@@ -76,8 +113,6 @@ export default function BasicTable() {
       console.log("Error 1 ");
       notifyError("Something went wrong!");
     }
-
-    console.log(data);
   };
 
   const getData = async () => {
@@ -157,8 +192,20 @@ export default function BasicTable() {
                   <TableCell component="th" scope="row">
                     {data.firstName}
                   </TableCell>
-                  <TableCell align="right">{data.born}</TableCell>
-                  <TableCell align="right">{data.died}</TableCell>
+                  <TableCell align="right">
+                    {new Date(data.born).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "2-digit",
+                    })}
+                  </TableCell>
+                  <TableCell align="right">
+                    {new Date(data.died).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "2-digit",
+                    })}
+                  </TableCell>
                   <TableCell align="right">{data.age}</TableCell>
 
                   <TableCell align="right">
@@ -190,21 +237,26 @@ export default function BasicTable() {
       >
         <Box sx={style}>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div>
+            <div className="">
               <h2 className=" text-center bg-[#0C3B68] text-white rounded-lg py-3 my-3">
                 Fill up this form
               </h2>
-              <div className=" flex gap-5">
+              <div className=" flex justify-center gap-5 mt-5">
                 <div>
                   <p className=" mx-2  ">First Name</p>
 
                   <input
-                    className=" rounded-md my-2 py-2"
+                    className=" rounded-md my-2 py-2 "
                     {...register("firstName", { required: true })}
                   />
-                  {errors.firstName && (
-                    <span className=" text-white">This field is required</span>
-                  )}
+
+                  <div>
+                    {errors.firstName && (
+                      <span className=" text-white">
+                        This field is required
+                      </span>
+                    )}
+                  </div>
                 </div>
                 <div>
                   <p className=" mx-2  ">Last Name</p>
@@ -213,35 +265,14 @@ export default function BasicTable() {
                     className=" rounded-md my-2 py-2"
                     {...register("lastName", { required: true })}
                   />
-                  {errors.lastName && (
-                    <span className=" text-white">This field is required</span>
-                  )}
+                  <div>
+                    {errors.lastName && (
+                      <span className=" text-white">
+                        This field is required
+                      </span>
+                    )}
+                  </div>
                 </div>
-              </div>
-              <div className=" flex gap-5">
-                <div>
-                  <p className=" mx-2  ">Date Born</p>
-                  <input
-                    className=" rounded-md my-2 py-2"
-                    {...register("born", { required: true })}
-                  />
-                  {errors.born && (
-                    <span className=" text-white">This field is required</span>
-                  )}
-                </div>
-                <div>
-                  <p className=" mx-2  ">Date Death</p>
-
-                  <input
-                    className=" rounded-md my-2 py-2"
-                    {...register("died", { required: true })}
-                  />
-                  {errors.died && (
-                    <span className=" text-white">This field is required</span>
-                  )}
-                </div>
-              </div>
-              <div className=" flex justify-center">
                 <div className="">
                   <p className=" mx-2 text-center  ">Age</p>
 
@@ -252,6 +283,99 @@ export default function BasicTable() {
                   {errors.age && (
                     <div className=" text-white">This field is required</div>
                   )}
+                </div>
+              </div>
+              <div className=" flex gap-5 justify-center">
+                <div>
+                  <p className=" mx-2  ">Date Born</p>
+                  <Controller
+                    control={control}
+                    name="dateBorn"
+                    rules={{ required: true }} //optional
+                    render={({
+                      field: { onChange, name, value },
+                      fieldState: { invalid, isDirty }, //optional
+                      formState: { errors }, //optional, but necessary if you want to show an error message
+                    }) => (
+                      <DatePicker
+                        value={value || ""}
+                        onChange={(date: any) => {
+                          onChange(date?.isValid ? date : "");
+                        }}
+                        // Add margin and padding to the input field
+                        style={{ padding: "20px" }}
+                      />
+                    )}
+                  />
+                  <div>
+                    {errors.dateBorn && (
+                      <span className=" text-white">
+                        This field is required
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <div>
+                  <p className=" mx-2  ">Date Death</p>
+
+                  <Controller
+                    control={control}
+                    name="dateDie"
+                    rules={{ required: true }} //optional
+                    render={({
+                      field: { onChange, name, value },
+                      fieldState: { invalid, isDirty }, //optional
+                      formState: { errors }, //optional, but necessary if you want to show an error message
+                    }) => (
+                      <DatePicker
+                        value={value || ""}
+                        onChange={(date: any) => {
+                          onChange(date?.isValid ? date : "");
+                        }}
+                        // Add margin and padding to the input field
+                        style={{ padding: "20px" }}
+                      />
+                    )}
+                  />
+                  <div>
+                    {errors.dateDie && (
+                      <span className=" text-white">
+                        This field is required
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className=" flex justify-center">
+                <div className=" mt-5">
+                  <p className=" mx-2 text-center  ">Deadline</p>
+
+                  <Controller
+                    control={control}
+                    name="deadLine"
+                    rules={{ required: true }} //optional
+                    render={({
+                      field: { onChange, name, value },
+                      fieldState: { invalid, isDirty }, //optional
+                      formState: { errors }, //optional, but necessary if you want to show an error message
+                    }) => (
+                      <DatePicker
+                        value={value || ""}
+                        onChange={(date: any) => {
+                          onChange(date?.isValid ? date : "");
+                        }}
+                        // Add margin and padding to the input field
+                        style={{ padding: "20px" }}
+                      />
+                    )}
+                  />
+                  <div>
+                    {errors.dateDie && (
+                      <span className=" text-white">
+                        This field is required
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
               <div className=" flex justify-end gap-3 mt-3">

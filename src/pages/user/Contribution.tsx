@@ -188,25 +188,32 @@ export default function BasicTable() {
 
   return (
     <div className=" h-screen">
-      <button
-        onClick={handleOpen}
-        className="btn btn-active btn-accent text-white"
-      >
-        <IoIosAddCircle />
-        Add Contribution
-      </button>
+      <div className=" flex justify-between">
+        <div>
+          <p className=" text-center border-2 px-20 rounded-md bg-slate-400 py-3">
+            Contribution
+          </p>
+        </div>
+        <div>
+          <button
+            onClick={handleOpen}
+            className="btn btn-active btn-accent text-white"
+          >
+            <IoIosAddCircle />
+            Add Contribution
+          </button>
+        </div>
+      </div>
       <TableContainer component={Paper} className=" mb-20 mt-10">
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
               <TableCell>Firs Namet</TableCell>
-              <TableCell align="right">Last Name</TableCell>
-              <TableCell align="right">Age</TableCell>
-
-              <TableCell align="right">Date Born</TableCell>
-              <TableCell align="right">Date Die</TableCell>
-              <TableCell align="right">Date Deadline</TableCell>
-
+              <TableCell align="left">Last Name</TableCell>
+              <TableCell align="left">Age</TableCell>
+              <TableCell align="left">Date Born</TableCell>
+              <TableCell align="left">Date Die</TableCell>
+              <TableCell align="left">Date Deadline</TableCell>
               <TableCell align="right">Action</TableCell>
             </TableRow>
           </TableHead>
@@ -226,34 +233,49 @@ export default function BasicTable() {
                   <TableCell component="th" scope="row">
                     {data.firstName}
                   </TableCell>
-                  <TableCell align="right" component="th" scope="row">
+                  <TableCell align="left" component="th" scope="row">
                     {data.lastName}
                   </TableCell>
-                  <TableCell align="right">{data.age}</TableCell>
+                  <TableCell align="left">{data.age}</TableCell>
 
-                  <TableCell align="right">
+                  <TableCell align="left">
                     {new Date(data.born).toLocaleDateString("en-US", {
                       year: "numeric",
                       month: "long",
                       day: "2-digit",
                     })}
                   </TableCell>
-                  <TableCell align="right">
+                  <TableCell align="left">
                     {new Date(data.died).toLocaleDateString("en-US", {
                       year: "numeric",
                       month: "long",
                       day: "2-digit",
                     })}
                   </TableCell>
-                  <TableCell align="right">
+                  <TableCell align="left">
+                    {data.countDown <= 0 ? (
+                      <p className="bg-red-300 text-center rounded-md">
+                        Already Due
+                      </p>
+                    ) : (
+                      <p className=" text-center bg-green-400 rounded-md">
+                        {data.countDown} Days left
+                      </p>
+                    )}
+                  </TableCell>
+                  {/* <TableCell align="right">
                     {new Date(data.deadLine).toLocaleDateString("en-US", {
                       year: "numeric",
                       month: "long",
                       day: "2-digit",
                     })}
-                  </TableCell>
+                  </TableCell> */}
 
                   <TableCell align="right">
+                    <button className="btn btn-active btn-accent mr-3 text-white">
+                      Payment
+                    </button>
+
                     <button
                       onClick={() => handleUpdate(data)}
                       className="btn btn-active btn-primary mr-3"

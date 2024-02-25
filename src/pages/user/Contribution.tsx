@@ -56,7 +56,6 @@ export default function BasicTable() {
     dateDie: "",
     deadLine: "",
   });
-  const [defaultDate, setDefaultDate] = React.useState(new Date());
   const [open, setOpen] = React.useState(false);
   const [openUpdate, setOpenUpdate] = React.useState(false);
 

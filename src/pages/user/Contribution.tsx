@@ -181,6 +181,10 @@ export default function BasicTable() {
     }
   };
 
+  const handlePaymeny = () => {
+    notifyError("UnderCodingPa : ) ");
+  };
+
   React.useEffect(() => {
     getData();
   }, []);
@@ -271,7 +275,10 @@ export default function BasicTable() {
                   </TableCell> */}
 
                   <TableCell align="right">
-                    <button className="btn btn-active btn-accent mr-3 text-white">
+                    <button
+                      onClick={handlePaymeny}
+                      className="btn btn-active btn-accent mr-3 text-white"
+                    >
                       Payment
                     </button>
 

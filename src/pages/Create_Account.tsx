@@ -205,7 +205,7 @@ export default function App() {
             </div>
           </div>
           <div className=" flex justify-end my-8 mx-2 gap-5">
-            <Link href="/">
+            <Link href="/admin/Main">
               <button className="  hover:bg-green-800 rounded-md bg-green-600 py-3 px-5 text-white">
                 Back
               </button>

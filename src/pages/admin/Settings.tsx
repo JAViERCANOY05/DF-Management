@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PersonPinIcon from "@mui/icons-material/PersonPin";
 import LockPersonIcon from "@mui/icons-material/LockPerson";
 import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
@@ -6,6 +6,7 @@ import Link from "next/link";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import { IoIosAddCircle } from "react-icons/io";
 import Modal from "@mui/material/Modal";
 
 const style = {
@@ -34,10 +35,27 @@ const Settings = () => {
   const role = localStorage.getItem("role");
   const email = localStorage.getItem("email");
 
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+
+  const handleSumbitPassowrd = (e: any) => {
+    e.preventDefault();
+    console.log(oldPassword, newPassword, " sdsd");
+  };
+
+  const handleChangeNew = (event: any) => {
+    setNewPassword(event.target.value);
+  };
+  const handleChangeOld = (event: any) => {
+    setOldPassword(event.target.value);
+  };
+
   return (
     <div>
       <div>
-        <p className=" text-center  bg-slate-400 p-5 rounded-lg text-white">Admin Settings</p>
+        <p className=" text-center  bg-slate-400 p-5 rounded-lg text-white">
+          Admin Settings
+        </p>
       </div>
       <div>
         <div className=" flex justify-center mt-28">
@@ -72,21 +90,6 @@ const Settings = () => {
             </button>
           </div>
         </div>
-        {/* <div className=" flex justify-center my-20">
-          <Link href="/admin/Notification">
-            <div className=" p-32 border-2 bg-slate-400 rounded-lg">
-              <div className=" h-10 mx-10">
-                <CircleNotificationsIcon
-                  className=" text-white"
-                  sx={{
-                    fontSize: 40, // Set the font size to control the height
-                  }}
-                />
-              </div>
-              <p className=" text-center font-bold mt-2">Notifications</p>
-            </div>
-          </Link>
-        </div> */}
       </div>
       <Modal
         open={open}
@@ -121,9 +124,55 @@ const Settings = () => {
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Password and Security
           </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-          </Typography>
+          <div className=" mt-5">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium leading-6 "
+            >
+              Old Password
+            </label>
+            <div className="mt-2">
+              <input
+                value={oldPassword}
+                onChange={handleChangeOld}
+                id="oldPassword"
+                name="oldPassword"
+                type="password"
+
+                autoComplete="oldPassword"
+                required
+                className="block font-bold px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+            </div>
+          </div>
+          <div>
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium leading-6 "
+            >
+              New Password
+            </label>
+            <div className="mt-2">
+              <input
+                value={newPassword}
+                onChange={handleChangeNew}
+                id="newPassword"
+                name="newPassword"
+                type="password"
+                autoComplete="newPassword"
+                required
+                className="block font-bold px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+            </div>
+          </div>
+          <div className=" flex justify-end mt-5">
+            <button
+              onClick={handleSumbitPassowrd}
+              className="btn btn-active btn-accent text-white"
+            >
+              Confirm
+            </button>
+          </div>
         </Box>
       </Modal>
     </div>

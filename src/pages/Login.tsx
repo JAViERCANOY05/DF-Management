@@ -34,11 +34,20 @@ const Home = () => {
       const response = await LoginAPI.logIn(formData);
       if (response.user.role === "admin") {
         localStorage.setItem("id", response.user._id);
+        localStorage.setItem("firstName", response.user.firstName);
+        localStorage.setItem("lastName", response.user.lastName);
+        localStorage.setItem("email", response.user.email);
+        localStorage.setItem("role", response.user.role);
         console.log("Welcome : ", response);
-
         localStorage.setItem("token", response.token);
         router.push("/admin/Main");
-      } else if (response.user.role === "user") {
+      } else if (response.user.role === "member") {
+        localStorage.setItem("id", response.user._id);
+        localStorage.setItem("firstName", response.user.firstName);
+        localStorage.setItem("lastName", response.user.lastName);
+        localStorage.setItem("email", response.user.email);
+        localStorage.setItem("role", response.user.role);
+
         localStorage.setItem("token", response.token);
         console.log(
           "Welcome : ",
@@ -133,13 +142,13 @@ const Home = () => {
             </div>
           </form>
 
-          <p className="mt-10 text-center text-sm text-gray-500">
+          {/* <p className="mt-10 text-center text-sm text-gray-500">
             <Link href="/Create_Account">
               <button className="font-semibold leading-6 text-white hover:text-black">
                 Dont have an Account ? Create Account
               </button>
             </Link>
-          </p>
+          </p> */}
         </div>
         <div className=" flex justify-center my-10">
           <Link href="/">

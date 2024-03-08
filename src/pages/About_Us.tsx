@@ -57,104 +57,49 @@ const MyComponent = () => {
             <div className=" col-span-6">
               <div
                 className="relative block mx-32  rounded-lg  h-64 
-                      bg-gray-900 group"
+                      bg-white group"
               >
-                <div
-                  className="absolute text-center rounded-lg  pt-28 bg-slate-300 inset-0 
-                            w-full h-64 group-hover:opacity-50"
-                >
-                  <p className=" uppercase mb-20 bg-yellow-300 text-center mx-2 py-2 px-5 text-white font-bold">
-                    Trasparency
-                  </p>
-                </div>
-                <div className="relative p-10">
-                  <div className="mt-2">
-                    <div
-                      className="transition-all transform 
-                                translate-y-8 opacity-0 
-                                group-hover:opacity-100 
-                                group-hover:translate-y-0"
-                    >
-                      <div className="p-2">
-                        <p className="text-xl cursor-pointer text-center text-white">
-                          We make sure everything <br /> including transaction
-                          and
-                          <br />
-                          disbursement be transform
-                          <br /> for more trusted funding.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <p className=" uppercase text-center py-5 text-2xl font-bold">
+                  Trasparency
+                </p>
+                <p className="text-xl  text-center text-gray-500  py-5">
+                  We make sure everything <br /> including transaction and
+                  <br />
+                  disbursement be transform
+                  <br /> for more trusted funding.
+                </p>
               </div>
             </div>
             <div className=" col-span-6">
               <div
                 className="relative block mx-32  rounded-lg  h-64 
-                      bg-gray-900 group"
+                      bg-white group"
               >
-                <div
-                  className="absolute text-center rounded-lg  pt-28  bg-slate-300 inset-0 
-                            w-full h-64 group-hover:opacity-50"
-                >
-                  <p className=" uppercase mb-20 bg-yellow-300 text-center mx-2 py-2 px-5 text-white font-bold">
-                    Efficiency
-                  </p>
-                </div>
-                <div className="relative p-10">
-                  <div className="mt-2">
-                    <div
-                      className="transition-all transform 
-                                translate-y-8 opacity-0 
-                                group-hover:opacity-100 
-                                group-hover:translate-y-0"
-                    >
-                      <div className="p-2">
-                        <p className="text-xl cursor-pointer text-center text-white">
-                          We show how efficient this <br /> death fund
-                          organization is <br />
-                          through report of how the
-                          <br /> process are effective.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <p className=" uppercase text-center py-5 text-2xl font-bold">
+                  Efficiency
+                </p>
+                <p className="text-xl  text-center text-gray-500  py-5">
+                  We show how efficient this <br /> death fund organization is{" "}
+                  <br />
+                  through report of how the
+                  <br /> process are effective.
+                </p>
               </div>
             </div>
           </div>
           <div className=" flex justify-center my-10">
             <div
-              className="relative block w-1/4 rounded-lg  h-64 
-                      bg-gray-900 group"
+              className="relative block px-40  rounded-lg  h-64 
+                      bg-white group"
             >
-              <div
-                className="absolute text-center rounded-lg  pt-28  bg-slate-300 inset-0 
-                            w-full h-64 group-hover:opacity-50"
-              >
-                <p className=" uppercase mb-20 bg-yellow-300 text-center mx-2 py-2 px-5 text-white font-bold">
-                  Empathy
-                </p>
-              </div>
-              <div className="relative p-10">
-                <div className="mt-2">
-                  <div
-                    className="transition-all transform 
-                                translate-y-8 opacity-0 
-                                group-hover:opacity-100 
-                                group-hover:translate-y-0"
-                  >
-                    <div className="p-2">
-                      <p className="text-xl cursor-pointer text-center text-white">
-                        We offer understanding <br />
-                        emotional aspects as well <br />
-                        as support.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <p className=" uppercase text-center py-5 text-2xl font-bold">
+                Empathy
+              </p>
+              <p className="text-xl cursor-pointer text-gray-500 text-center py-5">
+                We offer understanding <br />
+                emotional aspects as well <br />
+                as support.
+              </p>
             </div>
           </div>
         </div>

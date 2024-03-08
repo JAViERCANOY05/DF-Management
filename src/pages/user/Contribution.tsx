@@ -79,7 +79,6 @@ export default function BasicTable() {
     const date1 = new Date(data.dateBorn);
     const date2 = new Date(data.dateDie);
     const date3 = new Date(data.deadLine);
-
     // Assuming you have a date object
     const formattedDateBorn = date1.toLocaleDateString("en-US", {
       year: "numeric",
@@ -216,8 +215,8 @@ export default function BasicTable() {
               <TableCell align="left">Age</TableCell>
               <TableCell align="left">Date Born</TableCell>
               <TableCell align="left">Date Die</TableCell>
-              <TableCell align="left">Date Deadline</TableCell>
-              <TableCell align="right">Action</TableCell>
+              <TableCell align="right">Date Deadline</TableCell>
+              {/* <TableCell align="right">Action</TableCell> */}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -274,7 +273,7 @@ export default function BasicTable() {
                     })}
                   </TableCell> */}
 
-                  <TableCell align="right">
+                  {/* <TableCell align="right">
                     <button
                       onClick={handlePaymeny}
                       className="btn btn-active btn-accent mr-3 text-white"
@@ -295,7 +294,7 @@ export default function BasicTable() {
                     >
                       Delete
                     </button>
-                  </TableCell>
+                  </TableCell> */}
                 </TableRow>
               ))
             )}

@@ -23,7 +23,9 @@ const rows = [
 export default function BasicTable() {
   return (
     <div className=" h-screen">
-    
+      <p className=" text-center  bg-slate-400 rounded-lg p-5">
+        Transaction
+      </p>
       <TableContainer component={Paper} className=" my-20">
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>

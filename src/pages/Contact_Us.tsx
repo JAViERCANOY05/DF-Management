@@ -45,7 +45,7 @@ const MyComponent = () => {
                       bg-gray-900 group"
         >
           <div
-            className="absolute rounded-lg cursor-pointer  text-center pt-28 bg-blue-700 inset-0 
+            className="absolute rounded-lg cursor-pointer  text-center pt-24 bg-blue-700 inset-0 
                             w-full h-64 group-hover:opacity-50"
           >
             <LocalPhoneIcon
@@ -54,26 +54,7 @@ const MyComponent = () => {
                 fontSize: 40, // Set the font size to control the height
               }}
             />
-          </div>
-          <div className="relative p-10">
-            <div className="mt-2">
-              {/* Hidden content */}
-              <div
-                className="transition-all
-                 transform 
-                 bg-blue-700
-                                translate-y-8 opacity-0 
-                                group-hover:opacity-100 
-                                group-hover:translate-y-0"
-              >
-                <div className="p-2">
-                  <p className="text-xl text-center cursor-pointer text-white">
-                    +63-998-765-4321
-                  </p>
-                </div>
-              </div>
-              {/* End of hidden content */}
-            </div>
+            <div className="p-2 text-white text-xl">+639123456789</div>
           </div>
         </div>
         <div
@@ -81,7 +62,7 @@ const MyComponent = () => {
                       bg-gray-900 group"
         >
           <div
-            className="absolute text-center rounded-lg  pt-28  bg-blue-700 inset-0 
+            className="absolute text-center rounded-lg  pt-24  bg-blue-700 inset-0 
                             w-full h-64 group-hover:opacity-50"
           >
             <EmailIcon
@@ -90,29 +71,14 @@ const MyComponent = () => {
                 fontSize: 40, // Set the font size to control the height
               }}
             />
-          </div>
-          <div className="relative p-10">
-            <div className="mt-2">
-              {/* Hidden content */}
-              <div
-                className="transition-all transform 
-                                translate-y-8 opacity-0 
-                                group-hover:opacity-100 
-                                group-hover:translate-y-0
-                                bg-blue-700
-                                "
-              >
-                <div className="p-2">
-                  <p
-                    className="text-xl text-center cursor-pointer text-white
+            <div className="p-2">
+              <p
+                className="text-xl text-center  text-white
                   
                   "
-                  >
-                    rosemariego@gmail.com
-                  </p>
-                </div>
-              </div>
-              {/* End of hidden content */}
+              >
+                rosemariego@gmail.com
+              </p>
             </div>
           </div>
         </div>
@@ -121,7 +87,7 @@ const MyComponent = () => {
                       bg-gray-900 group"
         >
           <div
-            className="absolute rounded-lg  text-center pt-28  bg-blue-700 inset-0 
+            className="absolute rounded-lg  text-center pt-24  bg-blue-700 inset-0 
                             w-full h-64 group-hover:opacity-50"
           >
             <LocationOnIcon
@@ -130,24 +96,10 @@ const MyComponent = () => {
                 fontSize: 40, // Set the font size to control the height
               }}
             />
-          </div>
-          <div className="relative p-10">
-            <div className="mt-2">
-              {/* Hidden content */}
-              <div
-                className="transition-all transform 
-                                translate-y-8 opacity-0 
-                                group-hover:opacity-100 
-                                group-hover:translate-y-0
-                                bg-blue-700"
-              >
-                <div className="p-2">
-                  <p className="text-xl text-center cursor-pointer text-white">
-                    Purok 4 Lungsudaan,Candijay, Bohol
-                  </p>
-                </div>
-              </div>
-              {/* End of hidden content */}
+            <div className="p-2">
+              <p className="text-xl text-center cursor-pointer text-white">
+                Purok 4 Lungsudaan,Candijay, Bohol
+              </p>
             </div>
           </div>
         </div>

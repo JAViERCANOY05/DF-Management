@@ -13,7 +13,7 @@ const SuccessCreatedAccount = () => {
           </div>
         </div>
         <div className=" flex justify-center gap-5 my-5">
-          <Link href="/">
+          <Link href="/admin/Main">
             <button className="  hover:bg-red-800 rounded-md bg-red-600 py-3 px-5 text-white">
               Back
             </button>

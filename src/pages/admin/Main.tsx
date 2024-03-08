@@ -25,7 +25,6 @@ import Dashboard from "./Dashboard";
 import Add_Contribution from "./Add_Contribution";
 import Announcement from "./Announcement";
 import Manage_User from "./Manage_User";
-import Record_Member from "./Record_Member";
 import Settings from "./Settings";
 import Transaction from "./Transaction";
 import { useRouter } from "next/navigation"; // Correct import
@@ -61,13 +60,13 @@ const component: display[] = [
     icon: <RiHeartAddFill style={{ fontSize: "1.5em", color: "#1976D2" }} />,
     href: "Add_Contribution",
   },
-  {
-    name: "Record_Member",
-    icon: (
-      <MdOutlineHistoryEdu style={{ fontSize: "1.5em", color: "#1976D2" }} />
-    ),
-    href: "Record_Member",
-  },
+  // {
+  //   name: "Record_Member",
+  //   icon: (
+  //     <MdOutlineHistoryEdu style={{ fontSize: "1.5em", color: "#1976D2" }} />
+  //   ),
+  //   href: "Record_Member",
+  // },
   {
     name: "Manage_User",
     icon: <MdManageAccounts style={{ fontSize: "1.5em", color: "#1976D2" }} />,
@@ -183,8 +182,6 @@ export default function MiniDrawer() {
       setDisplayComponent(<Add_Contribution />);
     } else if (item === "Announcement") {
       setDisplayComponent(<Announcement />);
-    } else if (item === "Record_Member") {
-      setDisplayComponent(<Record_Member />);
     } else if (item === "Settings") {
       setDisplayComponent(<Settings />);
     } else if (item === "Transaction") {

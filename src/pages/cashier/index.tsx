@@ -16,22 +16,15 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 import { useState } from "react";
-import Link from "next/link";
-
-import Avatar from "@mui/material/Avatar";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import Tooltip from "@mui/material/Tooltip";
-import Logout from "@mui/icons-material/Logout";
+import Announcement from "./Announcement";
 
 import Dashboard from "./Dashboard";
 import Contribution from "./Contribution";
 import Report from "./Report";
 import Settings from "./Setting";
 import Payment from "./Payment";
+import Approval from "./Approval";
 
 import { MdDashboardCustomize } from "react-icons/md";
 import { RiHeartAddFill } from "react-icons/ri";
@@ -42,6 +35,7 @@ import { GrAnnounce } from "react-icons/gr";
 import { GrTransaction } from "react-icons/gr";
 import { GiExitDoor } from "react-icons/gi";
 import { useRouter } from "next/navigation"; // Correct import
+import { MdApproval } from "react-icons/md";
 
 const drawerWidth = 240;
 
@@ -66,16 +60,27 @@ const component: display[] = [
     href: "Contribution",
   },
   {
-    name: "Report",
-    icon: (
-      <MdOutlineHistoryEdu style={{ fontSize: "1.5em", color: "#1976D2" }} />
-    ),
-    href: "Report",
+    name: "Approval",
+    icon: <MdApproval style={{ fontSize: "1.5em", color: "#1976D2" }} />,
+    href: "Approval",
   },
+
+  // {
+  //   name: "Report",
+  //   icon: (
+  //     <MdOutlineHistoryEdu style={{ fontSize: "1.5em", color: "#1976D2" }} />
+  //   ),
+  //   href: "Report",
+  // },
+  // {
+  //   name: "Payment",
+  //   icon: <GrTransaction style={{ fontSize: "1.5em", color: "#1976D2" }} />,
+  //   href: "Payment",
+  // },
   {
-    name: "Payment",
-    icon: <GrTransaction style={{ fontSize: "1.5em", color: "#1976D2" }} />,
-    href: "Payment",
+    name: "Announcement",
+    icon: <GrAnnounce style={{ fontSize: "1.5em", color: "#1976D2" }} />,
+    href: "Announcement",
   },
 
   {
@@ -187,6 +192,10 @@ export default function MiniDrawer() {
       setDisplayComponent(<Settings />);
     } else if (item === "Payment") {
       setDisplayComponent(<Payment />);
+    } else if (item === "Announcement") {
+      setDisplayComponent(<Announcement />);
+    } else if (item === "Approval") {
+      setDisplayComponent(<Approval />);
     }
   };
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);

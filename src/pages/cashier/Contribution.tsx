@@ -21,6 +21,7 @@ import { notifyError, notifySuccess } from "../Notifications";
 import DeleteContribution from "../api/deleteContrinbution";
 import DatePicker from "react-multi-date-picker";
 import UpdateContribution from "../api/updateContribution";
+import Payment from "../api/payment";
 type Inputs = {
   firstName: string;
   lastName: string;
@@ -30,6 +31,7 @@ type Inputs = {
   dateBorn: string;
   dateDie: string;
   deadLine: string;
+  amount: string;
 };
 const language: string = "en";
 const style = {
@@ -60,18 +62,80 @@ export default function BasicTable() {
   const [openUpdate, setOpenUpdate] = React.useState(false);
 
   const [openPayment, setOpenPayment] = React.useState(false);
-  const handleOpenPayment = () => setOpenPayment(true);
+  const handleOpenPayment = (id: any) => {
+    console.log(id);
+    setId(id);
+    setOpenPayment(true);
+  };
   const handleClosePayment = () => setOpenPayment(false);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const handleOpenUpdate = () => setOpenUpdate(true);
+  const handleOpenUpdate = () => {
+    setOpenUpdate(true);
+  };
   const handleCloseUpdate = () => {
     reset();
     setOpenUpdate(false);
   };
   const [data, setData] = React.useState([]);
+  const [name, setName] = React.useState("");
+  const [number, setNumber] = React.useState("");
+  const [paymentMethod, setPaymentMethod] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [amount, setAmount] = React.useState("");
+  const [id, setId] = React.useState("");
+
+  const handleChangeName = (event: any) => {
+    setName(event.target.value);
+  };
+  const handleChangePaymentMethod = (event: any) => {
+    setPaymentMethod(event.target.value);
+  };
+  const handleChangeNumber = (event: any) => {
+    setNumber(event.target.value);
+  };
+
+  const handleChangeEmail = (event: any) => {
+    setEmail(event.target.value);
+  };
+  const handleChangeAmount = (event: any) => {
+    setAmount(event.target.value);
+  };
+
+  const payment = async (e: any) => {
+    e.preventDefault();
+    try {
+      const newData = {
+        name: name,
+        number: number,
+        paymentMethod: paymentMethod,
+        email: email,
+        amount: amount,
+      };
+      const token = localStorage.getItem("token");
+      const response = await Payment.pay(token, id, newData);
+      if (response.status) {
+        notifySuccess("Successfully Paid!");
+        console.log("goods");
+        getData();
+        handleClosePayment();
+        setName("");
+        setNumber("");
+        setPaymentMethod("");
+        setEmail("");
+        setAmount("");
+      } else {
+        notifyError("someting went wrong");
+        console.log("error");
+      }
+    } catch (error) {
+      notifyError("someting went wrong");
+      console.log("error");
+    }
+  };
+
   const {
     register,
     handleSubmit,
@@ -108,6 +172,7 @@ export default function BasicTable() {
       died: formattedDateDie,
       age: data.age,
       deadLine: formattedDateLine,
+      amount: data.amount,
     };
     console.log(fillForm);
 
@@ -200,22 +265,15 @@ export default function BasicTable() {
             Contribution
           </p>
         </div>
-        <div>
-          <button
-            onClick={handleOpen}
-            className="btn btn-active btn-accent text-white"
-          >
-            <IoIosAddCircle />
-            Add Contribution
-          </button>
-        </div>
+        <div></div>
       </div>
       <TableContainer component={Paper} className=" mb-20 mt-10">
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Firs Namet</TableCell>
+              <TableCell>Firs Name</TableCell>
               <TableCell align="left">Last Name</TableCell>
+              <TableCell align="left">Amount to Pay</TableCell>
               <TableCell align="left">Age</TableCell>
               <TableCell align="left">Date Born</TableCell>
               <TableCell align="left">Date Die</TableCell>
@@ -242,6 +300,9 @@ export default function BasicTable() {
                   </TableCell>
                   <TableCell align="left" component="th" scope="row">
                     {data.lastName}
+                  </TableCell>
+                  <TableCell align="left" component="th" scope="row">
+                    ₱ {data.amount}
                   </TableCell>
                   <TableCell align="left">{data.age}</TableCell>
 
@@ -282,20 +343,12 @@ export default function BasicTable() {
                     )}
                   </TableCell>
 
-                  {/* <TableCell align="right">
-                    {new Date(data.deadLine).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "long",
-                      day: "2-digit",
-                    })}
-                  </TableCell> */}
-
                   <TableCell align="right">
                     <button
-                      onClick={handleOpenPayment}
+                      onClick={() => handleOpenPayment(data._id)}
                       className="btn btn-active btn-accent mr-3 text-white"
                     >
-                      Approve
+                      Pay
                     </button>
 
                     <button
@@ -435,10 +488,19 @@ export default function BasicTable() {
                   </div>
                 </div>
               </div>
-              <div className=" flex justify-center">
-                <div className=" mt-5">
+              <div className=" flex justify-center gap-5">
+                <div className="my-2">
+                  <p className=" mx-2 text-center  ">Amount</p>
+                  <input
+                    className=" rounded-md  py-2"
+                    {...register("amount", { required: true })}
+                  />
+                  {errors.amount && (
+                    <div className=" text-white">This field is required</div>
+                  )}
+                </div>
+                <div className=" my-2">
                   <p className=" mx-2 text-center  ">Deadline</p>
-
                   <Controller
                     control={control}
                     name="deadLine"
@@ -634,10 +696,129 @@ export default function BasicTable() {
             component="h2"
             className=" text-white"
           >
-            Payment
+            <p className=" text-center">Payment Transcation</p>
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+            <div className=" flex gap-5 justify-center">
+              <div className=" mt-5">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium leading-6 "
+                >
+                  Name
+                </label>
+                <div className="mt-2">
+                  <input
+                    value={name}
+                    onChange={handleChangeName}
+                    id="name"
+                    name="name"
+                    type="text"
+                    autoComplete="name"
+                    required
+                    className="block font-bold px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  />
+                </div>
+              </div>
+              <div className=" mt-5">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium leading-6 "
+                >
+                  Number
+                </label>
+                <div className="mt-2">
+                  <input
+                    value={number}
+                    onChange={handleChangeNumber}
+                    id="email"
+                    name="email"
+                    type="text"
+                    autoComplete="email"
+                    required
+                    className="block font-bold px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  />
+                </div>
+              </div>
+            </div>
+            <div className=" flex gap-5 justify-center ">
+              <div className=" mt-5">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium leading-6 "
+                >
+                  Payment Method
+                </label>
+                <div className="mt-2">
+                  <input
+                    value={paymentMethod}
+                    onChange={handleChangePaymentMethod}
+                    id="paymentMethod"
+                    name="paymentMethod"
+                    type="text"
+                    autoComplete="paymentMethod"
+                    required
+                    className="block font-bold px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  />
+                </div>
+              </div>
+              <div className=" mt-5">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium leading-6 "
+                >
+                  Email
+                </label>
+                <div className="mt-2">
+                  <input
+                    value={email}
+                    onChange={handleChangeEmail}
+                    id="email"
+                    name="email"
+                    type="text"
+                    autoComplete="email"
+                    required
+                    className="block font-bold px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  />
+                </div>
+              </div>
+            </div>
+            <div className=" flex gap-5 justify-center">
+              <div className=" mt-5">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium leading-6 "
+                >
+                  Amount to Pay
+                </label>
+                <div className="mt-2">
+                  <input
+                    value={amount}
+                    onChange={handleChangeAmount}
+                    id="amount"
+                    name="amount"
+                    type="text"
+                    autoComplete="amount"
+                    required
+                    className="block font-bold px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  />
+                </div>
+              </div>
+            </div>
+            <div className=" flex justify-evenly my-10 gap-5">
+              <button
+                onClick={() => setOpenPayment(false)}
+                className="btn btn-error text-white"
+              >
+                Back
+              </button>
+              <button
+                onClick={payment}
+                className="btn btn-active btn-accent mr-3 text-white"
+              >
+                Confirm
+              </button>
+            </div>
           </Typography>
         </Box>
       </Modal>

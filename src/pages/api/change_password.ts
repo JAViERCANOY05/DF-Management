@@ -15,7 +15,11 @@ const ChangePass = {
       );
       if (response.ok) {
         const responseData = await response.json();
-        return responseData;
+        const sendTo ={
+          status : true , 
+          response : responseData
+        }
+        return sendTo;
       }
       throw new Error(response.status.toString());
     } catch (error) {

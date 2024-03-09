@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import PersonPinIcon from "@mui/icons-material/PersonPin";
 import LockPersonIcon from "@mui/icons-material/LockPerson";
-import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
-import Link from "next/link";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { IoIosAddCircle } from "react-icons/io";
 import Modal from "@mui/material/Modal";
+import ChangePass from "../api/change_password";
 
 const style = {
   position: "absolute" as "absolute",
@@ -48,6 +47,26 @@ const Settings = () => {
   };
   const handleChangeOld = (event: any) => {
     setOldPassword(event.target.value);
+  };
+
+  const onSubmitNew = async () => {
+    const newData = {
+      currentPassword: oldPassword,
+      newPassword: newPassword,
+    };
+    console.log(newData, 111111);
+    try {
+      const token = localStorage.getItem("token");
+      const response = await ChangePass.changePassword(newData, token);
+      if (response.status) {
+        console.log("Password Successfully");
+        handleClosePassword();
+      } else {
+        console.log("Something went wrong ! ");
+      }
+    } catch (error) {
+      console.log("Something went wrong ! ");
+    }
   };
 
   return (
@@ -138,7 +157,6 @@ const Settings = () => {
                 id="oldPassword"
                 name="oldPassword"
                 type="password"
-
                 autoComplete="oldPassword"
                 required
                 className="block font-bold px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -167,7 +185,7 @@ const Settings = () => {
           </div>
           <div className=" flex justify-end mt-5">
             <button
-              onClick={handleSumbitPassowrd}
+              onClick={onSubmitNew}
               className="btn btn-active btn-accent text-white"
             >
               Confirm

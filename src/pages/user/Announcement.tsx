@@ -15,6 +15,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { notifyError, notifySuccess } from "../Notifications";
 import UpdateContribution from "../api/updateContribution";
 import GetAnnouncement from "../api/getAnnouncement";
+
 import AddAnnouncement from "../api/addAnnoucement";
 type Inputs = {
   _id: string;
@@ -59,7 +60,7 @@ export default function BasicTable() {
         message: "",
         amount: 0,
       },
-      date: 0,
+      date: "",
     },
   ]);
   const {
@@ -95,25 +96,6 @@ export default function BasicTable() {
     } catch (error) {
       notifyError("Something went wrong!");
       console.log("error");
-    }
-  };
-  const onSubmitUpdate: SubmitHandler<Inputs> = async (data) => {
-    try {
-      const token = localStorage.getItem("token");
-      const response = await UpdateContribution.update(
-        token,
-        data,
-        formData._id
-      );
-      if (response.status) {
-        getData();
-        setOpenUpdate(false);
-        notifySuccess(response.response.message);
-      } else {
-        notifyError("Something went wrong!");
-      }
-    } catch (error) {
-      notifyError("Something went wrong!");
     }
   };
 
@@ -159,15 +141,7 @@ export default function BasicTable() {
             Announcements
           </p>
         </div>
-        <div>
-          <button
-            onClick={handleOpen}
-            className="btn btn-active btn-accent text-white"
-          >
-            <IoIosAddCircle />
-            Add Annoucement
-          </button>
-        </div>
+        <div></div>
       </div>
       <TableContainer component={Paper} className=" mb-20 mt-10">
         <Table sx={{ minWidth: 650 }} aria-label="simple table">

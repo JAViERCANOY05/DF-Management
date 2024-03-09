@@ -16,22 +16,14 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 import { useState } from "react";
-import Link from "next/link";
-
-import Avatar from "@mui/material/Avatar";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import Tooltip from "@mui/material/Tooltip";
-import Logout from "@mui/icons-material/Logout";
 
 import Dashboard from "./Dashboard";
 import Contribution from "./Contribution";
 import Report from "./Report";
 import Transaction from "./Transaction";
 import Settings from "./Setting";
+import Announcement from "./Announcement";
 
 import { MdDashboardCustomize } from "react-icons/md";
 import { RiHeartAddFill } from "react-icons/ri";
@@ -53,30 +45,27 @@ interface display {
 
 const component: display[] = [
   {
-    name: "Dashboard",
-    icon: (
-      <MdDashboardCustomize style={{ fontSize: "1.5em", color: "#1976D2" }} />
-    ),
-    href: "Dashboard",
-  },
-
-  {
     name: "Contribution",
     icon: <RiHeartAddFill style={{ fontSize: "1.5em", color: "#1976D2" }} />,
     href: "Contribution",
   },
   {
-    name: "Report",
-    icon: (
-      <MdOutlineHistoryEdu style={{ fontSize: "1.5em", color: "#1976D2" }} />
-    ),
-    href: "Report",
+    name: "Announcement",
+    icon: <GrAnnounce style={{ fontSize: "1.5em", color: "#1976D2" }} />,
+    href: "Announcement",
   },
-  {
-    name: "Transaction",
-    icon: <GrTransaction style={{ fontSize: "1.5em", color: "#1976D2" }} />,
-    href: "Transaction",
-  },
+  // {
+  //   name: "Report",
+  //   icon: (
+  //     <MdOutlineHistoryEdu style={{ fontSize: "1.5em", color: "#1976D2" }} />
+  //   ),
+  //   href: "Report",
+  // },
+  // {
+  //   name: "Transaction",
+  //   icon: <GrTransaction style={{ fontSize: "1.5em", color: "#1976D2" }} />,
+  //   href: "Transaction",
+  // },
 
   {
     name: "Settings",
@@ -161,7 +150,7 @@ export default function MiniDrawer() {
   const router = useRouter();
 
   const [open, setOpen] = React.useState(false);
-  const [displayComponent, setDisplayComponent] = useState(<Dashboard />);
+  const [displayComponent, setDisplayComponent] = useState(<Contribution />);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -177,12 +166,10 @@ export default function MiniDrawer() {
   };
   const handlerClick = (item: any) => {
     console.log(item);
-    if (item === "Dashboard") {
-      setDisplayComponent(<Dashboard />);
-    } else if (item === "Contribution") {
+    if (item === "Contribution") {
       setDisplayComponent(<Contribution />);
-    } else if (item === "Report") {
-      setDisplayComponent(<Report />);
+    } else if (item === "Announcement") {
+      setDisplayComponent(<Announcement />);
     } else if (item === "Settings") {
       setDisplayComponent(<Settings />);
     } else if (item === "Transaction") {

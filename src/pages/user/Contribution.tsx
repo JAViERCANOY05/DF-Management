@@ -197,13 +197,13 @@ export default function BasicTable() {
           </p>
         </div>
         <div>
-          <button
+          {/* <button
             onClick={handleOpen}
             className="btn btn-active btn-accent text-white"
           >
             <IoIosAddCircle />
             Add Contribution
-          </button>
+          </button> */}
         </div>
       </div>
       <TableContainer component={Paper} className=" mb-20 mt-10">

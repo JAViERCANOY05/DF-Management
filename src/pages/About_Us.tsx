@@ -8,17 +8,17 @@ const MyComponent = () => {
       <div className=" h-screen bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 px-10 py-5  ">
         <div className="nav-bar  flex justify-end  font-bold text-white ">
           <Link href="/">
-            <button className="mx-3 hover:text-yellow-300">Home</button>
+            <button className="mx-5 hover:text-yellow-300">Home</button>
           </Link>
-          <button className="mx-3 hover:text-yellow-300">About Us</button>
+          <button className="mx-5 hover:text-yellow-300">About Us</button>
           <Link href="/Services">
-            <button className="mx-3 hover:text-yellow-300"> Services</button>
+            <button className="mx-5 hover:text-yellow-300"> Services</button>
           </Link>
           <Link href="/Contact_Us">
-            <button className="mx-3 hover:text-yellow-300"> Contact</button>
+            <button className="mx-5 hover:text-yellow-300"> Contact</button>
           </Link>
           <Link href="/Login">
-            <button className="mx-3 hover:text-yellow-300"> Login</button>
+            <button className="mx-5 hover:text-yellow-300"> Login</button>
           </Link>
         </div>
         <div className=" my-40">

@@ -20,6 +20,8 @@ import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import { useState } from "react";
 import Link from "next/link";
+import { MdApproval } from "react-icons/md";
+import Approval from "./Approval";
 
 import Dashboard from "./Dashboard";
 import Add_Contribution from "./Add_Contribution";
@@ -56,21 +58,20 @@ const component: display[] = [
   },
 
   {
-    name: "Add_Contribution",
+    name: "Contribution",
     icon: <RiHeartAddFill style={{ fontSize: "1.5em", color: "#1976D2" }} />,
     href: "Add_Contribution",
   },
-  // {
-  //   name: "Record_Member",
-  //   icon: (
-  //     <MdOutlineHistoryEdu style={{ fontSize: "1.5em", color: "#1976D2" }} />
-  //   ),
-  //   href: "Record_Member",
-  // },
+ 
   {
     name: "Manage_User",
     icon: <MdManageAccounts style={{ fontSize: "1.5em", color: "#1976D2" }} />,
     href: "Manage_User",
+  },
+  {
+    name: "Approval",
+    icon: <MdApproval style={{ fontSize: "1.5em", color: "#1976D2" }} />,
+    href: "Approval",
   },
 
   {
@@ -188,7 +189,10 @@ export default function MiniDrawer() {
       setDisplayComponent(<Transaction />);
     } else if (item === "Manage_User") {
       setDisplayComponent(<Manage_User />);
+    } else if (item === "Approval") {
+      setDisplayComponent(<Approval />);
     }
+    // Approval
   };
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open1 = Boolean(anchorEl);

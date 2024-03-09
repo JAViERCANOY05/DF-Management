@@ -231,6 +231,8 @@ export default function BasicTable() {
             <TableRow>
               <TableCell>Firs Name</TableCell>
               <TableCell align="left">Last Name</TableCell>
+              <TableCell align="left">Email</TableCell>
+
               <TableCell align="left">Date join</TableCell>
             </TableRow>
           </TableHead>
@@ -252,6 +254,9 @@ export default function BasicTable() {
                   </TableCell>
                   <TableCell align="left" component="th" scope="row">
                     {data.lastName}
+                  </TableCell>
+                  <TableCell align="left" component="th" scope="row">
+                    {data.email}
                   </TableCell>
                   <TableCell align="left">
                     {new Date(data.dateJoin).toLocaleDateString("en-US", {

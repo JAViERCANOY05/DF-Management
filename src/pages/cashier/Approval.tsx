@@ -6,10 +6,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import Link from "next/link";
-import { IoIosAddCircle } from "react-icons/io";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import AddContribution from "../api/addContribution";
@@ -21,7 +18,10 @@ import { notifyError, notifySuccess } from "../Notifications";
 import DeleteContribution from "../api/deleteContrinbution";
 import DatePicker from "react-multi-date-picker";
 import UpdateContribution from "../api/updateContribution";
+import GetAllTransaction from "../api/getAllTransaction";
 import Payment from "../api/payment";
+import DeleteTrans from "../api/deleteTrans";
+import Approval from "../api/approval";
 type Inputs = {
   firstName: string;
   lastName: string;
@@ -86,6 +86,29 @@ export default function BasicTable() {
   const [email, setEmail] = React.useState("");
   const [amount, setAmount] = React.useState("");
   const [id, setId] = React.useState("");
+  const [trans, setTrans] = React.useState([
+    {
+      _id: "",
+      userId: "",
+      name: "",
+      email: "",
+      number: "",
+      contribution: {
+        _id: "",
+        firstName: "",
+        lastName: "",
+        born: "",
+        died: "",
+        age: "",
+      },
+      paymentMethod: "",
+      status: "",
+      amount: "",
+      image: "",
+      date: "",
+      referenceNumber: "",
+    },
+  ]);
 
   const handleChangeName = (event: any) => {
     setName(event.target.value);
@@ -104,6 +127,17 @@ export default function BasicTable() {
     setAmount(event.target.value);
   };
 
+  const handlePayment = (e: any) => {
+    e.preventDefault();
+    setOpenPayment(false);
+    console.log(name, number, paymentMethod, email, amount, "===========");
+    setName("");
+    setNumber("");
+    setPaymentMethod("");
+    setEmail("");
+    setAmount("");
+  };
+
   const payment = async (e: any) => {
     e.preventDefault();
     try {
@@ -117,7 +151,6 @@ export default function BasicTable() {
       const token = localStorage.getItem("token");
       const response = await Payment.pay(token, id, newData);
       if (response.status) {
-        notifySuccess("Successfully Paid!");
         console.log("goods");
         getData();
         handleClosePayment();
@@ -127,11 +160,9 @@ export default function BasicTable() {
         setEmail("");
         setAmount("");
       } else {
-        notifyError("someting went wrong");
         console.log("error");
       }
     } catch (error) {
-      notifyError("someting went wrong");
       console.log("error");
     }
   };
@@ -228,33 +259,61 @@ export default function BasicTable() {
       console.log("error ", error);
     }
   };
-  const handleUpdate = (id: any) => {
-    handleOpenUpdate();
-    setFormData(id);
-    console.log(id, "update");
-  };
-  const deleteCont = async (id: any) => {
+
+  const approvalTrans = async (id: any) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await DeleteContribution.delete(token, id);
+      const response = await Approval.trans(token, id);
       if (response.status) {
-        getData();
-        notifySuccess("Successfully Delete ! ");
+        notifySuccess("Sucess Approved!");
+        console.log("goods na ");
+        getAllTrans();
       } else {
-        notifyError("Something went wrong!");
+        console.log("error");
       }
     } catch (error) {
-      notifyError("Something went wrong!");
-      console.log(error);
+      notifyError("Already Paid!");
+      console.log("error");
     }
   };
 
-  const handlePaymeny = () => {
-    notifyError("UnderCodingPa : ) ");
+  const getAllTrans = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await GetAllTransaction.get(token);
+      if (response.status) {
+        console.log(response.response, "0000");
+        setTrans(response.response);
+      } else {
+        console.log("Error");
+      }
+    } catch (error) {
+      console.log("Error");
+    }
+  };
+
+  const deleteTrns = async (id: any) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await DeleteTrans.delete(token, id);
+      if (response.status) {
+        notifySuccess("Deleted Success!");
+        getAllTrans();
+        console.log("goods na delete na ");
+      } else {
+        notifyError("Something went wrong ! ");
+        console.log("error");
+      }
+    } catch (error) {
+      notifyError("Something went wrong ! ");
+
+      console.log("error");
+    }
   };
 
   React.useEffect(() => {
-    getData();
+    // getData();
+    getAllTrans();
   }, []);
 
   return (
@@ -262,18 +321,10 @@ export default function BasicTable() {
       <div className=" flex justify-between">
         <div>
           <p className=" text-center border-2 px-20 rounded-md text-white font-bold bg-slate-400 py-3">
-            Contribution
+            Admin Approval
           </p>
         </div>
-        <div>
-          <button
-            onClick={handleOpen}
-            className="btn btn-active btn-accent text-white"
-          >
-            <IoIosAddCircle />
-            Add Contribution
-          </button>
-        </div>
+        <div></div>
       </div>
       <TableContainer component={Paper} className=" mb-20 mt-10">
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -281,48 +332,46 @@ export default function BasicTable() {
             <TableRow>
               <TableCell>Firs Name</TableCell>
               <TableCell align="left">Last Name</TableCell>
-              <TableCell align="left">Amount to Pay</TableCell>
               <TableCell align="left">Age</TableCell>
-              <TableCell align="left">Date Born</TableCell>
-              <TableCell align="left">Date Die</TableCell>
+              <TableCell align="left">Payment Method</TableCell>
+              <TableCell align="left">Date Pay</TableCell>
               <TableCell align="left">Status</TableCell>
-              <TableCell align="left">Date Deadline</TableCell>
               <TableCell align="right">Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.length === 0 ? (
+            {trans.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={7} align="center">
                   No data collected
                 </TableCell>
               </TableRow>
             ) : (
-              data.map((data: any, index = 0) => (
+              trans.map((data: any, index = 0) => (
                 <TableRow
                   key={index++}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
-                    {data.firstName}
+                    {data.contribution.firstName}
                   </TableCell>
-                  <TableCell align="left" component="th" scope="row">
+                  <TableCell component="th" scope="row">
+                    {data.contribution.lastName}
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    {data.number}
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    {data.paymentMethod}
+                  </TableCell>
+
+                  {/* <TableCell align="left" component="th" scope="row">
                     {data.lastName}
                   </TableCell>
-                  <TableCell align="left" component="th" scope="row">
-                    ₱ {data.amount}
-                  </TableCell>
-                  <TableCell align="left">{data.age}</TableCell>
+                  <TableCell align="left">{data.age}</TableCell> */}
 
                   <TableCell align="left">
-                    {new Date(data.born).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "long",
-                      day: "2-digit",
-                    })}
-                  </TableCell>
-                  <TableCell align="left">
-                    {new Date(data.died).toLocaleDateString("en-US", {
+                    {new Date(data.date).toLocaleDateString("en-US", {
                       year: "numeric",
                       month: "long",
                       day: "2-digit",
@@ -339,39 +388,22 @@ export default function BasicTable() {
                       </p>
                     )}
                   </TableCell>
-                  <TableCell align="left">
-                    {data.countDown <= 0 ? (
-                      <p className="bg-red-300 text-center rounded-md">
-                        Already Due
-                      </p>
-                    ) : (
-                      <p className=" text-center bg-green-400 rounded-md">
-                        {data.countDown} Days left
-                      </p>
-                    )}
-                  </TableCell>
 
                   <TableCell align="right">
-                    <button
-                      onClick={() => handleOpenPayment(data._id)}
-                      className="btn btn-active btn-accent mr-3 text-white"
-                    >
-                      Pay
-                    </button>
-
-                    <button
-                      onClick={() => handleUpdate(data)}
-                      className="btn btn-active btn-primary mr-3"
-                    >
-                      Update
-                    </button>
-
-                    <button
-                      onClick={() => deleteCont(data._id)}
-                      className="btn btn-error text-white"
-                    >
-                      Delete
-                    </button>
+                    <div className=" flex justify-end">
+                      <button
+                        onClick={() => approvalTrans(data._id)}
+                        className="btn btn-active btn-accent mr-3 text-white"
+                      >
+                        Approve
+                      </button>
+                      <button
+                        onClick={() => deleteTrns(data._id)}
+                        className="btn btn-error text-white"
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))

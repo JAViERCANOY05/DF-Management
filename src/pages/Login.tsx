@@ -56,6 +56,21 @@ const Home = () => {
           response.token
         );
         router.push("/user");
+      } else if (response.user.role === "cashier") {
+        localStorage.setItem("id", response.user._id);
+        localStorage.setItem("firstName", response.user.firstName);
+        localStorage.setItem("lastName", response.user.lastName);
+        localStorage.setItem("email", response.user.email);
+        localStorage.setItem("role", response.user.role);
+
+        localStorage.setItem("token", response.token);
+        console.log(
+          "Welcome : ",
+          response.user.email,
+          " token ",
+          response.token
+        );
+        router.push("/cashier");
       }
     } catch (err: any) {
       notifyError("Wrong credentials");

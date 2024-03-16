@@ -30,6 +30,7 @@ type Inputs = {
   dateBorn: string;
   dateDie: string;
   deadLine: string;
+  status : string;
 };
 const language: string = "en";
 const style = {
@@ -46,6 +47,7 @@ const style = {
 
 export default function BasicTable() {
   const [formData, setFormData] = React.useState({
+
     _id: "",
     age: "",
     born: "",
@@ -55,6 +57,7 @@ export default function BasicTable() {
     dateBorn: "",
     dateDie: "",
     deadLine: "",
+    status :"",
   });
   const [open, setOpen] = React.useState(false);
   const [openUpdate, setOpenUpdate] = React.useState(false);
@@ -216,7 +219,7 @@ export default function BasicTable() {
               <TableCell align="left">Date Born</TableCell>
               <TableCell align="left">Date Die</TableCell>
               <TableCell align="right">Date Deadline</TableCell>
-              {/* <TableCell align="right">Action</TableCell> */}
+              {/* <TableCell align="right">Status</TableCell> */}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -261,10 +264,16 @@ export default function BasicTable() {
                       </p>
                     ) : (
                       <p className=" text-center bg-green-400 rounded-md">
-                        {data.countDown} Days left
+                        {data.countDown}Days left
                       </p>
                     )}
                   </TableCell>
+                  {/* <TableCell align="left">
+                    <p className=" text-center bg-green-400 rounded-md">
+                        {data.status}
+                      </p>
+                   </TableCell> */}
+
                   {/* <TableCell align="right">
                     {new Date(data.deadLine).toLocaleDateString("en-US", {
                       year: "numeric",

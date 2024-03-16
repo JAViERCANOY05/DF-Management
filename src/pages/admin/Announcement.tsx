@@ -173,9 +173,8 @@ export default function BasicTable() {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Subject</TableCell>First Name
+              <TableCell>Subject</TableCell>
               <TableCell align="left">Message</TableCell>
-              <TableCell align="left">Date Created</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -197,13 +196,7 @@ export default function BasicTable() {
                   <TableCell align="left" component="th" scope="row">
                     {data.content.message}
                   </TableCell>
-                  <TableCell align="left" component="th" scope="row">
-                    {new Date(data.date).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "long",
-                      day: "2-digit",
-                    })}
-                  </TableCell>
+                
                 </TableRow>
               ))
             )}

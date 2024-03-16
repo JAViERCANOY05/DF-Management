@@ -4,11 +4,11 @@ import GetReport from "../api/getReport";
 
 const Dashboard = () => {
   const [data, setData] = useState({
-    totalamount: "",
+    totalAmount: "",
     totalNumberMember: "",
-    transaction: {
+    transactions: {
       paid: "",
-      waitingForapproval: "",
+      waitingForApproval: "",
     },
   });
   const [paid, setPaid] = useState(0);
@@ -31,8 +31,11 @@ const Dashboard = () => {
     getData();
   }, []);
 
-  const p = parseInt(data.transaction.paid);
-  const app = parseInt(data.transaction.waitingForapproval);
+  const p = parseInt(data.transactions.paid);
+  const app = parseInt(data.transactions.waitingForApproval);
+  console.log(p,"p");
+  console.log(app, "app");
+
 
   return (
    
@@ -46,7 +49,7 @@ const Dashboard = () => {
           <div className=" bg-slate-500 p-20 rounded-md">
             <p className=" text-white border-b-2 text-center">Reports </p>
             <p className=" py-10 text-white ">
-              Total Amount :    ₱ {data.totalamount}
+              Total Amount :    ₱ {data.totalAmount}
             </p>
             <p className="  text-white ">Members : {data.totalNumberMember}</p>
           </div>

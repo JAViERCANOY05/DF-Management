@@ -330,7 +330,7 @@ export default function BasicTable() {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Firs Name</TableCell>
+              <TableCell>First Name</TableCell>
               <TableCell align="left">Last Name</TableCell>
               <TableCell align="left">Age</TableCell>
               <TableCell align="left">Payment Method</TableCell>
@@ -352,9 +352,9 @@ export default function BasicTable() {
                   key={index++}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  <TableCell component="th" scope="row">
+                  {/* <TableCell component="th" scope="row">
                     {data.contribution.firstName}
-                  </TableCell>
+                  </TableCell> */}
                   <TableCell component="th" scope="row">
                     {data.contribution.lastName}
                   </TableCell>

@@ -38,7 +38,7 @@ const MyComponent = () => {
           </div>
         </div>
         <div className=" flex justify-center ">
-          <p className=" rounded-md  bg-slate-100 py-20 font-bold text-xl px-20 text-center">
+          <p className=" rounded-md  bg-slate-100 py-20 font-bold text-xl px-20 text-center text-black ">
             The organization that aids to provide financial assistance. A death
             is assistance <br /> payable to the benificiary of a deceased
             person. Our mission is to help one another

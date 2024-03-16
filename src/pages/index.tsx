@@ -36,7 +36,7 @@ const Home = () => {
         </div>
       </div>
       <div className=" flex justify-center my-20 ">
-        <p className=" rounded-md font-bold  text-xl  bg-slate-100  py-20  px-20 text-center">
+        <p className=" rounded-md font-bold  text-xl  bg-slate-100 text-black  py-20  px-20 text-center">
           We have grown the intial 38 members to 413 members.
           <br />
           As a trusted organizatio, we proud that wehave already helped

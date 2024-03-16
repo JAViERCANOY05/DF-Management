@@ -48,16 +48,26 @@ const style = {
 
 export default function BasicTable() {
   const [formData, setFormData] = React.useState({
-    _id: "",
-    age: "",
-    born: "",
-    died: "",
-    firstName: "",
-    lastName: "",
-    dateBorn: "",
-    dateDie: "",
-    deadLine: "",
-  });
+      _id: 0,
+      userId: 0,
+      name:"",
+      email: "",
+      number: 0,
+      contribution: {
+          _id: 0,
+          firstName: "",
+          lastName: "",
+          born: 0,
+          died: 0,
+          age: 0,
+      },
+      paymentMethod: "",
+      status: "",
+      amount:"",
+      date: 0,
+      referenceNumber: 0,
+  },
+);
   const [open, setOpen] = React.useState(false);
   const [openUpdate, setOpenUpdate] = React.useState(false);
 
@@ -79,7 +89,19 @@ export default function BasicTable() {
     reset();
     setOpenUpdate(false);
   };
-  const [data, setData] = React.useState([]);
+  const [data, setData] = React.useState([
+    
+  ]);
+  const [cont, setCont] = React.useState([
+    {
+     _id: "",
+     firstName: "",
+     lastName: "",
+     born: "",
+     died: "",
+     age: "",
+   }
+ ]);
   const [name, setName] = React.useState("");
   const [number, setNumber] = React.useState("");
   const [paymentMethod, setPaymentMethod] = React.useState("");
@@ -88,22 +110,22 @@ export default function BasicTable() {
   const [id, setId] = React.useState("");
   const [trans, setTrans] = React.useState([
     {
+      amount : 0,
       _id: "",
       userId: "",
       name: "",
       email: "",
       number: "",
-      contribution: {
+      contribution :{
         _id: "",
         firstName: "",
         lastName: "",
         born: "",
         died: "",
         age: "",
-      },
+      } ,
       paymentMethod: "",
       status: "",
-      amount: "",
       image: "",
       date: "",
       referenceNumber: "",
@@ -283,6 +305,7 @@ export default function BasicTable() {
       const response = await GetAllTransaction.get(token);
       if (response.status) {
         console.log(response.response, "0000");
+        setCont(response.response.contribution)
         setTrans(response.response);
       } else {
         console.log("Error");
@@ -315,6 +338,9 @@ export default function BasicTable() {
     // getData();
     getAllTrans();
   }, []);
+  console.log(trans.length, " cont!  1111")
+
+
 
   return (
     <div className=" h-screen">
@@ -330,7 +356,7 @@ export default function BasicTable() {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Firs Name</TableCell>
+              <TableCell>First Name</TableCell>
               <TableCell align="left">Last Name</TableCell>
               <TableCell align="left">Age</TableCell>
               <TableCell align="left">Payment Method</TableCell>
@@ -340,14 +366,14 @@ export default function BasicTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {trans.length === 0 ? (
+            {trans.filter(data => data.status === "Waiting for approval").length === 0 ? (
               <TableRow>
                 <TableCell colSpan={7} align="center">
                   No data collected
                 </TableCell>
               </TableRow>
             ) : (
-              trans.map((data: any, index = 0) => (
+              trans.filter(data => data.status === "Waiting for approval").map((data, index) => (
                 <TableRow
                   key={index++}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -358,18 +384,15 @@ export default function BasicTable() {
                   <TableCell component="th" scope="row">
                     {data.contribution.lastName}
                   </TableCell>
+                 
+                
                   <TableCell component="th" scope="row">
                     {data.number}
                   </TableCell>
                   <TableCell component="th" scope="row">
                     {data.paymentMethod}
+                    2
                   </TableCell>
-
-                  {/* <TableCell align="left" component="th" scope="row">
-                    {data.lastName}
-                  </TableCell>
-                  <TableCell align="left">{data.age}</TableCell> */}
-
                   <TableCell align="left">
                     {new Date(data.date).toLocaleDateString("en-US", {
                       year: "numeric",
@@ -588,7 +611,7 @@ export default function BasicTable() {
         </Box>
       </Modal>
 
-      <Modal
+      {/* <Modal
         className="update-modal"
         open={openUpdate}
         onClose={handleCloseUpdate}
@@ -722,7 +745,7 @@ export default function BasicTable() {
             </div>
           </form>
         </Box>
-      </Modal>
+      </Modal> */}
       <Modal
         open={openPayment}
         onClose={handleClosePayment}

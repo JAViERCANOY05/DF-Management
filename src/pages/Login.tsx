@@ -42,6 +42,11 @@ const Home = () => {
         localStorage.setItem("token", response.token);
         router.push("/admin/Main");
       } else if (response.user.role === "member") {
+        
+        localStorage.setItem("beneficiary1", response.user.beneficiary[0]);
+        localStorage.setItem("beneficiary2", response.user.beneficiary[1]);
+        localStorage.setItem("beneficiary3", response.user.beneficiary[2]);
+
         localStorage.setItem("id", response.user._id);
         localStorage.setItem("firstName", response.user.firstName);
         localStorage.setItem("lastName", response.user.lastName);
@@ -49,12 +54,7 @@ const Home = () => {
         localStorage.setItem("role", response.user.role);
 
         localStorage.setItem("token", response.token);
-        console.log(
-          "Welcome : ",
-          response.user.email,
-          " token ",
-          response.token
-        );
+      
         router.push("/user");
       } else if (response.user.role === "cashier") {
         localStorage.setItem("id", response.user._id);

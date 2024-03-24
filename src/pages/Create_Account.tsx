@@ -20,8 +20,12 @@ type Inputs = {
   confirmPassword: string;
   fee: string;
   gender: string;
-
   exampleRequired: string;
+  firtBeneficiary : string;
+  secondBeneficiary : string;
+  thirdBeneficiary : string;
+  // beneficiary: [];
+
 };
 const style = {
   position: "absolute" as "absolute",
@@ -45,6 +49,7 @@ export default function App() {
     gender: "",
     firstName: "",
     lastName: "",
+    // beneficiary :[],
   });
 
   const handleOpen = (e: any) => {
@@ -61,12 +66,14 @@ export default function App() {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
+
     const accountCreated = {
       email: data.email,
       password: data.password,
       gender: data.gender,
       firstName: data.firtName,
       lastName: data.firtName,
+      beneficiary : [data.firtBeneficiary , data.secondBeneficiary , data.thirdBeneficiary],
     };
 
     setData(accountCreated);
@@ -96,14 +103,14 @@ export default function App() {
   password.current = watch("password");
 
   return (
-    <div className=" h-screen bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 px-10 py-5  ">
+    <div className="  bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 px-10 py-5  ">
       <div className=" my-20  flex justify-center text-4xl font-bold">
         <h2 className=" text-blue-700">
           Create <span className="  text-yellow-400">Account</span>
         </h2>
       </div>
       <div className=" flex justify-center ">
-        <form>
+        <form className="">
           {/* register your input into the hook by invoking the "register" function */}
 
           {/* include validation with required or other standard HTML validation rules */}
@@ -204,6 +211,47 @@ export default function App() {
               </div>
             </div>
           </div>
+          <div className=" my-10  flex justify-center text-4xl font-bold">
+        <h2 className=" text-blue-700">
+        Beneficiary
+        </h2>
+      </div>
+      <div className=" flex">
+            <div>
+              <p className=" mx-2 mt-3 mb-1">First  Beneficiary</p>
+              <input
+                className=" mx-2 rounded-md py-3 px-10"
+                {...register("firtBeneficiary", { required: true })}
+              />
+              <div className=" mx-2 text-yellow-500">
+                {errors.firtBeneficiary && <span>This field is required</span>}
+              </div>
+            </div>
+            <div>
+              <p className=" mx-2 mt-3 mb-1">Second  Beneficiary</p>
+              <input
+                className=" mx-2 rounded-md py-3 px-10"
+                {...register("secondBeneficiary", { required: true })}
+              />
+              <div className=" mx-2 text-yellow-500">
+                {errors.secondBeneficiary && <span>This field is required</span>}
+              </div>
+            </div>
+          </div>
+          <div className=" flex justify-center">
+            <div>
+              <p className=" mx-2 mt-3 mb-1">Third  Beneficiary</p>
+              <input
+                className=" mx-2 rounded-md py-3 px-10"
+                {...register("thirdBeneficiary", { required: true })}
+              />
+              <div className=" mx-2 text-yellow-500">
+                {errors.thirdBeneficiary && <span>This field is required</span>}
+              </div>
+            </div>
+          
+          </div>
+
           <div className=" flex justify-end my-8 mx-2 gap-5">
             <Link href="/admin/Main">
               <button className="  hover:bg-green-800 rounded-md bg-green-600 py-3 px-5 text-white">

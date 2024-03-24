@@ -34,6 +34,13 @@ const Settings = () => {
   const role = localStorage.getItem("role");
   const email = localStorage.getItem("email");
 
+  const b1 = localStorage.getItem("beneficiary1");
+  const b2 = localStorage.getItem("beneficiary2");
+  const b3 = localStorage.getItem("beneficiary3");
+
+
+
+
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
 
@@ -130,7 +137,12 @@ const Settings = () => {
             <div className="my-2 font-semibold">First Name : {name}</div>
             <div className="my-2 font-semibold">Last Name : {last}</div>
             <div className="my-2 font-semibold">Email : {email}</div>
+            <div className="my-2 font-semibold">First Beneficiary  : {b1}</div>
+            <div className="my-2 font-semibold">Second Beneficiary: {b2}</div>
+            <div className="my-2 font-semibold">Third Beneficiary: {b3}</div>
+
           </div>
+
         </Box>
       </Modal>
       <Modal

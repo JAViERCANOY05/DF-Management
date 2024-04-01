@@ -22,6 +22,8 @@ import GetAllTransaction from "../api/getAllTransaction";
 import Payment from "../api/payment";
 import DeleteTrans from "../api/deleteTrans";
 import Approval from "../api/approval";
+import Image from "next/image";
+
 type Inputs = {
   firstName: string;
   lastName: string;
@@ -271,8 +273,8 @@ export default function BasicTable() {
       const response = await GetContribution.get(token);
       if (response.status) {
         reset();
-        console.log("data is here ! ");
-        console.log(response.response);
+        console.log(response.response , "--------ss-------");
+        setFormData(response.response)
         setData(response.response);
       } else {
         console.log("error ");
@@ -338,7 +340,7 @@ export default function BasicTable() {
     // getData();
     getAllTrans();
   }, []);
-  console.log(trans.length, " cont!  1111")
+  console.log(trans, " cont!  1111")
 
 
 
@@ -366,72 +368,82 @@ export default function BasicTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {trans.filter(data => data.status === "Waiting for approval").length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={7} align="center">
-                  No data collected
-                </TableCell>
-              </TableRow>
-            ) : (
-              trans.filter(data => data.status === "Waiting for approval").map((data, index) => (
-                <TableRow
-                  key={index++}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row">
-                    {data.contribution.firstName}
-                  </TableCell>
-                  <TableCell component="th" scope="row">
-                    {data.contribution.lastName}
-                  </TableCell>
-                 
-                
-                  <TableCell component="th" scope="row">
-                    {data.number}
-                  </TableCell>
-                  <TableCell component="th" scope="row">
-                    {data.paymentMethod}
-                    2
-                  </TableCell>
-                  <TableCell align="left">
-                    {new Date(data.date).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "long",
-                      day: "2-digit",
-                    })}
-                  </TableCell>
-                  <TableCell align="left">
-                    {data.status === "pending" ? (
-                      <p className="bg-red-300 text-center rounded-md">
-                        {data.status}
-                      </p>
-                    ) : (
-                      <p className=" text-center bg-green-400 rounded-md">
-                        {data.status}
-                      </p>
-                    )}
-                  </TableCell>
+  {trans.length === 0 ? (
+    <TableRow>
+      <TableCell colSpan={7} align="center">
+        No data collected
+      </TableCell>
+    </TableRow>
+  ) : (
+    trans.map((data, index) => (
+      <TableRow
+        key={index}
+        sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+      >
+ 
+      
+        <TableCell component="th" scope="row">
+          {data.contribution.firstName}
+        </TableCell>
+        <TableCell component="th" scope="row">
+          {data.contribution.lastName}
+        </TableCell>
+        <TableCell component="th" scope="row">
+          {data.number}
+        </TableCell>
+        <TableCell component="th" scope="row">
+          {data.paymentMethod} 
+        </TableCell>
+        <TableCell align="left">
+          {new Date(data.date).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "2-digit",
+          })}
+        </TableCell>
+        <TableCell align="left">
+          {data.status === "Waiting for approval" ? (
+            <p className="bg-red-300 text-center rounded-md">
+              {data.status}
+            </p>
+          ) : (
+            <p className=" text-center bg-green-400 rounded-md">
+              {data.status}
+            </p>
+          )}
+        </TableCell>
 
-                  <TableCell align="right">
-                    <div className=" flex justify-end">
-                      <button
-                        onClick={() => approvalTrans(data._id)}
-                        className="btn btn-active btn-accent mr-3 text-white"
-                      >
-                        Approve
-                      </button>
-                      <button
-                        onClick={() => deleteTrns(data._id)}
-                        className="btn btn-error text-white"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))
+        <TableCell align="right">
+            {data.status === "Waiting for approval" ? (
+              <>
+                <button
+                  onClick={() => approvalTrans(data._id)}
+                  className="btn btn-active btn-accent mr-3 text-white"
+                >
+                  Approve
+                </button>
+                <button
+                  onClick={() => deleteTrns(data._id)}
+                  className="btn btn-error text-white"
+                >
+                  Delete
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={() => deleteTrns(data._id)}
+                className="btn btn-error text-white"
+              >
+                Delete
+              </button>
             )}
-          </TableBody>
+        </TableCell>
+      </TableRow>
+    ))
+  )}
+</TableBody>
+
+
         </Table>
       </TableContainer>
       <Modal

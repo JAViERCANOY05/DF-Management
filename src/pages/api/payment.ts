@@ -1,15 +1,19 @@
 const Payment = {
-  pay: async (token: any, id: any, data: any) => {
+  pay: async (token: any, id: any, formData: any) => {
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/makePayment/${id}`,
         {
           method: "POST",
           headers: {
-            "Content-Type": "application/json",
+            
+            // "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify(data),
+
+          // body: JSON.stringify(data),
+          body: formData,
+
         }
       );
       if (response.status) {

@@ -6,21 +6,17 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { IoIosAddCircle } from "react-icons/io";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { notifyError, notifySuccess } from "../Notifications";
-import UpdateContribution from "../api/updateContribution";
-import GetAnnouncement from "../api/getAnnouncement";
-
-import AddAnnouncement from "../api/addAnnoucement";
+import Advance from "../api/advancePayment"
+import AddvancePaymentni from "../api/addAdvancePayment"
+import DatePanel from "react-multi-date-picker/plugins/date_panel";
 type Inputs = {
-  _id: string;
-  subject: string;
-  message: string;
+  amount : string ;
 };
 const language: string = "en";
 const style = {
@@ -52,37 +48,34 @@ export default function BasicTable() {
     reset();
     setOpenUpdate(false);
   };
-  const [data, setData] = React.useState([]);
-  const [announce, setAnnounce] = React.useState([
+ 
+  const [data, setData] = React.useState([
+
     {
-      subject: "",
-      content: {
-        message: "",
-        amount: 0,
+      advance : {
+        amount : "",
       },
-      date: "",
-    },
+      referenceNumber : "",
+      date : ""
+    }
+  
   ]);
+
   const {
     register,
     handleSubmit,
     reset,
-    control,
     formState: { errors },
   } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    const newData = {
-      subject: data.subject,
-      content: {
-        message: data.message,
-        amount: 0,
-      },
-    };
-    console.log("yes mao ni ang data ", newData);
 
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    
+
+console.log(data , " data submited ")
     try {
       const token = localStorage.getItem("token");
-      const response = await AddAnnouncement.add(token, newData);
+      const response = await AddvancePaymentni.trans(token, data);
+
       if (response.status) {
         console.log("Done");
         notifySuccess("Announcement Added!");
@@ -99,49 +92,45 @@ export default function BasicTable() {
     }
   };
 
-  const getData = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const response = await GetAnnouncement.get(token);
-      if (response.status) {
-        reset();
-        console.log("data is here ! ");
-        console.log(response.response);
-        setData(response.response);
-      } else {
-        console.log("error ");
-      }
-    } catch (error) {
-      console.log("error ", error);
-    }
-  };
+
 
   const getAnn = async () => {
     try {
+
       const toks = localStorage.getItem("token");
-      const response = await GetAnnouncement.get(toks);
+      const response = await Advance.user(toks);
       if (response.status) {
-        setAnnounce(response.response);
-        console.log(response.response, " 222222222");
+        setData(response.response)
       }
     } catch (error) {
       console.log(error, " ");
     }
   };
-
-  
-
+const handleOpenTo  =()=>
+{
+    handleOpen()
+    console.log("javierbernadas")
+}
   React.useEffect(() => {
     getAnn();
   }, []);
-
+console.log(data , "-----------------------")
   return (
     <div className=" h-screen">
       <div className=" flex justify-between">
         <div>
           <p className=" text-center border-2 px-20 rounded-md bg-slate-400 py-3  text-white font-bold">
-            Announcements
+            Advance Payment
           </p>
+        </div>
+        <div>
+          <button
+            onClick={handleOpenTo}
+            className="btn btn-active btn-accent text-white"
+          >
+            {/* <IoIosAddCircle /> */}
+            + Advance
+          </button>
         </div>
         <div></div>
       </div>
@@ -149,37 +138,44 @@ export default function BasicTable() {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Subjet</TableCell>
-              <TableCell align="left">Message</TableCell>
-              <TableCell align="left">Date Created</TableCell>
+              <TableCell>Payment Advance </TableCell>
+              <TableCell>Reference Number</TableCell>
+              <TableCell>Date</TableCell>
+
+
             </TableRow>
           </TableHead>
           <TableBody>
-            {announce.length === 0 ? (
+           
+          {data.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={7} align="center">
                   No data collected
                 </TableCell>
               </TableRow>
             ) : (
-              announce.map((data: any, index = 0) => (
+              data.map((data: any, index = 0) => (
                 <TableRow
                   key={index++}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  <TableCell component="th" scope="row">
-                    {data.subject}
+                
+                  <TableCell align="left" component="th" scope="row">
+                    Amount : {data.advance.amount}
+                    {/* referenceNumber */}
                   </TableCell>
                   <TableCell align="left" component="th" scope="row">
-                    {data.content.message}
+                  {data.referenceNumber}
+                    {/* referenceNumber */}
                   </TableCell>
                   <TableCell align="left" component="th" scope="row">
-                    {new Date(data.date).toLocaleDateString("en-US", {
+                  {new Date(data.date).toLocaleDateString("en-US", {
                       year: "numeric",
                       month: "long",
                       day: "2-digit",
                     })}
                   </TableCell>
+               
                 </TableRow>
               ))
             )}
@@ -196,43 +192,29 @@ export default function BasicTable() {
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="">
               <h2 className=" text-center bg-[#0C3B68] text-white rounded-lg py-3 my-3">
-                Fill up this for Announcement
+                Fill up this for Advance Payment
               </h2>
               <div className=" flex justify-center gap-5 mt-5">
                 <div>
-                  <p className=" mx-2  ">Subject</p>
+                  <p className=" mx-2  ">Amount</p>
 
                   <input
                     className=" rounded-md my-2 py-2 "
-                    {...register("subject", { required: true })}
+                    {...register("amount", { required: true })}
                   />
 
                   <div>
-                    {errors.subject && (
+                    {errors.amount && (
                       <span className=" text-white">
                         This field is required
                       </span>
                     )}
                   </div>
                 </div>
-                <div>
-                  <p className=" mx-2  ">Message</p>
+                
+              
 
-                  <input
-                    className=" rounded-md my-2 py-2"
-                    {...register("message", { required: true })}
-                  />
-                  <div>
-                    {errors.message && (
-                      <span className=" text-white">
-                        This field is required
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              <div className=" flex justify-end gap-3 mt-3">
+              <div className=" flex justify-end gap-3 mt-7">
                 <button
                   onClick={() => setOpen(false)}
                   className="btn btn-error text-white"
@@ -240,13 +222,14 @@ export default function BasicTable() {
                   Back
                 </button>
                 <button
-                  // onClick={handleOpen}
                   className="btn btn-active btn-accent text-white"
                 >
                   Confirm
                 </button>
               </div>
             </div>
+            </div>
+
           </form>
         </Box>
       </Modal>

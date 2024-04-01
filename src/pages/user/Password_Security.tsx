@@ -177,7 +177,6 @@ export default function MiniDrawer() {
 
     try {
       const response = await ChangePass.changePassword(newPassword, token);
-      console.log("response", response.message);
       notifySuccess("Password changed successfully.");
       setTimeout(() => {
         router.push("/user");

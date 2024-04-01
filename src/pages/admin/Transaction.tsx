@@ -81,7 +81,7 @@ export default function BasicTable() {
               <TableCell align="right">Status</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
+          {/* <TableBody>
             {data.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={6} align="center">
@@ -124,7 +124,7 @@ export default function BasicTable() {
                 </TableRow>
               ))
             )}
-          </TableBody>
+          </TableBody> */}
         </Table>
       </TableContainer>
     </div>

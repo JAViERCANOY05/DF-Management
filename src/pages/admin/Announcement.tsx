@@ -16,6 +16,8 @@ import { notifyError, notifySuccess } from "../Notifications";
 import UpdateContribution from "../api/updateContribution";
 import GetAnnouncement from "../api/getAnnouncement";
 import AddAnnouncement from "../api/addAnnoucement";
+import DeleteAnnounce from "../api/deleteAnnounce";
+import { Console } from "console";
 type Inputs = {
   _id: string;
   subject: string;
@@ -140,8 +142,8 @@ export default function BasicTable() {
       const response = await GetAnnouncement.get(toks);
       if (response.status) {
         setAnnounce(response.response);
-        console.log(response.response, " 222222222");
       }
+     
     } catch (error) {
       console.log(error, " ");
     }
@@ -151,6 +153,24 @@ export default function BasicTable() {
     getAnn();
   }, []);
 
+  const deleteCont = async(id: any )=>
+  {
+    try {
+
+      const token = localStorage.getItem("token")
+      const response = await DeleteAnnounce.delete(token , id )
+      if(response.status)
+      {
+        console.log("console.log")
+        notifySuccess("Successfully Deleted ! ");
+        getAnn();
+      }
+      
+    } catch (error) {
+      
+    }
+    console.log(id)
+  }
   return (
     <div className=" h-screen">
       <div className=" flex justify-between">
@@ -175,6 +195,8 @@ export default function BasicTable() {
             <TableRow>
               <TableCell>Subject</TableCell>
               <TableCell align="left">Message</TableCell>
+              <TableCell align="left">Action</TableCell>
+
             </TableRow>
           </TableHead>
           <TableBody>
@@ -195,6 +217,14 @@ export default function BasicTable() {
                   </TableCell>
                   <TableCell align="left" component="th" scope="row">
                     {data.content.message}
+                  </TableCell>
+                  <TableCell>
+                      <button
+                      onClick={() => deleteCont(data._id)}
+                      className="btn btn-error text-white"
+                    >
+                      Delete
+                    </button>
                   </TableCell>
                 
                 </TableRow>

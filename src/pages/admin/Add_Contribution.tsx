@@ -257,6 +257,7 @@ export default function BasicTable() {
     getData();
   }, []);
 
+console.log(data , " javierbernad1222222222222222222222")
   return (
     <div className=" h-screen">
       <div className=" flex justify-between">
@@ -366,12 +367,12 @@ export default function BasicTable() {
                       Update
                     </button>
 
-                    <button
+                    {/* <button
                       onClick={() => deleteCont(data._id)}
                       className="btn btn-error text-white"
                     >
                       Delete
-                    </button>
+                    </button> */}
                   </TableCell>
                 </TableRow>
               ))

@@ -17,6 +17,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { useState } from "react";
+import Advance from "./Advance"
 
 import Dashboard from "./Dashboard";
 import Contribution from "./Contribution";
@@ -71,6 +72,11 @@ const component: display[] = [
     name: "Settings",
     icon: <MdOutlineSettings style={{ fontSize: "1.5em", color: "#1976D2" }} />,
     href: "Settings",
+  },
+  {
+    name: "Advance Payment",
+    icon: <MdOutlineSettings style={{ fontSize: "1.5em", color: "#1976D2" }} />,
+    href: "Advance Payment",
   },
 
   // Add more trees as needed
@@ -174,6 +180,9 @@ export default function MiniDrawer() {
       setDisplayComponent(<Settings />);
     } else if (item === "Transaction") {
       setDisplayComponent(<Transaction />);
+    }
+    else if (item === "Advance Payment") {
+      setDisplayComponent(<Advance />);
     }
   };
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);

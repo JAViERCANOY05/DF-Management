@@ -1,6 +1,7 @@
 const UpdateContribution = {
   update: async (token: any, data: any, id: any) => {
     try {
+      console.log(data, "////////////////////////////////////////////////");
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/editContribution/${id}`,
         {

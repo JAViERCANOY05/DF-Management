@@ -32,7 +32,7 @@ type Inputs = {
   dateDie: string;
   deadLine: string;
   amount: string;
-  image : [] ;
+  image: [];
 };
 const language: string = "en";
 const style = {
@@ -58,7 +58,7 @@ export default function BasicTable() {
     dateBorn: "",
     dateDie: "",
     deadLine: "",
-    image : "",
+    image: "",
   });
   const [open, setOpen] = React.useState(false);
   const [openUpdate, setOpenUpdate] = React.useState(false);
@@ -88,6 +88,13 @@ export default function BasicTable() {
   const [email, setEmail] = React.useState("");
   const [amount, setAmount] = React.useState("");
   const [image, setImage] = React.useState("");
+  const [selectedImage, setSelectedImage] = React.useState(null); // State to store the selected image
+
+  const handleImageChange = (event: any) => {
+    if (event.target.files && event.target.files[0]) {
+      setSelectedImage(event.target.files[0]);
+    }
+  };
 
   const [id, setId] = React.useState("");
 
@@ -111,42 +118,27 @@ export default function BasicTable() {
   const handleImage = (event: any) => {
     setImage(event.target.value);
   };
-  
 
   const payment = async (e: any) => {
-
     e.preventDefault();
 
-    
- 
     try {
-     const reader = new FileReader();
-    //  reader.readAsDataURL(image);
+      const newData = {
+        name: name,
+        number: number,
+        paymentMethod,
+        email: email,
+        amount: amount,
+        image: selectedImage,
+      };
+      console.log(newData, "xxxxxxxxxxxxxxxxxxxxxxxxxx");
 
-      // const  newImage = image.substring(12)
-      const formData = new FormData();
-      formData.append("number", number); 
-      formData.append("paymentMethod", paymentMethod); 
-      formData.append("email", email); 
-      formData.append("amount", amount); 
-      formData.append("image", image); 
-
-    // formData.append("image",newImage); 
-      // const newData = {
-      //   name: name,
-      //   number: number,
-      //   paymentMethod: paymentMethod,
-      //   email: email, 
-      //   amount: amount,
-      //   image : k ,
-      // };
-   
       const token = localStorage.getItem("token");
-      const response = await Payment.pay(token, id, formData);
+      const response = await Payment.pay(token, id, newData);
 
       if (response.status) {
         notifySuccess("Successfully Paid!");
-        console.log(response , "goods");
+        console.log(response, "goods");
         getData();
         handleClosePayment();
         setName("");
@@ -162,7 +154,6 @@ export default function BasicTable() {
       notifyError("someting went wrong");
       console.log("error");
     }
-
   };
 
   const {
@@ -203,7 +194,7 @@ export default function BasicTable() {
       deadLine: formattedDateLine,
       amount: data.amount,
     };
-    console.log(fillForm);
+    console.log(fillForm, "sasdsadsdddddddddddddddddddddddddad");
 
     try {
       const token = localStorage.getItem("token");
@@ -381,21 +372,19 @@ export default function BasicTable() {
                   </TableCell>
 
                   <TableCell align="right">
-
-                  {data.status === "Waiting for approval" || data.status === "paid" ? (
-    // Render nothing
-    ""
-) : (
-    // Render Pay button
-    <button
-        onClick={() => handleOpenPayment(data._id)}
-        className="btn btn-active btn-accent mr-3 text-white"
-    >
-        Pay
-    </button>
-)}
-
-                 
+                    {data.status === "Waiting for approval" ||
+                    data.status === "paid" ? (
+                      // Render nothing
+                      ""
+                    ) : (
+                      // Render Pay button
+                      <button
+                        onClick={() => handleOpenPayment(data._id)}
+                        className="btn btn-active btn-accent mr-3 text-white"
+                      >
+                        Pay
+                      </button>
+                    )}
 
                     {/* <button
                       onClick={() => handleUpdate(data)}
@@ -594,141 +583,6 @@ export default function BasicTable() {
         </Box>
       </Modal>
 
-      {/* <Modal
-        className="update-modal"
-        open={openUpdate}
-        onClose={handleCloseUpdate}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <form onSubmit={handleSubmit(onSubmitUpdate)}>
-            <div className="">
-              <h2 className=" text-center bg-green-400 text-black rounded-lg py-3 my-3">
-                Update Information
-              </h2>
-              <div className=" flex justify-center gap-5 mt-5">
-                <div>
-                  <p className=" mx-2  ">First Name</p>
-
-                  <input
-                    className=" rounded-md my-2 py-2 "
-                    {...register("firstName", { required: true })}
-                    defaultValue={formData.firstName}
-                  />
-                </div>
-                <div>
-                  <p className=" mx-2  ">Last Name</p>
-
-                  <input
-                    className=" rounded-md my-2 py-2"
-                    {...register("lastName", { required: true })}
-                    defaultValue={formData.lastName}
-                  />
-                </div>
-                <div className="">
-                  <p className=" mx-2 text-center  ">Age</p>
-
-                  <input
-                    className=" rounded-md my-2 py-2"
-                    {...register("age", { required: true })}
-                    defaultValue={formData.age}
-                  />
-                </div>
-              </div>
-              <div className=" flex gap-5 justify-center">
-                <div>
-                  <p className=" mx-2  ">Date Born</p>
-                  <Controller
-                    control={control}
-                    name="dateBorn"
-                    defaultValue={formData.born}
-                    rules={{ required: true }} //optional
-                    render={({
-                      field: { onChange, name, value },
-                      fieldState: { invalid, isDirty }, //optional
-                      formState: { errors }, //optional, but necessary if you want to show an error message
-                    }) => (
-                      <DatePicker
-                        value={value}
-                        onChange={(date: any) => {
-                          onChange(date?.isValid ? date : "");
-                        }}
-                        // Add margin and padding to the input field
-                        style={{ padding: "20px" }}
-                      />
-                    )}
-                  />
-                </div>
-                <div>
-                  <p className=" mx-2  ">Date Death</p>
-
-                  <Controller
-                    control={control}
-                    name="dateDie"
-                    defaultValue={formData.died}
-                    rules={{ required: true }} //optional
-                    render={({
-                      field: { onChange, name, value },
-                      fieldState: { invalid, isDirty }, //optional
-                      formState: { errors }, //optional, but necessary if you want to show an error message
-                    }) => (
-                      <DatePicker
-                        value={value}
-                        onChange={(date: any) => {
-                          onChange(date?.isValid ? date : "");
-                        }}
-                        // Add margin and padding to the input field
-                        style={{ padding: "20px" }}
-                      />
-                    )}
-                  />
-                </div>
-              </div>
-              <div className=" flex justify-center">
-                <div className=" mt-5">
-                  <p className=" mx-2 text-center  ">Deadline</p>
-
-                  <Controller
-                    control={control}
-                    name="deadLine"
-                    defaultValue={formData.deadLine}
-                    rules={{ required: true }} //optional
-                    render={({
-                      field: { onChange, name, value },
-                      fieldState: { invalid, isDirty }, //optional
-                      formState: { errors }, //optional, but necessary if you want to show an error message
-                    }) => (
-                      <DatePicker
-                        value={value}
-                        onChange={(date: any) => {
-                          onChange(date?.isValid ? date : "");
-                        }}
-                        // Add margin and padding to the input field
-                        style={{ padding: "20px" }}
-                      />
-                    )}
-                  />
-                </div>
-              </div>
-              <div className=" flex justify-end gap-3 mt-3">
-                <button
-                  onClick={() => setOpenUpdate(false)}
-                  className="btn btn-error text-white"
-                >
-                  Back
-                </button>
-                <button
-                  // onClick={handleOpen}
-                  className="btn btn-active btn-accent text-white"
-                >
-                  Confirm
-                </button>
-              </div>
-            </div>
-          </form>
-        </Box>
-      </Modal> */}
       <Modal
         open={openPayment}
         onClose={handleClosePayment}
@@ -740,20 +594,20 @@ export default function BasicTable() {
             id="modal-modal-title"
             variant="h6"
             component="h2"
-            className=" text-white"
+            className="text-white"
           >
-            <p className=" text-center">Payment Transcation</p>
+            <p className="text-center">Payment Transaction</p>
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            <div className=" flex gap-5 justify-center">
-              <div className=" mt-5">
+            <div className="flex  justify-center items-center flex-col gap-2">
+              <div className=" w-1/2">
                 <label
-                  htmlFor="email"
-                  className="block text-sm font-medium leading-6 "
+                  htmlFor="name"
+                  className="block text-sm font-medium leading-6"
                 >
                   Name
                 </label>
-                <div className="mt-2">
+                <div className="">
                   <input
                     value={name}
                     onChange={handleChangeName}
@@ -766,10 +620,10 @@ export default function BasicTable() {
                   />
                 </div>
               </div>
-              <div className=" mt-5">
+              <div className=" w-1/2">
                 <label
-                  htmlFor="email"
-                  className="block text-sm font-medium leading-6 "
+                  htmlFor="number"
+                  className="block text-sm font-medium leading-6"
                 >
                   Number
                 </label>
@@ -777,41 +631,19 @@ export default function BasicTable() {
                   <input
                     value={number}
                     onChange={handleChangeNumber}
-                    id="email"
-                    name="email"
+                    id="number"
+                    name="number"
                     type="text"
-                    autoComplete="email"
+                    autoComplete="tel"
                     required
                     className="block font-bold px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
               </div>
-            </div>
-            <div className=" flex gap-5 justify-center ">
-              <div className=" mt-5">
+              <div className=" w-1/2">
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium leading-6 "
-                >
-                  Payment Method
-                </label>
-                <div className="mt-2">
-                  <input
-                    value={paymentMethod}
-                    onChange={handleChangePaymentMethod}
-                    id="paymentMethod"
-                    name="paymentMethod"
-                    type="text"
-                    autoComplete="paymentMethod"
-                    required
-                    className="block font-bold px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  />
-                </div>
-              </div>
-              <div className=" mt-5">
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium leading-6 "
+                  className="block text-sm font-medium leading-6"
                 >
                   Email
                 </label>
@@ -821,21 +653,19 @@ export default function BasicTable() {
                     onChange={handleChangeEmail}
                     id="email"
                     name="email"
-                    type="text"
+                    type="email"
                     autoComplete="email"
                     required
                     className="block font-bold px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
               </div>
-            </div>
-            <div className=" flex gap-5 justify-center">
-              <div className=" mt-5">
+              <div className=" w-1/2">
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium leading-6 "
+                  className="block text-sm font-medium leading-6"
                 >
-                  Amount to Pay
+                  Amount
                 </label>
                 <div className="mt-2">
                   <input
@@ -843,39 +673,57 @@ export default function BasicTable() {
                     onChange={handleChangeAmount}
                     id="amount"
                     name="amount"
-                    type="text"
+                    type="number"
                     autoComplete="amount"
                     required
                     className="block font-bold px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
               </div>
-              {/* <div className=" mt-5">
+              <div className=" w-1/2">
                 <label
-                  htmlFor="email"
-                  className="block text-sm font-medium leading-6 "
+                  htmlFor="paymentMethod"
+                  className="block text-sm font-medium leading-6"
                 >
-                  Payment Proof
+                  Payment Method
                 </label>
                 <div className="mt-2">
-  
-
-  <input
-    className="relative m-0 block w-full min-w-0 flex-auto cursor-pointer rounded border border-solid border-secondary-500 bg-transparent bg-clip-padding px-3 py-[0.32rem] text-base font-normal text-surface transition duration-300 ease-in-out file:-mx-3 file:-my-[0.32rem] file:me-3 file:cursor-pointer file:overflow-hidden file:rounded-none file:border-0 file:border-e file:border-solid file:border-inherit file:bg-transparent file:px-3  file:py-[0.32rem] file:text-surface focus:border-primary focus:text-gray-700 focus:shadow-inset focus:outline-none dark:border-white/70 dark:text-white  file:dark:text-white"
-    name="image"
-    value={image}
-    onChange={handleImage}
-    id="file"
-    type="file"
-    accept="image/*"
-    />
-       
-
-
+                  <select
+                    value={paymentMethod}
+                    onChange={handleChangePaymentMethod}
+                    id="paymentMethod"
+                    name="paymentMethod"
+                    autoComplete="paymentMethod"
+                    required
+                    className="block font-bold px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  >
+                    <option value="">Select Payment Method</option>
+                    <option value="Gcash">Gcash</option>
+                    <option value="Cash">Cash</option>
+                  </select>
                 </div>
-              </div> */}
+              </div>
+              <div className=" w-1/2">
+                <label
+                  htmlFor="image-upload"
+                  className="block text-sm font-medium leading-6"
+                >
+                  Attach Reciept
+                </label>
+                <div className="mt-2">
+                  <input
+                    onChange={handleImageChange} // Define this function to handle the image file
+                    id="image-upload"
+                    name="image-upload"
+                    type="file"
+                    accept="image/*" // This restricts the file input to image files only
+                    className="block w-full text-sm text-gray-900 px-2 py-1.5 rounded-md border-0 shadow-sm ring-1 ring-inset ring-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100"
+                  />
+                </div>
+              </div>
             </div>
-            <div className=" flex justify-evenly my-10 gap-5">
+
+            <div className="flex justify-evenly my-10 gap-5">
               <button
                 onClick={() => setOpenPayment(false)}
                 className="btn btn-error text-white"
@@ -892,6 +740,7 @@ export default function BasicTable() {
           </Typography>
         </Box>
       </Modal>
+
       <ToastContainer />
     </div>
   );

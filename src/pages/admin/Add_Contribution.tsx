@@ -22,14 +22,13 @@ import DeleteContribution from "../api/deleteContrinbution";
 import DatePicker from "react-multi-date-picker";
 import UpdateContribution from "../api/updateContribution";
 import Payment from "../api/payment";
+
 type Inputs = {
   firstName: string;
   lastName: string;
   born: string;
   age: string;
   died: string;
-  dateBorn: string;
-  dateDie: string;
   deadLine: string;
   amount: string;
 };
@@ -54,9 +53,8 @@ export default function BasicTable() {
     died: "",
     firstName: "",
     lastName: "",
-    dateBorn: "",
-    dateDie: "",
     deadLine: "",
+    amount: "",
   });
   const [open, setOpen] = React.useState(false);
   const [openUpdate, setOpenUpdate] = React.useState(false);
@@ -144,8 +142,8 @@ export default function BasicTable() {
     formState: { errors },
   } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    const date1 = new Date(data.dateBorn);
-    const date2 = new Date(data.dateDie);
+    const date1 = new Date(data.born);
+    const date2 = new Date(data.died);
     const date3 = new Date(data.deadLine);
     // Assuming you have a date object
     const formattedDateBorn = date1.toLocaleDateString("en-US", {
@@ -257,7 +255,6 @@ export default function BasicTable() {
     getData();
   }, []);
 
-console.log(data , " javierbernad1222222222222222222222")
   return (
     <div className=" h-screen">
       <div className=" flex justify-between">
@@ -366,6 +363,12 @@ console.log(data , " javierbernad1222222222222222222222")
                     >
                       Update
                     </button>
+                    <button
+                      onClick={() => deleteCont(data._id)}
+                      className="btn btn-error text-white"
+                    >
+                      Delete
+                    </button>
 
                     {/* <button
                       onClick={() => deleteCont(data._id)}
@@ -429,6 +432,7 @@ console.log(data , " javierbernad1222222222222222222222")
 
                   <input
                     className=" rounded-md my-2 py-2"
+                    type="number"
                     {...register("age", { required: true })}
                   />
                   {errors.age && (
@@ -441,7 +445,7 @@ console.log(data , " javierbernad1222222222222222222222")
                   <p className=" mx-2  ">Date Born</p>
                   <Controller
                     control={control}
-                    name="dateBorn"
+                    name="born"
                     rules={{ required: true }} //optional
                     render={({
                       field: { onChange, name, value },
@@ -459,7 +463,7 @@ console.log(data , " javierbernad1222222222222222222222")
                     )}
                   />
                   <div>
-                    {errors.dateBorn && (
+                    {errors.born && (
                       <span className=" text-white">
                         This field is required
                       </span>
@@ -471,7 +475,7 @@ console.log(data , " javierbernad1222222222222222222222")
 
                   <Controller
                     control={control}
-                    name="dateDie"
+                    name="died"
                     rules={{ required: true }} //optional
                     render={({
                       field: { onChange, name, value },
@@ -489,7 +493,7 @@ console.log(data , " javierbernad1222222222222222222222")
                     )}
                   />
                   <div>
-                    {errors.dateDie && (
+                    {errors.died && (
                       <span className=" text-white">
                         This field is required
                       </span>
@@ -502,6 +506,7 @@ console.log(data , " javierbernad1222222222222222222222")
                   <p className=" mx-2 text-center  ">Amount</p>
                   <input
                     className=" rounded-md  py-2"
+                    type="number"
                     {...register("amount", { required: true })}
                   />
                   {errors.amount && (
@@ -530,7 +535,7 @@ console.log(data , " javierbernad1222222222222222222222")
                     )}
                   />
                   <div>
-                    {errors.dateDie && (
+                    {errors.died && (
                       <span className=" text-white">
                         This field is required
                       </span>
@@ -556,7 +561,7 @@ console.log(data , " javierbernad1222222222222222222222")
           </form>
         </Box>
       </Modal>
-
+      {/* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
       <Modal
         className="update-modal"
         open={openUpdate}
@@ -566,115 +571,140 @@ console.log(data , " javierbernad1222222222222222222222")
       >
         <Box sx={style}>
           <form onSubmit={handleSubmit(onSubmitUpdate)}>
-            <div className="">
-              <h2 className=" text-center bg-green-400 text-black rounded-lg py-3 my-3">
+            <div>
+              <h2 className="text-center bg-[#0C3B68] text-white rounded-lg py-3 my-3">
                 Update Information
               </h2>
-              <div className=" flex justify-center gap-5 mt-5">
+              <div className="flex justify-center gap-5 mt-5">
                 <div>
-                  <p className=" mx-2  ">First Name</p>
-
+                  <p className="mx-2">First Name</p>
                   <input
-                    className=" rounded-md my-2 py-2 "
+                    className="rounded-md my-2 py-2"
                     {...register("firstName", { required: true })}
                     defaultValue={formData.firstName}
                   />
+                  <div>
+                    {errors.firstName && (
+                      <span className="text-white">This field is required</span>
+                    )}
+                  </div>
                 </div>
                 <div>
-                  <p className=" mx-2  ">Last Name</p>
-
+                  <p className="mx-2">Last Name</p>
                   <input
-                    className=" rounded-md my-2 py-2"
+                    className="rounded-md my-2 py-2"
                     {...register("lastName", { required: true })}
                     defaultValue={formData.lastName}
                   />
+                  <div>
+                    {errors.lastName && (
+                      <span className="text-white">This field is required</span>
+                    )}
+                  </div>
                 </div>
-                <div className="">
-                  <p className=" mx-2 text-center  ">Age</p>
-
+                <div>
+                  <p className="mx-2 text-center">Age</p>
                   <input
-                    className=" rounded-md my-2 py-2"
+                    className="rounded-md my-2 py-2"
+                    type="number"
                     {...register("age", { required: true })}
                     defaultValue={formData.age}
                   />
+                  <div>
+                    {errors.age && (
+                      <span className="text-white">This field is required</span>
+                    )}
+                  </div>
                 </div>
               </div>
-              <div className=" flex gap-5 justify-center">
+              <div className="flex gap-5 justify-center">
                 <div>
-                  <p className=" mx-2  ">Date Born</p>
+                  <p className="mx-2">Date Born</p>
                   <Controller
                     control={control}
-                    name="dateBorn"
+                    name="born"
                     defaultValue={formData.born}
-                    rules={{ required: true }} //optional
-                    render={({
-                      field: { onChange, name, value },
-                      fieldState: { invalid, isDirty }, //optional
-                      formState: { errors }, //optional, but necessary if you want to show an error message
-                    }) => (
+                    rules={{ required: true }}
+                    render={({ field: { onChange, value } }) => (
                       <DatePicker
                         value={value}
-                        onChange={(date: any) => {
-                          onChange(date?.isValid ? date : "");
-                        }}
-                        // Add margin and padding to the input field
+                        onChange={(date: any) =>
+                          onChange(date?.isValid ? date : "")
+                        }
                         style={{ padding: "20px" }}
                       />
                     )}
                   />
+                  <div>
+                    {errors.born && (
+                      <span className="text-white">This field is required</span>
+                    )}
+                  </div>
                 </div>
                 <div>
-                  <p className=" mx-2  ">Date Death</p>
-
+                  <p className="mx-2">Date Death</p>
                   <Controller
                     control={control}
-                    name="dateDie"
+                    name="died"
                     defaultValue={formData.died}
-                    rules={{ required: true }} //optional
-                    render={({
-                      field: { onChange, name, value },
-                      fieldState: { invalid, isDirty }, //optional
-                      formState: { errors }, //optional, but necessary if you want to show an error message
-                    }) => (
+                    rules={{ required: true }}
+                    render={({ field: { onChange, value } }) => (
                       <DatePicker
                         value={value}
-                        onChange={(date: any) => {
-                          onChange(date?.isValid ? date : "");
-                        }}
-                        // Add margin and padding to the input field
+                        onChange={(date: any) =>
+                          onChange(date?.isValid ? date : "")
+                        }
                         style={{ padding: "20px" }}
                       />
                     )}
                   />
+                  <div>
+                    {errors.died && (
+                      <span className="text-white">This field is required</span>
+                    )}
+                  </div>
                 </div>
               </div>
-              <div className=" flex justify-center">
-                <div className=" mt-5">
-                  <p className=" mx-2 text-center  ">Deadline</p>
-
+              <div className="flex justify-center gap-5">
+                <div className="my-2">
+                  <p className="mx-2 text-center">Amount</p>
+                  <input
+                    className="rounded-md py-2"
+                    type="number"
+                    {...register("amount", { required: true })}
+                    defaultValue={formData.amount}
+                  />
+                  <div>
+                    {errors.amount && (
+                      <span className="text-white">This field is required</span>
+                    )}
+                  </div>
+                </div>
+                <div className="my-2">
+                  <p className="mx-2 text-center">Deadline</p>
                   <Controller
                     control={control}
                     name="deadLine"
                     defaultValue={formData.deadLine}
-                    rules={{ required: true }} //optional
-                    render={({
-                      field: { onChange, name, value },
-                      fieldState: { invalid, isDirty }, //optional
-                      formState: { errors }, //optional, but necessary if you want to show an error message
-                    }) => (
+                    rules={{ required: true }}
+                    render={({ field: { onChange, value } }) => (
                       <DatePicker
                         value={value}
-                        onChange={(date: any) => {
-                          onChange(date?.isValid ? date : "");
-                        }}
-                        // Add margin and padding to the input field
+                        onChange={(date: any) =>
+                          onChange(date?.isValid ? date : "")
+                        }
                         style={{ padding: "20px" }}
                       />
                     )}
                   />
+                  <div>
+                    {errors.deadLine && (
+                      <span className="text-white">This field is required</span>
+                    )}
+                  </div>
                 </div>
               </div>
-              <div className=" flex justify-end gap-3 mt-3">
+              <div className="flex justify-end gap-3 mt-3">
                 <button
                   onClick={() => setOpenUpdate(false)}
                   className="btn btn-error text-white"
@@ -682,7 +712,7 @@ console.log(data , " javierbernad1222222222222222222222")
                   Back
                 </button>
                 <button
-                  // onClick={handleOpen}
+                  type="submit"
                   className="btn btn-active btn-accent text-white"
                 >
                   Confirm

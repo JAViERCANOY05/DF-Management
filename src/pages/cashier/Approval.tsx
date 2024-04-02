@@ -22,6 +22,8 @@ import GetAllTransaction from "../api/getAllTransaction";
 import Payment from "../api/payment";
 import DeleteTrans from "../api/deleteTrans";
 import Approval from "../api/approval";
+import VIewTable from "../helper/openImage";
+
 type Inputs = {
   firstName: string;
   lastName: string;
@@ -48,26 +50,25 @@ const style = {
 
 export default function BasicTable() {
   const [formData, setFormData] = React.useState({
+    _id: 0,
+    userId: 0,
+    name: "",
+    email: "",
+    number: 0,
+    contribution: {
       _id: 0,
-      userId: 0,
-      name:"",
-      email: "",
-      number: 0,
-      contribution: {
-          _id: 0,
-          firstName: "",
-          lastName: "",
-          born: 0,
-          died: 0,
-          age: 0,
-      },
-      paymentMethod: "",
-      status: "",
-      amount:"",
-      date: 0,
-      referenceNumber: 0,
-  },
-);
+      firstName: "",
+      lastName: "",
+      born: 0,
+      died: 0,
+      age: 0,
+    },
+    paymentMethod: "",
+    status: "",
+    amount: "",
+    date: 0,
+    referenceNumber: 0,
+  });
   const [open, setOpen] = React.useState(false);
   const [openUpdate, setOpenUpdate] = React.useState(false);
 
@@ -89,19 +90,17 @@ export default function BasicTable() {
     reset();
     setOpenUpdate(false);
   };
-  const [data, setData] = React.useState([
-    
-  ]);
+  const [data, setData] = React.useState([]);
   const [cont, setCont] = React.useState([
     {
-     _id: "",
-     firstName: "",
-     lastName: "",
-     born: "",
-     died: "",
-     age: "",
-   }
- ]);
+      _id: "",
+      firstName: "",
+      lastName: "",
+      born: "",
+      died: "",
+      age: "",
+    },
+  ]);
   const [name, setName] = React.useState("");
   const [number, setNumber] = React.useState("");
   const [paymentMethod, setPaymentMethod] = React.useState("");
@@ -110,20 +109,20 @@ export default function BasicTable() {
   const [id, setId] = React.useState("");
   const [trans, setTrans] = React.useState([
     {
-      amount : 0,
+      amount: 0,
       _id: "",
       userId: "",
       name: "",
       email: "",
       number: "",
-      contribution :{
+      contribution: {
         _id: "",
         firstName: "",
         lastName: "",
         born: "",
         died: "",
         age: "",
-      } ,
+      },
       paymentMethod: "",
       status: "",
       image: "",
@@ -305,7 +304,7 @@ export default function BasicTable() {
       const response = await GetAllTransaction.get(token);
       if (response.status) {
         console.log(response.response, "0000");
-        setCont(response.response.contribution)
+        setCont(response.response.contribution);
         setTrans(response.response);
       } else {
         console.log("Error");
@@ -338,9 +337,7 @@ export default function BasicTable() {
     // getData();
     getAllTrans();
   }, []);
-  console.log(trans.length, " cont!  1111")
-
-
+  console.log(trans.length, " cont!  1111");
 
   return (
     <div className=" h-screen">
@@ -362,74 +359,79 @@ export default function BasicTable() {
               <TableCell align="left">Payment Method</TableCell>
               <TableCell align="left">Date Pay</TableCell>
               <TableCell align="left">Status</TableCell>
+              <TableCell align="left">Reciept</TableCell>
               <TableCell align="right">Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {trans.filter(data => data.status === "Waiting for approval").length === 0 ? (
+            {trans.filter((data) => data.status === "Waiting for approval")
+              .length === 0 ? (
               <TableRow>
                 <TableCell colSpan={7} align="center">
                   No data collected
                 </TableCell>
               </TableRow>
             ) : (
-              trans.filter(data => data.status === "Waiting for approval").map((data, index) => (
-                <TableRow
-                  key={index++}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row">
-                    {data.contribution.firstName}
-                  </TableCell>
-                  <TableCell component="th" scope="row">
-                    {data.contribution.lastName}
-                  </TableCell>
-                 
-                
-                  <TableCell component="th" scope="row">
-                    {data.number}
-                  </TableCell>
-                  <TableCell component="th" scope="row">
-                    {data.paymentMethod}
-                    2
-                  </TableCell>
-                  <TableCell align="left">
-                    {new Date(data.date).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "long",
-                      day: "2-digit",
-                    })}
-                  </TableCell>
-                  <TableCell align="left">
-                    {data.status === "pending" ? (
-                      <p className="bg-red-300 text-center rounded-md">
-                        {data.status}
-                      </p>
-                    ) : (
-                      <p className=" text-center bg-green-400 rounded-md">
-                        {data.status}
-                      </p>
-                    )}
-                  </TableCell>
+              trans
+                .filter((data) => data.status === "Waiting for approval")
+                .map((data, index) => (
+                  <TableRow
+                    key={index++}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {data.contribution.firstName}
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                      {data.contribution.lastName}
+                    </TableCell>
 
-                  <TableCell align="right">
-                    <div className=" flex justify-end">
-                      <button
-                        onClick={() => approvalTrans(data._id)}
-                        className="btn btn-active btn-accent mr-3 text-white"
-                      >
-                        Approve
-                      </button>
-                      <button
-                        onClick={() => deleteTrns(data._id)}
-                        className="btn btn-error text-white"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))
+                    <TableCell component="th" scope="row">
+                      {data.contribution.age}
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                      {data.paymentMethod}
+                    </TableCell>
+                    <TableCell align="left">
+                      {new Date(data.date).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        day: "2-digit",
+                      })}
+                    </TableCell>
+                    <TableCell align="left">
+                      {data.status === "pending" ? (
+                        <p className="bg-red-300 text-center rounded-md">
+                          {data.status}
+                        </p>
+                      ) : (
+                        <p className=" text-center bg-green-400 rounded-md">
+                          {data.status}
+                        </p>
+                      )}
+                    </TableCell>
+                    <TableCell align="left">
+                      {!data.image ? null : <VIewTable imageUrl={data.image} />}
+                    </TableCell>
+
+                    <TableCell align="right">
+                      <div className=" flex justify-end">
+                        <button
+                          onClick={() => approvalTrans(data._id)}
+                          className="btn btn-active btn-accent mr-3 text-white"
+                        >
+                          Approve
+                        </button>
+                        <button
+                          onClick={() => deleteTrns(data._id)}
+                          className="btn btn-error text-white"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))
             )}
           </TableBody>
         </Table>

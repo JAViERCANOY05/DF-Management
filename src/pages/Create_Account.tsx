@@ -21,11 +21,10 @@ type Inputs = {
   fee: string;
   gender: string;
   exampleRequired: string;
-  firtBeneficiary : string;
-  secondBeneficiary : string;
-  thirdBeneficiary : string;
+  firtBeneficiary: string;
+  secondBeneficiary: string;
+  thirdBeneficiary: string;
   // beneficiary: [];
-
 };
 const style = {
   position: "absolute" as "absolute",
@@ -66,14 +65,17 @@ export default function App() {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-
     const accountCreated = {
       email: data.email,
       password: data.password,
       gender: data.gender,
       firstName: data.firtName,
       lastName: data.firtName,
-      beneficiary : [data.firtBeneficiary , data.secondBeneficiary , data.thirdBeneficiary],
+      beneficiary: [
+        data.firtBeneficiary,
+        data.secondBeneficiary,
+        data.thirdBeneficiary,
+      ],
     };
 
     setData(accountCreated);
@@ -82,6 +84,7 @@ export default function App() {
   const handlerCreateAccount = async () => {
     try {
       const response = await CreateAccount.create(data);
+
       if (response) {
         notifySuccess("Account Created !");
         //  Delay route push by 3 seconds
@@ -95,10 +98,11 @@ export default function App() {
         console.log(data, "2");
       }
     } catch (error: any) {
-      notifyError("Network Error !");
+      console.log(error, "asasdasd");
+      notifyError("Email is already exist or Network Error !");
     }
   };
-  
+
   const password = useRef({});
   password.current = watch("password");
 
@@ -201,24 +205,26 @@ export default function App() {
               </div>
             </div>
             <div>
-              <p className=" mx-2 mt-3 mb-1 ">Gender</p>
-              <input
-                className=" mx-2 rounded-md py-3 px-10"
+              <p className="mx-2 mt-3 mb-1">Gender</p>
+              <select
+                className="mx-2 rounded-md py-3 px-10"
                 {...register("gender", { required: true })}
-              />
-              <div className=" mx-2 text-yellow-500">
+              >
+                <option value="">Select Gender</option> {/* Default option */}
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+              </select>
+              <div className="mx-2 text-yellow-500">
                 {errors.gender && <span>This field is required</span>}
               </div>
             </div>
           </div>
           <div className=" my-10  flex justify-center text-4xl font-bold">
-        <h2 className=" text-blue-700">
-        Beneficiary
-        </h2>
-      </div>
-      <div className=" flex">
+            <h2 className=" text-blue-700">Beneficiary</h2>
+          </div>
+          <div className=" flex">
             <div>
-              <p className=" mx-2 mt-3 mb-1">First  Beneficiary</p>
+              <p className=" mx-2 mt-3 mb-1">First Beneficiary</p>
               <input
                 className=" mx-2 rounded-md py-3 px-10"
                 {...register("firtBeneficiary", { required: true })}
@@ -228,19 +234,21 @@ export default function App() {
               </div>
             </div>
             <div>
-              <p className=" mx-2 mt-3 mb-1">Second  Beneficiary</p>
+              <p className=" mx-2 mt-3 mb-1">Second Beneficiary</p>
               <input
                 className=" mx-2 rounded-md py-3 px-10"
                 {...register("secondBeneficiary", { required: true })}
               />
               <div className=" mx-2 text-yellow-500">
-                {errors.secondBeneficiary && <span>This field is required</span>}
+                {errors.secondBeneficiary && (
+                  <span>This field is required</span>
+                )}
               </div>
             </div>
           </div>
           <div className=" flex justify-center">
             <div>
-              <p className=" mx-2 mt-3 mb-1">Third  Beneficiary</p>
+              <p className=" mx-2 mt-3 mb-1">Third Beneficiary</p>
               <input
                 className=" mx-2 rounded-md py-3 px-10"
                 {...register("thirdBeneficiary", { required: true })}
@@ -249,7 +257,6 @@ export default function App() {
                 {errors.thirdBeneficiary && <span>This field is required</span>}
               </div>
             </div>
-          
           </div>
 
           <div className=" flex justify-end my-8 mx-2 gap-5">

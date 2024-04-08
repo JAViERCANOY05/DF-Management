@@ -169,10 +169,11 @@ export default function BasicTable() {
   const deleteCont = async (id: any) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await DeleteContribution.delete(token, id);
+      const response = await DeleteContribution.user(token, id);
       if (response.status) {
         getData();
         notifySuccess("Successfully Delete ! ");
+        getUser();
       } else {
         notifyError("Something went wrong!");
       }
@@ -202,7 +203,6 @@ export default function BasicTable() {
   };
 
   React.useEffect(() => {
-    // getData();
     getUser();
   }, []);
 
@@ -229,8 +229,8 @@ export default function BasicTable() {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>First Name</TableCell>
               <TableCell align="left">Last Name</TableCell>
+              <TableCell>First Name</TableCell>
               <TableCell align="left">Email</TableCell>
 
               <TableCell align="left">Date join</TableCell>
@@ -249,12 +249,13 @@ export default function BasicTable() {
                   key={index++}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  <TableCell component="th" scope="row">
-                    {data.firstName}
-                  </TableCell>
                   <TableCell align="left" component="th" scope="row">
                     {data.lastName}
                   </TableCell>
+                  <TableCell component="th" scope="row">
+                    {data.firstName}
+                  </TableCell>
+
                   <TableCell align="left" component="th" scope="row">
                     {data.email}
                   </TableCell>
@@ -274,20 +275,20 @@ export default function BasicTable() {
                     })}
                   </TableCell> */}
 
-                  {/* <TableCell align="right">
-                    <button
+                  <TableCell align="right">
+                    {/* <button
                       onClick={handlePaymeny}
                       className="btn btn-active btn-accent mr-3 text-white"
                     >
                       Payment
-                    </button>
+                    </button> */}
 
-                    <button
+                    {/* <button
                       onClick={() => handleUpdate(data)}
                       className="btn btn-active btn-primary mr-3"
                     >
                       Update
-                    </button>
+                    </button> */}
 
                     <button
                       onClick={() => deleteCont(data._id)}
@@ -295,7 +296,7 @@ export default function BasicTable() {
                     >
                       Delete
                     </button>
-                  </TableCell> */}
+                  </TableCell>
                 </TableRow>
               ))
             )}

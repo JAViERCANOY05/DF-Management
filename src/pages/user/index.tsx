@@ -17,7 +17,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { useState } from "react";
-import Advance from "./Advance"
+import Advance from "./Advance";
 
 import Dashboard from "./Dashboard";
 import Contribution from "./Contribution";
@@ -62,11 +62,11 @@ const component: display[] = [
   //   ),
   //   href: "Report",
   // },
-  // {
-  //   name: "Transaction",
-  //   icon: <GrTransaction style={{ fontSize: "1.5em", color: "#1976D2" }} />,
-  //   href: "Transaction",
-  // },
+  {
+    name: "Transaction",
+    icon: <GrTransaction style={{ fontSize: "1.5em", color: "#1976D2" }} />,
+    href: "Transaction",
+  },
 
   {
     name: "Settings",
@@ -180,8 +180,7 @@ export default function MiniDrawer() {
       setDisplayComponent(<Settings />);
     } else if (item === "Transaction") {
       setDisplayComponent(<Transaction />);
-    }
-    else if (item === "Advance Payment") {
+    } else if (item === "Advance Payment") {
       setDisplayComponent(<Advance />);
     }
   };

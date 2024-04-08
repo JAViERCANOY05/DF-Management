@@ -350,15 +350,6 @@ export default function BasicTable() {
                   </TableCell>
 
                   <TableCell align="right">
-                    {data.status !== "pending" ? null : (
-                      <button
-                        onClick={() => handleOpenPayment(data._id)}
-                        className="btn btn-active btn-accent mr-3 text-white"
-                      >
-                        Pay
-                      </button>
-                    )}
-
                     <button
                       onClick={() => handleUpdate(data)}
                       className="btn btn-active btn-primary mr-3"

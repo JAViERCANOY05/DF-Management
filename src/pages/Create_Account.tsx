@@ -198,6 +198,8 @@ export default function App() {
               <p className=" mx-2 mt-3 mb-1">Registration fee</p>
               <input
                 className=" mx-2 rounded-md py-3 px-10"
+                defaultValue={20}
+                readOnly
                 {...register("fee", { required: true })}
               />
               <div className=" mx-2 text-yellow-500">
@@ -291,25 +293,18 @@ export default function App() {
                     variant="h6"
                     component="h2"
                   >
-                    <p className=" font-bold text-2xl">Registration Fee</p>
+                    <p className=" font-bold text-2xl">
+                      Continue Creating account?
+                    </p>
                   </Typography>
                 </div>
                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                  <div className=" flex justify-center">
-                    <PaidIcon /> <span className=" font-bold">20</span>
-                  </div>
                   <div className=" my-5 flex justify-center gap-5">
                     <button
                       onClick={handlerCreateAccount}
                       className="  hover:bg-green-800 rounded-md bg-green-600 py-3 px-5 text-white"
                     >
-                      Cash
-                    </button>
-                    <button
-                      onClick={handlerCreateAccount}
-                      className="  hover:bg-blue-800 rounded-md bg-blue-600 py-3 px-5 text-white"
-                    >
-                      GCash
+                      Continue
                     </button>
                   </div>
                 </Typography>

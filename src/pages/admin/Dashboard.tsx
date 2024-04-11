@@ -33,13 +33,10 @@ const Dashboard = () => {
 
   const p = parseInt(data.transactions.paid);
   const app = parseInt(data.transactions.waitingForApproval);
-  console.log(p,"p");
+  console.log(p, "p");
   console.log(app, "app");
 
-
   return (
-   
- 
     <div>
       <p className=" text-center  bg-slate-400 rounded-lg p-5">
         Admin Dashboard
@@ -48,8 +45,8 @@ const Dashboard = () => {
         <div className=" flex ">
           <div className=" bg-slate-500 p-20 rounded-md">
             <p className=" text-white border-b-2 text-center">Reports </p>
-            <p className=" py-10 text-white ">
-              Total Amount :    ₱ {data.totalAmount}
+            <p className="py-10 text-white">
+              Total Amount: ₱ {data.totalAmount.toLocaleString()}
             </p>
             <p className="  text-white ">Members : {data.totalNumberMember}</p>
           </div>

@@ -62,7 +62,7 @@ const component: display[] = [
     icon: <RiHeartAddFill style={{ fontSize: "1.5em", color: "#1976D2" }} />,
     href: "Add_Contribution",
   },
- 
+
   {
     name: "Manage_User",
     icon: <MdManageAccounts style={{ fontSize: "1.5em", color: "#1976D2" }} />,
@@ -84,11 +84,11 @@ const component: display[] = [
     icon: <GrAnnounce style={{ fontSize: "1.5em", color: "#1976D2" }} />,
     href: "Announcement",
   },
-  {
-    name: "Transaction",
-    icon: <GrTransaction style={{ fontSize: "1.5em", color: "#1976D2" }} />,
-    href: "Transaction",
-  },
+  // {
+  //   name: "Transaction",
+  //   icon: <GrTransaction style={{ fontSize: "1.5em", color: "#1976D2" }} />,
+  //   href: "Transaction",
+  // },
 
   // Add more trees as needed
 ];

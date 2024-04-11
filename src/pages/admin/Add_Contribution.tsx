@@ -22,15 +22,15 @@ import DeleteContribution from "../api/deleteContrinbution";
 import DatePicker from "react-multi-date-picker";
 import UpdateContribution from "../api/updateContribution";
 import Payment from "../api/payment";
+import SingleSelectUser from "../helper/dropdown";
+
+import CircularProgress from "@mui/material/CircularProgress";
 
 type Inputs = {
-  firstName: string;
-  lastName: string;
-  born: string;
-  age: string;
   died: string;
   deadLine: string;
   amount: string;
+  user: any;
 };
 const language: string = "en";
 const style = {
@@ -78,13 +78,16 @@ export default function BasicTable() {
     setOpenUpdate(false);
   };
   const [data, setData] = React.useState([]);
+  const [users, setUsers] = React.useState([]);
   const [name, setName] = React.useState("");
   const [number, setNumber] = React.useState("");
   const [paymentMethod, setPaymentMethod] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [amount, setAmount] = React.useState("");
   const [id, setId] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
 
+  const [dots, setDots] = React.useState(""); // State to hold the dots
   const handleChangeName = (event: any) => {
     setName(event.target.value);
   };
@@ -141,16 +144,14 @@ export default function BasicTable() {
     control,
     formState: { errors },
   } = useForm<Inputs>();
+
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    const date1 = new Date(data.born);
+    setLoading(true);
+    console.log(data.user, "========================================");
     const date2 = new Date(data.died);
     const date3 = new Date(data.deadLine);
     // Assuming you have a date object
-    const formattedDateBorn = date1.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    });
+
     const formattedDateDie = date2.toLocaleDateString("en-US", {
       year: "numeric",
       month: "2-digit",
@@ -164,13 +165,10 @@ export default function BasicTable() {
     });
 
     const fillForm = {
-      firstName: data.firstName,
-      lastName: data.lastName,
-      born: formattedDateBorn,
       died: formattedDateDie,
-      age: data.age,
       deadLine: formattedDateLine,
       amount: data.amount,
+      user: data.user,
     };
     console.log(fillForm);
 
@@ -188,6 +186,9 @@ export default function BasicTable() {
     } catch (error) {
       console.log("Error 1 ");
       notifyError("Something went wrong!");
+    } finally {
+      // Set loading to false when operation is complete or fails
+      setLoading(false);
     }
   };
   const onSubmitUpdate: SubmitHandler<Inputs> = async (data) => {
@@ -226,6 +227,22 @@ export default function BasicTable() {
       console.log("error ", error);
     }
   };
+  const getUsers = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await GetContribution.getUsers(token);
+      if (response.status) {
+        reset();
+        console.log("Users ! ");
+        console.log(response.response);
+        setUsers(response.response);
+      } else {
+        console.log("error ");
+      }
+    } catch (error) {
+      console.log("error ", error);
+    }
+  };
   const handleUpdate = (id: any) => {
     handleOpenUpdate();
     setFormData(id);
@@ -250,9 +267,17 @@ export default function BasicTable() {
   const handlePaymeny = () => {
     notifyError("UnderCodingPa : ) ");
   };
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      // Function to update the dots
+      setDots((prevDots) => (prevDots === "...." ? "" : prevDots + "."));
+    }, 500); // Adjust the interval duration as needed
 
+    return () => clearInterval(interval); // Cleanup interval on component unmount
+  }, []);
   React.useEffect(() => {
     getData();
+    getUsers();
   }, []);
 
   return (
@@ -277,13 +302,12 @@ export default function BasicTable() {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>First Name</TableCell>
-              <TableCell align="left">Last Name</TableCell>
+              <TableCell>Name</TableCell>
               <TableCell align="left">Amount to Pay</TableCell>
               <TableCell align="left">Age</TableCell>
               <TableCell align="left">Date Born</TableCell>
               <TableCell align="left">Date Die</TableCell>
-              <TableCell align="left">Status</TableCell>
+
               <TableCell align="left">Date Deadline</TableCell>
               <TableCell align="right">Action</TableCell>
             </TableRow>
@@ -302,11 +326,12 @@ export default function BasicTable() {
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
-                    {data.firstName}
+                    {data.lastName.charAt(0).toUpperCase() +
+                      data.lastName.slice(1)}{" "}
+                    {data.firstName.charAt(0).toUpperCase() +
+                      data.firstName.slice(1)}
                   </TableCell>
-                  <TableCell align="left" component="th" scope="row">
-                    {data.lastName}
-                  </TableCell>
+
                   <TableCell align="left" component="th" scope="row">
                     ₱ {data.amount}
                   </TableCell>
@@ -326,17 +351,7 @@ export default function BasicTable() {
                       day: "2-digit",
                     })}
                   </TableCell>
-                  <TableCell align="left">
-                    {data.status === "pending" ? (
-                      <p className="bg-red-300 text-center rounded-md">
-                        {data.status}
-                      </p>
-                    ) : (
-                      <p className=" text-center bg-green-400 rounded-md">
-                        {data.status}
-                      </p>
-                    )}
-                  </TableCell>
+
                   <TableCell align="left">
                     {data.countDown <= 0 ? (
                       <p className="bg-red-300 text-center rounded-md">
@@ -382,177 +397,129 @@ export default function BasicTable() {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="">
-              <h2 className=" text-center bg-[#0C3B68] text-white rounded-lg py-3 my-3">
-                Fill up this form
-              </h2>
-              <div className=" flex justify-center gap-5 mt-5">
-                <div>
-                  <p className=" mx-2  ">First Name</p>
+        {loading ? (
+          <div className="flex h-screen items-center justify-center flex-col gap-6">
+            <CircularProgress />
+            <p className=" text-3xl text-white">Please Wait{dots}</p>
+          </div>
+        ) : (
+          <Box sx={style}>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div className="">
+                <h2 className=" text-center bg-[#0C3B68] text-white rounded-lg py-3 my-3">
+                  Fill up this form
+                </h2>
 
-                  <input
-                    className=" rounded-md my-2 py-2 "
-                    {...register("firstName", { required: true })}
-                  />
-
-                  <div>
-                    {errors.firstName && (
-                      <span className=" text-white">
-                        This field is required
-                      </span>
-                    )}
-                  </div>
-                </div>
-                <div>
-                  <p className=" mx-2  ">Last Name</p>
-
-                  <input
-                    className=" rounded-md my-2 py-2"
-                    {...register("lastName", { required: true })}
-                  />
-                  <div>
-                    {errors.lastName && (
-                      <span className=" text-white">
-                        This field is required
-                      </span>
-                    )}
-                  </div>
-                </div>
-                <div className="">
-                  <p className=" mx-2 text-center  ">Age</p>
-
-                  <input
-                    className=" rounded-md my-2 py-2"
-                    type="number"
-                    {...register("age", { required: true })}
-                  />
-                  {errors.age && (
-                    <div className=" text-white">This field is required</div>
-                  )}
-                </div>
-              </div>
-              <div className=" flex gap-5 justify-center">
-                <div>
-                  <p className=" mx-2  ">Date Born</p>
-                  <Controller
-                    control={control}
-                    name="born"
-                    rules={{ required: true }} //optional
-                    render={({
-                      field: { onChange, name, value },
-                      fieldState: { invalid, isDirty }, //optional
-                      formState: { errors }, //optional, but necessary if you want to show an error message
-                    }) => (
-                      <DatePicker
-                        value={value || ""}
-                        onChange={(date: any) => {
-                          onChange(date?.isValid ? date : "");
-                        }}
-                        // Add margin and padding to the input field
-                        style={{ padding: "20px" }}
+                <div className=" flex gap-5 justify-center mt-2">
+                  <div className="">
+                    <h1 className="mx-2">Select a User</h1>
+                    <div className=" bg-white  w-56 ">
+                      {" "}
+                      <Controller
+                        name="user"
+                        control={control}
+                        rules={{ required: "User selection is required" }} // Adding a validation rule
+                        render={({ field }) => (
+                          <SingleSelectUser
+                            users={users}
+                            value={field.value || ""} // Provide a fallback value if field value is undefined
+                            onChange={(e) => field.onChange(e.target.value)}
+                          />
+                        )}
                       />
-                    )}
-                  />
-                  <div>
-                    {errors.born && (
-                      <span className=" text-white">
-                        This field is required
-                      </span>
-                    )}
+                    </div>
                   </div>
-                </div>
-                <div>
-                  <p className=" mx-2  ">Date Death</p>
+                  <div>
+                    <p className=" mx-2  ">Date Death</p>
 
-                  <Controller
-                    control={control}
-                    name="died"
-                    rules={{ required: true }} //optional
-                    render={({
-                      field: { onChange, name, value },
-                      fieldState: { invalid, isDirty }, //optional
-                      formState: { errors }, //optional, but necessary if you want to show an error message
-                    }) => (
-                      <DatePicker
-                        value={value || ""}
-                        onChange={(date: any) => {
-                          onChange(date?.isValid ? date : "");
-                        }}
-                        // Add margin and padding to the input field
-                        style={{ padding: "20px" }}
-                      />
-                    )}
-                  />
-                  <div>
-                    {errors.died && (
-                      <span className=" text-white">
-                        This field is required
-                      </span>
-                    )}
+                    <Controller
+                      control={control}
+                      name="died"
+                      rules={{ required: true }} //optional
+                      render={({
+                        field: { onChange, name, value },
+                        fieldState: { invalid, isDirty }, //optional
+                        formState: { errors }, //optional, but necessary if you want to show an error message
+                      }) => (
+                        <DatePicker
+                          value={value || ""}
+                          onChange={(date: any) => {
+                            onChange(date?.isValid ? date : "");
+                          }}
+                          // Add margin and padding to the input field
+                          style={{ padding: "27px" }}
+                        />
+                      )}
+                    />
+                    <div>
+                      {errors.died && (
+                        <span className=" text-white">
+                          This field is required
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className=" flex justify-center gap-5">
-                <div className="my-2">
-                  <p className=" mx-2 text-center  ">Amount</p>
-                  <input
-                    className=" rounded-md  py-2"
-                    type="number"
-                    {...register("amount", { required: true })}
-                  />
-                  {errors.amount && (
-                    <div className=" text-white">This field is required</div>
-                  )}
-                </div>
-                <div className=" my-2">
-                  <p className=" mx-2 text-center  ">Deadline</p>
-                  <Controller
-                    control={control}
-                    name="deadLine"
-                    rules={{ required: true }} //optional
-                    render={({
-                      field: { onChange, name, value },
-                      fieldState: { invalid, isDirty }, //optional
-                      formState: { errors }, //optional, but necessary if you want to show an error message
-                    }) => (
-                      <DatePicker
-                        value={value || ""}
-                        onChange={(date: any) => {
-                          onChange(date?.isValid ? date : "");
-                        }}
-                        // Add margin and padding to the input field
-                        style={{ padding: "20px" }}
-                      />
-                    )}
-                  />
-                  <div>
-                    {errors.died && (
-                      <span className=" text-white">
-                        This field is required
-                      </span>
+                <div className=" flex justify-center gap-5 mt-5">
+                  <div className="my-2">
+                    <p className=" mx-2 text-center  ">Amount</p>
+                    <input
+                      className=" rounded-md  py-4"
+                      type="number"
+                      {...register("amount", { required: true })}
+                    />
+                    {errors.amount && (
+                      <div className=" text-white">This field is required</div>
                     )}
                   </div>
+                  <div className=" my-2">
+                    <p className=" mx-2 text-center  ">Deadline</p>
+                    <Controller
+                      control={control}
+                      name="deadLine"
+                      rules={{ required: true }} //optional
+                      render={({
+                        field: { onChange, name, value },
+                        fieldState: { invalid, isDirty }, //optional
+                        formState: { errors }, //optional, but necessary if you want to show an error message
+                      }) => (
+                        <DatePicker
+                          value={value || ""}
+                          onChange={(date: any) => {
+                            onChange(date?.isValid ? date : "");
+                          }}
+                          // Add margin and padding to the input field
+                          style={{ padding: "26px" }}
+                        />
+                      )}
+                    />
+                    <div>
+                      {errors.died && (
+                        <span className=" text-white">
+                          This field is required
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <div className=" flex justify-end gap-3 mt-3">
+                  <button
+                    onClick={() => setOpen(false)}
+                    className="btn btn-error text-white"
+                  >
+                    Back
+                  </button>
+                  <button
+                    // onClick={handleOpen}
+                    className="btn btn-active btn-accent text-white"
+                  >
+                    Confirm
+                  </button>
                 </div>
               </div>
-              <div className=" flex justify-end gap-3 mt-3">
-                <button
-                  onClick={() => setOpen(false)}
-                  className="btn btn-error text-white"
-                >
-                  Back
-                </button>
-                <button
-                  // onClick={handleOpen}
-                  className="btn btn-active btn-accent text-white"
-                >
-                  Confirm
-                </button>
-              </div>
-            </div>
-          </form>
-        </Box>
+            </form>
+          </Box>
+        )}
       </Modal>
       {/* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
       <Modal
@@ -568,72 +535,8 @@ export default function BasicTable() {
               <h2 className="text-center bg-[#0C3B68] text-white rounded-lg py-3 my-3">
                 Update Information
               </h2>
-              <div className="flex justify-center gap-5 mt-5">
-                <div>
-                  <p className="mx-2">First Name</p>
-                  <input
-                    className="rounded-md my-2 py-2"
-                    {...register("firstName", { required: true })}
-                    defaultValue={formData.firstName}
-                  />
-                  <div>
-                    {errors.firstName && (
-                      <span className="text-white">This field is required</span>
-                    )}
-                  </div>
-                </div>
-                <div>
-                  <p className="mx-2">Last Name</p>
-                  <input
-                    className="rounded-md my-2 py-2"
-                    {...register("lastName", { required: true })}
-                    defaultValue={formData.lastName}
-                  />
-                  <div>
-                    {errors.lastName && (
-                      <span className="text-white">This field is required</span>
-                    )}
-                  </div>
-                </div>
-                <div>
-                  <p className="mx-2 text-center">Age</p>
-                  <input
-                    className="rounded-md my-2 py-2"
-                    type="number"
-                    {...register("age", { required: true })}
-                    defaultValue={formData.age}
-                  />
-                  <div>
-                    {errors.age && (
-                      <span className="text-white">This field is required</span>
-                    )}
-                  </div>
-                </div>
-              </div>
+
               <div className="flex gap-5 justify-center">
-                <div>
-                  <p className="mx-2">Date Born</p>
-                  <Controller
-                    control={control}
-                    name="born"
-                    defaultValue={formData.born}
-                    rules={{ required: true }}
-                    render={({ field: { onChange, value } }) => (
-                      <DatePicker
-                        value={value}
-                        onChange={(date: any) =>
-                          onChange(date?.isValid ? date : "")
-                        }
-                        style={{ padding: "20px" }}
-                      />
-                    )}
-                  />
-                  <div>
-                    {errors.born && (
-                      <span className="text-white">This field is required</span>
-                    )}
-                  </div>
-                </div>
                 <div>
                   <p className="mx-2">Date Death</p>
                   <Controller
@@ -715,145 +618,7 @@ export default function BasicTable() {
           </form>
         </Box>
       </Modal>
-      <Modal
-        open={openPayment}
-        onClose={handleClosePayment}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <Typography
-            id="modal-modal-title"
-            variant="h6"
-            component="h2"
-            className=" text-white"
-          >
-            <p className=" text-center">Payment Transcation</p>
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            <div className=" flex gap-5 justify-center">
-              <div className=" mt-5">
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium leading-6 "
-                >
-                  Name
-                </label>
-                <div className="mt-2">
-                  <input
-                    value={name}
-                    onChange={handleChangeName}
-                    id="name"
-                    name="name"
-                    type="text"
-                    autoComplete="name"
-                    required
-                    className="block font-bold px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  />
-                </div>
-              </div>
-              <div className=" mt-5">
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium leading-6 "
-                >
-                  Number
-                </label>
-                <div className="mt-2">
-                  <input
-                    value={number}
-                    onChange={handleChangeNumber}
-                    id="email"
-                    name="email"
-                    type="text"
-                    autoComplete="email"
-                    required
-                    className="block font-bold px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  />
-                </div>
-              </div>
-            </div>
-            <div className=" flex gap-5 justify-center ">
-              <div className=" mt-5">
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium leading-6 "
-                >
-                  Payment Method
-                </label>
-                <div className="mt-2">
-                  <input
-                    value={paymentMethod}
-                    onChange={handleChangePaymentMethod}
-                    id="paymentMethod"
-                    name="paymentMethod"
-                    type="text"
-                    autoComplete="paymentMethod"
-                    required
-                    className="block font-bold px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  />
-                </div>
-              </div>
-              <div className=" mt-5">
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium leading-6 "
-                >
-                  Email
-                </label>
-                <div className="mt-2">
-                  <input
-                    value={email}
-                    onChange={handleChangeEmail}
-                    id="email"
-                    name="email"
-                    type="text"
-                    autoComplete="email"
-                    required
-                    className="block font-bold px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  />
-                </div>
-              </div>
-            </div>
-            <div className=" flex gap-5 justify-center">
-              <div className=" mt-5">
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium leading-6 "
-                >
-                  Amount to Pay
-                </label>
-                <div className="mt-2">
-                  <input
-                    value={amount}
-                    onChange={handleChangeAmount}
-                    id="amount"
-                    name="amount"
-                    type="text"
-                    autoComplete="amount"
-                    required
-                    className="block font-bold px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  />
-                </div>
-              </div>
-            </div>
-            <div className=" flex justify-evenly my-10 gap-5">
-              <button
-                onClick={() => setOpenPayment(false)}
-                className="btn btn-error text-white"
-              >
-                Back
-              </button>
-              <button
-                onClick={payment}
-                className="btn btn-active btn-accent mr-3 text-white"
-              >
-                Confirm
-              </button>
-            </div>
-          </Typography>
-        </Box>
-      </Modal>
+
       <ToastContainer />
     </div>
   );

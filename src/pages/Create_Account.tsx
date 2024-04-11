@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+
 import Link from "next/link";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -8,7 +8,8 @@ import PaidIcon from "@mui/icons-material/Paid";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { notifyError, notifySuccess } from "./Notifications";
-
+import { useForm, SubmitHandler, Controller } from "react-hook-form";
+import DatePicker from "react-multi-date-picker";
 import { useRouter } from "next/navigation"; // Correct import
 import CreateAccount from "./api/create_account";
 
@@ -20,10 +21,7 @@ type Inputs = {
   confirmPassword: string;
   fee: string;
   gender: string;
-  exampleRequired: string;
-  firtBeneficiary: string;
-  secondBeneficiary: string;
-  thirdBeneficiary: string;
+  dateBorn: any;
   // beneficiary: [];
 };
 const style = {
@@ -48,6 +46,7 @@ export default function App() {
     gender: "",
     firstName: "",
     lastName: "",
+    dateBorn: "",
     // beneficiary :[],
   });
 
@@ -60,22 +59,21 @@ export default function App() {
   const {
     register,
     handleSubmit,
+    control,
     watch,
     formState: { errors },
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
+    const date = new Date(data.dateBorn);
+    const formattedDate = date.toISOString().split("T")[0]; // Convert Date to string in format 'YYYY-MM-DD'
     const accountCreated = {
       email: data.email,
       password: data.password,
       gender: data.gender,
       firstName: data.firtName,
-      lastName: data.firtName,
-      beneficiary: [
-        data.firtBeneficiary,
-        data.secondBeneficiary,
-        data.thirdBeneficiary,
-      ],
+      lastName: data.lastName,
+      dateBorn: formattedDate, // Assign formattedDate instead of date
     };
 
     setData(accountCreated);
@@ -107,13 +105,13 @@ export default function App() {
   password.current = watch("password");
 
   return (
-    <div className="  bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 px-10 py-5  ">
+    <div className="  bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 px-10 py-5  h-screen">
       <div className=" my-20  flex justify-center text-4xl font-bold">
         <h2 className=" text-blue-700">
           Create <span className="  text-yellow-400">Account</span>
         </h2>
       </div>
-      <div className=" flex justify-center ">
+      <div className=" flex justify-center">
         <form className="">
           {/* register your input into the hook by invoking the "register" function */}
 
@@ -140,18 +138,47 @@ export default function App() {
               </div>
             </div>
           </div>
-          <div className=" flex">
+          <div className="flex gap-1">
             <div>
-              <p className=" mx-2 mt-3 mb-1">Enter your email</p>
+              <p className="mx-2 mt-3 mb-1">Enter your email</p>
               <input
-                className=" mx-2 rounded-md py-3 px-10"
+                className="mx-2 rounded-md py-3 px-10"
                 {...register("email", { required: true })}
               />
-              <div className=" mx-2 text-yellow-500">
+              <div className="mx-2 text-yellow-500">
                 {errors.email && <span>This field is required</span>}
               </div>
             </div>
+            <div>
+              <p className="mx-2 mt-3 mb-1">Birth Date</p>
+
+              <Controller
+                control={control}
+                name="dateBorn"
+                rules={{ required: true }} //optional
+                render={({
+                  field: { onChange, name, value },
+                  fieldState: { invalid, isDirty },
+                  formState: { errors },
+                }) => (
+                  <DatePicker
+                    value={value || ""}
+                    onChange={(date: any) => {
+                      onChange(date?.isValid ? date : "");
+                    }}
+                    // Adjust padding to match the input field
+                    style={{ padding: "23px 27px" }}
+                  />
+                )}
+              />
+              <div>
+                {errors.dateBorn && (
+                  <span className="text-white">This field is required</span>
+                )}
+              </div>
+            </div>
           </div>
+
           <div className=" flex">
             <div>
               <p className=" mx-2 mt-3 mb-1">Enter your password</p>
@@ -218,45 +245,6 @@ export default function App() {
               </select>
               <div className="mx-2 text-yellow-500">
                 {errors.gender && <span>This field is required</span>}
-              </div>
-            </div>
-          </div>
-          <div className=" my-10  flex justify-center text-4xl font-bold">
-            <h2 className=" text-blue-700">Beneficiary</h2>
-          </div>
-          <div className=" flex">
-            <div>
-              <p className=" mx-2 mt-3 mb-1">First Beneficiary</p>
-              <input
-                className=" mx-2 rounded-md py-3 px-10"
-                {...register("firtBeneficiary", { required: true })}
-              />
-              <div className=" mx-2 text-yellow-500">
-                {errors.firtBeneficiary && <span>This field is required</span>}
-              </div>
-            </div>
-            <div>
-              <p className=" mx-2 mt-3 mb-1">Second Beneficiary</p>
-              <input
-                className=" mx-2 rounded-md py-3 px-10"
-                {...register("secondBeneficiary", { required: true })}
-              />
-              <div className=" mx-2 text-yellow-500">
-                {errors.secondBeneficiary && (
-                  <span>This field is required</span>
-                )}
-              </div>
-            </div>
-          </div>
-          <div className=" flex justify-center">
-            <div>
-              <p className=" mx-2 mt-3 mb-1">Third Beneficiary</p>
-              <input
-                className=" mx-2 rounded-md py-3 px-10"
-                {...register("thirdBeneficiary", { required: true })}
-              />
-              <div className=" mx-2 text-yellow-500">
-                {errors.thirdBeneficiary && <span>This field is required</span>}
               </div>
             </div>
           </div>

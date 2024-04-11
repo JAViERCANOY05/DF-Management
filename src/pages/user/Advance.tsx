@@ -12,11 +12,11 @@ import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { notifyError, notifySuccess } from "../Notifications";
-import Advance from "../api/advancePayment"
-import AddvancePaymentni from "../api/addAdvancePayment"
+import Advance from "../api/advancePayment";
+import AddvancePaymentni from "../api/addAdvancePayment";
 import DatePanel from "react-multi-date-picker/plugins/date_panel";
 type Inputs = {
-  amount : string ;
+  amount: string;
 };
 const language: string = "en";
 const style = {
@@ -48,17 +48,15 @@ export default function BasicTable() {
     reset();
     setOpenUpdate(false);
   };
- 
-  const [data, setData] = React.useState([
 
+  const [data, setData] = React.useState([
     {
-      advance : {
-        amount : "",
+      advance: {
+        amount: "",
       },
-      referenceNumber : "",
-      date : ""
-    }
-  
+      referenceNumber: "",
+      date: "",
+    },
   ]);
 
   const {
@@ -69,9 +67,7 @@ export default function BasicTable() {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    
-
-console.log(data , " data submited ")
+    console.log(data, " data submited ");
     try {
       const token = localStorage.getItem("token");
       const response = await AddvancePaymentni.trans(token, data);
@@ -92,29 +88,25 @@ console.log(data , " data submited ")
     }
   };
 
-
-
   const getAnn = async () => {
     try {
-
       const toks = localStorage.getItem("token");
       const response = await Advance.user(toks);
       if (response.status) {
-        setData(response.response)
+        setData(response.response);
       }
     } catch (error) {
       console.log(error, " ");
     }
   };
-const handleOpenTo  =()=>
-{
-    handleOpen()
-    console.log("javierbernadas")
-}
+  const handleOpenTo = () => {
+    handleOpen();
+    console.log("javierbernadas");
+  };
   React.useEffect(() => {
     getAnn();
   }, []);
-console.log(data , "-----------------------")
+  console.log(data, "-----------------------");
   return (
     <div className=" h-screen">
       <div className=" flex justify-between">
@@ -128,11 +120,9 @@ console.log(data , "-----------------------")
             onClick={handleOpenTo}
             className="btn btn-active btn-accent text-white"
           >
-            {/* <IoIosAddCircle /> */}
             + Advance
           </button>
         </div>
-        <div></div>
       </div>
       <TableContainer component={Paper} className=" mb-20 mt-10">
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -141,13 +131,10 @@ console.log(data , "-----------------------")
               <TableCell>Payment Advance </TableCell>
               <TableCell>Reference Number</TableCell>
               <TableCell>Date</TableCell>
-
-
             </TableRow>
           </TableHead>
           <TableBody>
-           
-          {data.length === 0 ? (
+            {data.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={7} align="center">
                   No data collected
@@ -159,23 +146,21 @@ console.log(data , "-----------------------")
                   key={index++}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                
                   <TableCell align="left" component="th" scope="row">
                     Amount : {data.advance.amount}
                     {/* referenceNumber */}
                   </TableCell>
                   <TableCell align="left" component="th" scope="row">
-                  {data.referenceNumber}
+                    {data.referenceNumber}
                     {/* referenceNumber */}
                   </TableCell>
                   <TableCell align="left" component="th" scope="row">
-                  {new Date(data.date).toLocaleDateString("en-US", {
+                    {new Date(data.date).toLocaleDateString("en-US", {
                       year: "numeric",
                       month: "long",
                       day: "2-digit",
                     })}
                   </TableCell>
-               
                 </TableRow>
               ))
             )}
@@ -211,25 +196,20 @@ console.log(data , "-----------------------")
                     )}
                   </div>
                 </div>
-                
-              
 
-              <div className=" flex justify-end gap-3 mt-7">
-                <button
-                  onClick={() => setOpen(false)}
-                  className="btn btn-error text-white"
-                >
-                  Back
-                </button>
-                <button
-                  className="btn btn-active btn-accent text-white"
-                >
-                  Confirm
-                </button>
+                <div className=" flex justify-end gap-3 mt-7">
+                  <button
+                    onClick={() => setOpen(false)}
+                    className="btn btn-error text-white"
+                  >
+                    Back
+                  </button>
+                  <button className="btn btn-active btn-accent text-white">
+                    Confirm
+                  </button>
+                </div>
               </div>
             </div>
-            </div>
-
           </form>
         </Box>
       </Modal>

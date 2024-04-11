@@ -72,8 +72,7 @@ export default function BasicTable() {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Deaths First Name</TableCell>
-              <TableCell>Deaths Last Name</TableCell>
+              <TableCell>Contribution Name</TableCell>
               <TableCell align="right">Date Pay</TableCell>
               <TableCell align="right">Method of Payment</TableCell>
               <TableCell align="right">Amount</TableCell>
@@ -95,12 +94,9 @@ export default function BasicTable() {
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
-                    key={row.contribution.firstName}
+                    {row.contribution.firstName} {row.contribution.lastName}
                   </TableCell>
 
-                  <TableCell component="th" scope="row">
-                    {row.contribution.lastName}
-                  </TableCell>
                   <TableCell align="right">
                     {new Date(row.date).toLocaleDateString("en-US", {
                       year: "numeric",

@@ -21,6 +21,7 @@ import Advance from "./Advance";
 
 import Dashboard from "./Dashboard";
 import Contribution from "./Contribution";
+import Beneficiary from "./Beneficiary";
 import Report from "./Report";
 import Transaction from "./Transaction";
 import Settings from "./Setting";
@@ -35,6 +36,8 @@ import { GrAnnounce } from "react-icons/gr";
 import { GrTransaction } from "react-icons/gr";
 import { GiExitDoor } from "react-icons/gi";
 import { useRouter } from "next/navigation"; // Correct import
+import Diversity2Icon from "@mui/icons-material/Diversity2";
+import PaidIcon from "@mui/icons-material/Paid";
 
 const drawerWidth = 240;
 
@@ -55,6 +58,7 @@ const component: display[] = [
     icon: <GrAnnounce style={{ fontSize: "1.5em", color: "#1976D2" }} />,
     href: "Announcement",
   },
+
   // {
   //   name: "Report",
   //   icon: (
@@ -67,16 +71,20 @@ const component: display[] = [
     icon: <GrTransaction style={{ fontSize: "1.5em", color: "#1976D2" }} />,
     href: "Transaction",
   },
-
+  {
+    name: "Beneficiary",
+    icon: <Diversity2Icon style={{ fontSize: "1.5em", color: "#1976D2" }} />,
+    href: "Beneficiary",
+  },
+  {
+    name: "Advance Payment",
+    icon: <PaidIcon style={{ fontSize: "1.5em", color: "#1976D2" }} />,
+    href: "Advance Payment",
+  },
   {
     name: "Settings",
     icon: <MdOutlineSettings style={{ fontSize: "1.5em", color: "#1976D2" }} />,
     href: "Settings",
-  },
-  {
-    name: "Advance Payment",
-    icon: <MdOutlineSettings style={{ fontSize: "1.5em", color: "#1976D2" }} />,
-    href: "Advance Payment",
   },
 
   // Add more trees as needed
@@ -182,6 +190,8 @@ export default function MiniDrawer() {
       setDisplayComponent(<Transaction />);
     } else if (item === "Advance Payment") {
       setDisplayComponent(<Advance />);
+    } else if (item === "Beneficiary") {
+      setDisplayComponent(<Beneficiary />);
     }
   };
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);

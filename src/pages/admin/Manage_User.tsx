@@ -229,8 +229,8 @@ export default function BasicTable() {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell align="left">Last Name</TableCell>
-              <TableCell>First Name</TableCell>
+              <TableCell align="left">Name</TableCell>
+
               <TableCell align="left">Email</TableCell>
 
               <TableCell align="left">Date join</TableCell>
@@ -250,10 +250,10 @@ export default function BasicTable() {
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell align="left" component="th" scope="row">
-                    {data.lastName}
-                  </TableCell>
-                  <TableCell component="th" scope="row">
-                    {data.firstName}
+                    {data.lastName.charAt(0).toUpperCase() +
+                      data.lastName.slice(1)}{" "}
+                    {data.firstName.charAt(0).toUpperCase() +
+                      data.firstName.slice(1)}
                   </TableCell>
 
                   <TableCell align="left" component="th" scope="row">

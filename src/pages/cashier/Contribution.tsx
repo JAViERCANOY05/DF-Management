@@ -271,15 +271,14 @@ export default function BasicTable() {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>First Name</TableCell>
-              <TableCell align="left">Last Name</TableCell>
+              <TableCell>Name</TableCell>
               <TableCell align="left">Amount to Pay</TableCell>
               <TableCell align="left">Age</TableCell>
               <TableCell align="left">Date Born</TableCell>
               <TableCell align="left">Date Die</TableCell>
-              <TableCell align="left">Status</TableCell>
+              {/* <TableCell align="left">Status</TableCell> */}
               <TableCell align="left">Date Deadline</TableCell>
-              <TableCell align="right">Action</TableCell>
+              {/* <TableCell align="right">Action</TableCell> */}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -296,11 +295,9 @@ export default function BasicTable() {
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
-                    {data.firstName}
+                    {data.lastName} {data.firstName}
                   </TableCell>
-                  <TableCell align="left" component="th" scope="row">
-                    {data.lastName}
-                  </TableCell>
+
                   <TableCell align="left" component="th" scope="row">
                     ₱ {data.amount}
                   </TableCell>
@@ -320,7 +317,7 @@ export default function BasicTable() {
                       day: "2-digit",
                     })}
                   </TableCell>
-                  <TableCell align="left">
+                  {/* <TableCell align="left">
                     {data.status === "pending" ? (
                       <p className="bg-red-300 text-center rounded-md">
                         {data.status}
@@ -330,7 +327,7 @@ export default function BasicTable() {
                         {data.status}
                       </p>
                     )}
-                  </TableCell>
+                  </TableCell> */}
                   <TableCell align="left">
                     {data.countDown <= 0 ? (
                       <p className="bg-red-300 text-center rounded-md">
@@ -343,7 +340,7 @@ export default function BasicTable() {
                     )}
                   </TableCell>
 
-                  <TableCell align="right">
+                  {/* <TableCell align="right">
                     <button
                       onClick={() => handleOpenPayment(data._id)}
                       className="btn btn-active btn-accent mr-3 text-white"
@@ -364,7 +361,7 @@ export default function BasicTable() {
                     >
                       Delete
                     </button>
-                  </TableCell>
+                  </TableCell> */}
                 </TableRow>
               ))
             )}

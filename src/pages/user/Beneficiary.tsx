@@ -27,6 +27,8 @@ import SingleSelectUser from "../helper/dropdown";
 type Inputs = {
   firstName: string;
   lastName: string;
+  dateBorn: any;
+  gender: string;
 };
 interface UserData {
   _id: string;
@@ -106,9 +108,13 @@ export default function BasicTable() {
   } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     console.log(data, "s=================");
+    const date = new Date(data.dateBorn);
+    const formattedDate = date.toISOString().split("T")[0];
     const fillForm = {
       firstName: data.firstName,
       lastName: data.lastName,
+      gender: data.gender,
+      born: formattedDate,
     };
 
     try {
@@ -337,6 +343,8 @@ export default function BasicTable() {
             <TableRow>
               <TableCell>First Name</TableCell>
               <TableCell align="left">Last Name</TableCell>
+              <TableCell align="left">Gender</TableCell>
+              <TableCell align="left">Date Born</TableCell>
               <TableCell align="left">Date Added</TableCell>
               <TableCell align="right">Action</TableCell>
             </TableRow>
@@ -360,7 +368,16 @@ export default function BasicTable() {
                   <TableCell align="left" component="th" scope="row">
                     {data.lastName}
                   </TableCell>
-
+                  <TableCell align="left" component="th" scope="row">
+                    {data.gender}
+                  </TableCell>
+                  <TableCell align="left">
+                    {new Date(data.born).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "2-digit",
+                    })}
+                  </TableCell>
                   <TableCell align="left">
                     {new Date(data.date).toLocaleDateString("en-US", {
                       year: "numeric",
@@ -410,25 +427,75 @@ export default function BasicTable() {
               </h2>
 
               <div className=" flex justify-center gap-5 mt-5">
-                <div className="my-2">
-                  <p className=" mx-2 text-center  ">First Name</p>
-                  <input
-                    className=" rounded-md  p-4"
-                    {...register("firstName", { required: true })}
-                  />
-                  {errors.firstName && (
-                    <div className=" text-white">This field is required</div>
-                  )}
+                <div>
+                  {" "}
+                  <div className="my-2">
+                    <p className=" mx-2 text-center  ">First Name</p>
+                    <input
+                      className=" rounded-md  p-4"
+                      {...register("firstName", { required: true })}
+                    />
+                    {errors.firstName && (
+                      <div className=" text-white">This field is required</div>
+                    )}
+                  </div>
+                  <div className="my-2">
+                    <p className="mx-2 text-center">Gender</p>
+                    <select
+                      className="rounded-md py-4 px-12"
+                      {...register("gender", { required: true })}
+                    >
+                      <option value="">Select Gender</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                    </select>
+                    {errors.gender && (
+                      <div className="text-white">This field is required</div>
+                    )}
+                  </div>
                 </div>
-                <div className="my-2">
-                  <p className=" mx-2 text-center  ">Last Name</p>
-                  <input
-                    className=" rounded-md  p-4"
-                    {...register("lastName", { required: true })}
-                  />
-                  {errors.lastName && (
-                    <div className=" text-white">This field is required</div>
-                  )}
+                <div>
+                  <div className="my-2">
+                    <p className=" mx-2 text-center  ">Last Name</p>
+                    <input
+                      className=" rounded-md  p-4"
+                      {...register("lastName", { required: true })}
+                    />
+                    {errors.lastName && (
+                      <div className=" text-white">This field is required</div>
+                    )}
+                  </div>
+
+                  <div>
+                    <p className="">Birth Date</p>
+
+                    <Controller
+                      control={control}
+                      name="dateBorn"
+                      rules={{ required: true }} //optional
+                      render={({
+                        field: { onChange, name, value },
+                        fieldState: { invalid, isDirty },
+                        formState: { errors },
+                      }) => (
+                        <DatePicker
+                          value={value || ""}
+                          onChange={(date: any) => {
+                            onChange(date?.isValid ? date : "");
+                          }}
+                          // Adjust padding to match the input field
+                          style={{ padding: "26px 16px" }}
+                        />
+                      )}
+                    />
+                    <div>
+                      {errors.dateBorn && (
+                        <span className="text-white">
+                          This field is required
+                        </span>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
               <div className=" flex justify-end gap-3 mt-3">

@@ -20,6 +20,7 @@ import { useState } from "react";
 import Advance from "./Advance";
 
 import Dashboard from "./Dashboard";
+import Pay from "./Pay";
 import Contribution from "./Contribution";
 import Beneficiary from "./Beneficiary";
 import Report from "./Report";
@@ -38,6 +39,7 @@ import { GiExitDoor } from "react-icons/gi";
 import { useRouter } from "next/navigation"; // Correct import
 import Diversity2Icon from "@mui/icons-material/Diversity2";
 import PaidIcon from "@mui/icons-material/Paid";
+import PaymentIcon from "@mui/icons-material/Payment";
 
 const drawerWidth = 240;
 
@@ -52,6 +54,11 @@ const component: display[] = [
     name: "Contribution",
     icon: <RiHeartAddFill style={{ fontSize: "1.5em", color: "#1976D2" }} />,
     href: "Contribution",
+  },
+  {
+    name: "Pay",
+    icon: <PaymentIcon style={{ fontSize: "1.5em", color: "#1976D2" }} />,
+    href: "Pay",
   },
   {
     name: "Announcement",
@@ -180,8 +187,8 @@ export default function MiniDrawer() {
   };
   const handlerClick = (item: any) => {
     console.log(item);
-    if (item === "Contribution") {
-      setDisplayComponent(<Contribution />);
+    if (item === "Pay") {
+      setDisplayComponent(<Pay />);
     } else if (item === "Announcement") {
       setDisplayComponent(<Announcement />);
     } else if (item === "Settings") {
@@ -192,6 +199,8 @@ export default function MiniDrawer() {
       setDisplayComponent(<Advance />);
     } else if (item === "Beneficiary") {
       setDisplayComponent(<Beneficiary />);
+    } else if (item === "Contribution") {
+      setDisplayComponent(<Contribution />);
     }
   };
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);

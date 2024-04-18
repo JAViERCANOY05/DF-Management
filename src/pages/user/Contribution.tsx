@@ -282,7 +282,7 @@ export default function BasicTable() {
       <div className=" flex justify-between">
         <div>
           <p className=" text-center border-2 px-20 rounded-md text-white font-bold bg-slate-400 py-3">
-            Contribution
+            List of Contribution
           </p>
         </div>
         <div>
@@ -300,13 +300,10 @@ export default function BasicTable() {
           <TableHead>
             <TableRow>
               <TableCell>Name</TableCell>
-              <TableCell align="left">Amount to Pay</TableCell>
+
               <TableCell align="left">Age</TableCell>
               <TableCell align="left">Date Born</TableCell>
               <TableCell align="left">Date Die</TableCell>
-              <TableCell align="left">Status</TableCell>
-              <TableCell align="left">Date Deadline</TableCell>
-              <TableCell align="right">Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -325,9 +322,7 @@ export default function BasicTable() {
                   <TableCell align="left" component="th" scope="row">
                     {data.firstName} {data.lastName}
                   </TableCell>
-                  <TableCell align="left" component="th" scope="row">
-                    ₱ {data.amount}
-                  </TableCell>
+
                   <TableCell align="left">{data.age}</TableCell>
 
                   <TableCell align="left">
@@ -343,58 +338,6 @@ export default function BasicTable() {
                       month: "long",
                       day: "2-digit",
                     })}
-                  </TableCell>
-                  <TableCell align="left">
-                    {data.status === "pending" ? (
-                      <p className="bg-red-300 text-center rounded-md">
-                        {data.status}
-                      </p>
-                    ) : (
-                      <p className=" text-center bg-green-400 rounded-md">
-                        {data.status}
-                      </p>
-                    )}
-                  </TableCell>
-                  <TableCell align="left">
-                    {data.countDown <= 0 ? (
-                      <p className="bg-red-300 text-center rounded-md">
-                        Already Due
-                      </p>
-                    ) : (
-                      <p className=" text-center bg-green-400 rounded-md">
-                        {data.countDown} Days left
-                      </p>
-                    )}
-                  </TableCell>
-
-                  <TableCell align="right">
-                    {data.status === "Waiting for approval" ||
-                    data.status === "paid" ? (
-                      // Render nothing
-                      ""
-                    ) : (
-                      // Render Pay button
-                      <button
-                        onClick={() => handleOpenPayment(data._id)}
-                        className="btn btn-active btn-accent mr-3 text-white"
-                      >
-                        Pay
-                      </button>
-                    )}
-
-                    {/* <button
-                      onClick={() => handleUpdate(data)}
-                      className="btn btn-active btn-primary mr-3"
-                    >
-                      Update
-                    </button> */}
-
-                    {/* <button
-                      onClick={() => deleteCont(data._id)}
-                      className="btn btn-error text-white"
-                    >
-                      Delete
-                    </button> */}
                   </TableCell>
                 </TableRow>
               ))

@@ -42,7 +42,12 @@ export default function BasicTable() {
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
+  const [selectedImage, setSelectedImage] = React.useState(null); // State to store the selected image
+  const handleImageChange = (event: any) => {
+    if (event.target.files && event.target.files[0]) {
+      setSelectedImage(event.target.files[0]);
+    }
+  };
   const handleOpenUpdate = () => setOpenUpdate(true);
   const handleCloseUpdate = () => {
     reset();
@@ -179,25 +184,46 @@ export default function BasicTable() {
               <h2 className=" text-center bg-[#0C3B68] text-white rounded-lg py-3 my-3">
                 Fill up this for Advance Payment
               </h2>
-              <div className=" flex justify-center gap-5 mt-5">
-                <div>
-                  <p className=" mx-2  ">Amount</p>
+              <div className=" flex justify-center gap-5 flex-col">
+                <div className="flex flex-col items-center justify-center">
+                  {" "}
+                  <div className="flex flex-col">
+                    <p className=" mx-2  ">Amount</p>
 
-                  <input
-                    className=" rounded-md my-2 py-2 "
-                    {...register("amount", { required: true })}
-                  />
+                    <input
+                      className=" rounded-md my-2 py-2 px-20"
+                      {...register("amount", { required: true })}
+                    />
 
-                  <div>
-                    {errors.amount && (
-                      <span className=" text-white">
-                        This field is required
-                      </span>
-                    )}
+                    <div>
+                      {errors.amount && (
+                        <span className=" text-white">
+                          This field is required
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <div className=" w-1/2">
+                    <label
+                      htmlFor="image-upload"
+                      className="block text-sm font-medium leading-6"
+                    >
+                      Attach Reciept
+                    </label>
+                    <div className="mt-2">
+                      <input
+                        onChange={handleImageChange} // Define this function to handle the image file
+                        id="image-upload"
+                        name="image-upload"
+                        type="file"
+                        accept="image/*" // This restricts the file input to image files only
+                        className="block w-full text-sm text-gray-900 px-2 py-1.5 rounded-md border-0 shadow-sm ring-1 ring-inset ring-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100"
+                      />
+                    </div>
                   </div>
                 </div>
 
-                <div className=" flex justify-end gap-3 mt-7">
+                <div className=" flex justify-center gap-3 ">
                   <button
                     onClick={() => setOpen(false)}
                     className="btn btn-error text-white"

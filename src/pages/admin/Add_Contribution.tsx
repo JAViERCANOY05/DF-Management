@@ -461,12 +461,14 @@ export default function BasicTable() {
                   </div>
                 </div>
                 <div className=" flex justify-center gap-5 mt-5">
-                  <div className="my-2">
+                  <div className="my-2 ">
                     <p className=" mx-2 text-center  ">Amount</p>
                     <input
-                      className=" rounded-md  py-4"
+                      className=" rounded-md  p-4"
                       type="number"
                       {...register("amount", { required: true })}
+                      readOnly
+                      defaultValue={20}
                     />
                     {errors.amount && (
                       <div className=" text-white">This field is required</div>
@@ -568,7 +570,8 @@ export default function BasicTable() {
                     className="rounded-md py-2"
                     type="number"
                     {...register("amount", { required: true })}
-                    defaultValue={formData.amount}
+                    readOnly
+                    defaultValue={20}
                   />
                   <div>
                     {errors.amount && (

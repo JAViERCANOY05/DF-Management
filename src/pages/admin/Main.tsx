@@ -39,6 +39,8 @@ import { MdOutlineSettings } from "react-icons/md";
 import { GrAnnounce } from "react-icons/gr";
 import { GrTransaction } from "react-icons/gr";
 import { GiExitDoor } from "react-icons/gi";
+import Manage_Contribution from "./ManageContribution";
+import NewReleasesIcon from "@mui/icons-material/NewReleases";
 
 const drawerWidth = 240;
 
@@ -62,16 +64,22 @@ const component: display[] = [
     icon: <RiHeartAddFill style={{ fontSize: "1.5em", color: "#1976D2" }} />,
     href: "Add_Contribution",
   },
+  {
+    name: "Approval",
+    icon: <MdApproval style={{ fontSize: "1.5em", color: "#1976D2" }} />,
+    href: "Approval",
+  },
 
   {
     name: "Manage_User",
     icon: <MdManageAccounts style={{ fontSize: "1.5em", color: "#1976D2" }} />,
     href: "Manage_User",
   },
+
   {
-    name: "Approval",
-    icon: <MdApproval style={{ fontSize: "1.5em", color: "#1976D2" }} />,
-    href: "Approval",
+    name: "Release List",
+    icon: <NewReleasesIcon style={{ fontSize: "1.5em", color: "#1976D2" }} />,
+    href: "Release List",
   },
 
   {
@@ -191,6 +199,8 @@ export default function MiniDrawer() {
       setDisplayComponent(<Manage_User />);
     } else if (item === "Approval") {
       setDisplayComponent(<Approval />);
+    } else if (item === "Release List") {
+      setDisplayComponent(<Manage_Contribution />);
     }
     // Approval
   };

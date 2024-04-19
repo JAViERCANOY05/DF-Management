@@ -1,8 +1,6 @@
-import React, { useState } from "react";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import React from "react";
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
 
 // Define the User interface to type each user object
 interface User {
@@ -18,28 +16,18 @@ interface SingleSelectUserProps {
 
 const SingleSelectUser: React.FC<
   SingleSelectUserProps & {
-    value: string;
-    onChange: (event: SelectChangeEvent<string>) => void;
+    value: User | null;
+    onChange: (user: User | null) => void;
   }
 > = ({ users, value, onChange }) => {
   return (
-    <FormControl fullWidth>
-      <InputLabel id="user-select-label">User</InputLabel>
-      <Select
-        labelId="user-select-label"
-        id="user-select"
-        value={value}
-        label="User"
-        onChange={onChange}
-      >
-        {users.map((user) => (
-          <MenuItem
-            key={user._id}
-            value={user._id}
-          >{`${user.lastName} ${user.firstName} `}</MenuItem>
-        ))}
-      </Select>
-    </FormControl>
+    <Autocomplete
+      value={value}
+      onChange={(event, user) => onChange(user)}
+      options={users}
+      getOptionLabel={(user) => `${user.lastName} ${user.firstName}`}
+      renderInput={(params) => <TextField {...params} label="User" />}
+    />
   );
 };
 

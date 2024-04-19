@@ -365,25 +365,27 @@ export default function BasicTable() {
                   </TableCell>
 
                   <TableCell align="right">
-                    <button
-                      onClick={() => handleUpdate(data)}
-                      className="btn btn-active btn-primary mr-3"
-                    >
-                      Update
-                    </button>
-                    <button
-                      onClick={() => deleteCont(data._id)}
-                      className="btn btn-error text-white"
-                    >
-                      Delete
-                    </button>
-
-                    {/* <button
-                      onClick={() => deleteCont(data._id)}
-                      className="btn btn-error text-white"
-                    >
-                      Delete
-                    </button> */}
+                    {data.release ? (
+                      <div className="bg-blue-200 flex  justify-center items-center">
+                        {" "}
+                        <p>Release</p>
+                      </div>
+                    ) : (
+                      <>
+                        <button
+                          onClick={() => handleUpdate(data)}
+                          className="btn btn-active btn-primary mr-3"
+                        >
+                          Update
+                        </button>
+                        <button
+                          onClick={() => deleteCont(data._id)}
+                          className="btn btn-error text-white"
+                        >
+                          Delete
+                        </button>
+                      </>
+                    )}
                   </TableCell>
                 </TableRow>
               ))
@@ -412,9 +414,11 @@ export default function BasicTable() {
 
                 <div className=" flex gap-5 justify-center mt-2">
                   <div className="">
-                    <h1 className="mx-2">Select a User</h1>
-                    <div className=" bg-white  w-56 ">
+                    <h1 className="mx-2">Search a User</h1>
+
+                    <div className="bg-white w-56 border rounded-md p-1 ">
                       {" "}
+                      {/* Adjust width and add border */}
                       <Controller
                         name="user"
                         control={control}
@@ -422,8 +426,8 @@ export default function BasicTable() {
                         render={({ field }) => (
                           <SingleSelectUser
                             users={users}
-                            value={field.value || ""} // Provide a fallback value if field value is undefined
-                            onChange={(e) => field.onChange(e.target.value)}
+                            value={field.value}
+                            onChange={(user) => field.onChange(user)}
                           />
                         )}
                       />
@@ -447,7 +451,7 @@ export default function BasicTable() {
                             onChange(date?.isValid ? date : "");
                           }}
                           // Add margin and padding to the input field
-                          style={{ padding: "27px" }}
+                          style={{ padding: "32px" }}
                         />
                       )}
                     />

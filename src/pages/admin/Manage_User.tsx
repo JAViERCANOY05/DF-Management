@@ -70,6 +70,7 @@ export default function BasicTable() {
   };
   const [data, setData] = React.useState([]);
   const [user, setUser] = React.useState([]);
+
   const {
     register,
     handleSubmit,
@@ -173,7 +174,7 @@ export default function BasicTable() {
       if (response.status) {
         getData();
         notifySuccess("Successfully Delete ! ");
-        getUser();
+        getUser(null);
       } else {
         notifyError("Something went wrong!");
       }
@@ -186,14 +187,40 @@ export default function BasicTable() {
   const handlePaymeny = () => {
     notifyError("UnderCodingPa : ) ");
   };
+  const [searchQuery, setSearchQuery] = React.useState<string>("");
 
-  const getUser = async () => {
+  // Function to handle changes in the search input
+  interface UserData {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    dateJoin: Date;
+    role: string;
+  }
+
+  interface Props {
+    user: UserData[];
+    deleteCont: (id: string) => void;
+  }
+  const handleSearchInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const value = event.target.value;
+    setSearchQuery(value);
+    console.log(value, "///");
+    getUser(value);
+  };
+
+  const getUser = async (value: any) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await GetUser.user(token);
+      console.log(searchQuery, "---");
+      const response = await GetUser.user(value, token);
+
       if (response.status) {
         setUser(response.response);
-        console.log(response.response, " userssssssssssss");
+        // console.log(response.response, " userssssssssssss");
       } else {
         console.log("error");
       }
@@ -203,7 +230,7 @@ export default function BasicTable() {
   };
 
   React.useEffect(() => {
-    getUser();
+    getUser(null);
   }, []);
 
   return (
@@ -224,6 +251,24 @@ export default function BasicTable() {
             Add Member
           </Link>
         </div>
+      </div>
+      <div className=" flex items-center justify-center gap-5 mt-6">
+        <input
+          type="text"
+          placeholder="Search..."
+          value={searchQuery}
+          onChange={handleSearchInputChange}
+          style={{
+            padding: "10px",
+            fontSize: "16px",
+            border: "1px solid #ccc",
+            borderRadius: "5px",
+            boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
+            width: "100%",
+            boxSizing: "border-box",
+            marginBottom: "10px",
+          }}
+        />
       </div>
       <TableContainer component={Paper} className=" mb-20 mt-10">
         <Table sx={{ minWidth: 650 }} aria-label="simple table">

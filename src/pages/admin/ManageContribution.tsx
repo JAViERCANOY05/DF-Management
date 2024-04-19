@@ -21,7 +21,7 @@ import { notifyError, notifySuccess } from "../Notifications";
 import DeleteContribution from "../api/deleteContrinbution";
 import DatePicker from "react-multi-date-picker";
 import UpdateContribution from "../api/updateContribution";
-import Payment from "../api/payment";
+import GetUser from "../api/getUser";
 type Inputs = {
   firstName: string;
   lastName: string;
@@ -31,8 +31,6 @@ type Inputs = {
   dateBorn: string;
   dateDie: string;
   deadLine: string;
-  amount: string;
-  image: [];
 };
 const language: string = "en";
 const style = {
@@ -58,103 +56,29 @@ export default function BasicTable() {
     dateBorn: "",
     dateDie: "",
     deadLine: "",
-    image: "",
   });
   const [open, setOpen] = React.useState(false);
+  const [id, setId] = React.useState("");
   const [openUpdate, setOpenUpdate] = React.useState(false);
-
-  const [openPayment, setOpenPayment] = React.useState(false);
-  const handleOpenPayment = (id: any) => {
-    console.log(id);
-    setId(id);
-    setOpenPayment(true);
-  };
-  const handleClosePayment = () => setOpenPayment(false);
+  const [openReason, setOpenReason] = React.useState(false);
+  const [claim, setClaim] = React.useState("");
+  const [relation, setRelation] = React.useState("");
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const handleCloseReason = () => setOpenReason(false);
 
-  const handleOpenUpdate = () => {
-    setOpenUpdate(true);
+  const handleOpenUpdate = () => setOpenUpdate(true);
+  const handleOpenReason = (data: any) => {
+    setId(data);
+    setOpenReason(true);
   };
   const handleCloseUpdate = () => {
     reset();
     setOpenUpdate(false);
   };
   const [data, setData] = React.useState([]);
-  const [name, setName] = React.useState("");
-  const [number, setNumber] = React.useState("");
-  const [paymentMethod, setPaymentMethod] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [amount, setAmount] = React.useState("");
-  const [image, setImage] = React.useState("");
-  const [selectedImage, setSelectedImage] = React.useState(null); // State to store the selected image
-
-  const handleImageChange = (event: any) => {
-    if (event.target.files && event.target.files[0]) {
-      setSelectedImage(event.target.files[0]);
-    }
-  };
-
-  const [id, setId] = React.useState("");
-
-  const handleChangeName = (event: any) => {
-    setName(event.target.value);
-  };
-  const handleChangePaymentMethod = (event: any) => {
-    setPaymentMethod(event.target.value);
-  };
-  const handleChangeNumber = (event: any) => {
-    setNumber(event.target.value);
-  };
-
-  const handleChangeEmail = (event: any) => {
-    setEmail(event.target.value);
-  };
-  const handleChangeAmount = (event: any) => {
-    setAmount(event.target.value);
-  };
-
-  const handleImage = (event: any) => {
-    setImage(event.target.value);
-  };
-
-  const payment = async (e: any) => {
-    e.preventDefault();
-
-    try {
-      const newData = {
-        name: name,
-        number: number,
-        paymentMethod,
-        email: email,
-        amount: 20,
-        image: selectedImage,
-      };
-      console.log(newData, "xxxxxxxxxxxxxxxxxxxxxxxxxx");
-
-      const token = localStorage.getItem("token");
-      const response = await Payment.pay(token, id, newData);
-
-      if (response.status) {
-        notifySuccess("Successfully Paid!");
-        console.log(response, "goods");
-        getData();
-        handleClosePayment();
-        setName("");
-        setNumber("");
-        setPaymentMethod("");
-        setEmail("");
-        setAmount("");
-      } else {
-        notifyError("someting went wrong");
-        console.log("error");
-      }
-    } catch (error) {
-      notifyError("someting went wrong");
-      console.log("error");
-    }
-  };
+  const [user, setUser] = React.useState([]);
 
   const {
     register,
@@ -192,9 +116,8 @@ export default function BasicTable() {
       died: formattedDateDie,
       age: data.age,
       deadLine: formattedDateLine,
-      amount: data.amount,
     };
-    console.log(fillForm, "sasdsadsdddddddddddddddddddddddddad");
+    console.log(fillForm);
 
     try {
       const token = localStorage.getItem("token");
@@ -210,6 +133,28 @@ export default function BasicTable() {
     } catch (error) {
       console.log("Error 1 ");
       notifyError("Something went wrong!");
+    }
+  };
+  const handleSubmitReason = async (event: any) => {
+    event.preventDefault();
+    const release = {
+      claim,
+      relation,
+    };
+    console.log(id, release);
+    try {
+      const token = localStorage.getItem("token");
+      const response = await GetUser.release(token, id, release);
+      if (response.status) {
+        setOpenReason(false);
+        getUser();
+        notifySuccess("Add amount success");
+        console.log("goods na ");
+      } else {
+        console.log("error");
+      }
+    } catch (error) {
+      console.log("error", error);
     }
   };
   const onSubmitUpdate: SubmitHandler<Inputs> = async (data) => {
@@ -256,10 +201,11 @@ export default function BasicTable() {
   const deleteCont = async (id: any) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await DeleteContribution.delete(token, id);
+      const response = await DeleteContribution.user(token, id);
       if (response.status) {
         getData();
         notifySuccess("Successfully Delete ! ");
+        getUser();
       } else {
         notifyError("Something went wrong!");
       }
@@ -272,96 +218,128 @@ export default function BasicTable() {
   const handlePaymeny = () => {
     notifyError("UnderCodingPa : ) ");
   };
+  const [searchQuery, setSearchQuery] = React.useState<string>("");
+
+  // Function to handle changes in the search input
+  interface UserData {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    dateJoin: Date;
+    role: string;
+  }
+
+  const getUser = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      console.log(searchQuery, "---");
+      const response = await GetUser.con(token);
+
+      if (response.status) {
+        setUser(response.response);
+        // console.log(response.response, " userssssssssssss");
+      } else {
+        console.log("error");
+      }
+    } catch (error) {
+      console.log("error");
+    }
+  };
 
   React.useEffect(() => {
-    getData();
+    getUser();
   }, []);
 
   return (
     <div className=" h-screen">
       <div className=" flex justify-between">
         <div>
-          <p className=" text-center border-2 px-20 rounded-md text-white font-bold bg-slate-400 py-3">
-            Payment
+          <p className=" text-center border-2 px-20 rounded-md bg-slate-400 py-3  text-white font-bold">
+            Releases
           </p>
         </div>
-        <div>
-          {/* <button
-            onClick={handleOpen}
-            className="btn btn-active btn-accent text-white"
-          >
-            <IoIosAddCircle />
-            Add Contribution
-          </button> */}
-        </div>
       </div>
+
       <TableContainer component={Paper} className=" mb-20 mt-10">
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell align="left">Amount to Pay</TableCell>
-              <TableCell align="left">Status</TableCell>
-              <TableCell align="left">Date Deadline</TableCell>
-              <TableCell align="right">Action</TableCell>
+              <TableCell align="left">Name</TableCell>
+
+              <TableCell align="left">Amount</TableCell>
+
+              <TableCell align="left">Total Collection</TableCell>
+              <TableCell align="left">Claim By</TableCell>
+              <TableCell align="left">Relationship</TableCell>
+              <TableCell align="left">Release Date</TableCell>
+              <TableCell align="left"></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.length === 0 ? (
+            {user.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={7} align="center">
                   No data collected
                 </TableCell>
               </TableRow>
             ) : (
-              data.map((data: any, index = 0) => (
+              user.map((data: any, index = 0) => (
                 <TableRow
                   key={index++}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell align="left" component="th" scope="row">
-                    {data.firstName} {data.lastName}
+                    {data.lastName.charAt(0).toUpperCase() +
+                      data.lastName.slice(1)}{" "}
+                    {data.firstName.charAt(0).toUpperCase() +
+                      data.firstName.slice(1)}
+                  </TableCell>
+
+                  <TableCell align="left" component="th" scope="row">
+                    {data.amount}
                   </TableCell>
                   <TableCell align="left" component="th" scope="row">
-                    ₱ {data.amount}
+                    {data.total}
+                  </TableCell>
+                  <TableCell align="left" component="th" scope="row">
+                    {!data.release ? (
+                      <p className=" text-red-600">Not yet</p>
+                    ) : (
+                      data.release.claim
+                    )}
+                  </TableCell>
+                  <TableCell align="left" component="th" scope="row">
+                    {!data.release ? (
+                      <p className=" text-red-600">Not yet</p>
+                    ) : (
+                      data.release.relation
+                    )}
+                  </TableCell>
+                  <TableCell align="left" component="th" scope="row">
+                    {!data.release ? (
+                      <p className=" text-red-600">Not yet</p>
+                    ) : (
+                      <p>{new Date(data.release.date).toLocaleDateString()}</p>
+                    )}
                   </TableCell>
 
-                  <TableCell align="left">
-                    {data.status === "pending" ? (
-                      <p className="bg-red-300 text-center rounded-md">
-                        {data.status}
-                      </p>
-                    ) : (
-                      <p className=" text-center bg-green-400 rounded-md">
-                        {data.status}
-                      </p>
-                    )}
-                  </TableCell>
-                  <TableCell align="left">
-                    {data.countDown <= 0 ? (
-                      <p className="bg-red-300 text-center rounded-md">
-                        Already Due
-                      </p>
-                    ) : (
-                      <p className=" text-center bg-green-400 rounded-md">
-                        {data.countDown} Days left
-                      </p>
-                    )}
-                  </TableCell>
+                  {/* <TableCell align="right">
+                    {new Date(data.deadLine).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "2-digit",
+                    })}
+                  </TableCell> */}
 
                   <TableCell align="right">
-                    {data.status === "Waiting for approval" ||
-                    data.status === "paid" ? null : data.release ? (
-                      <div className="bg-blue-200 flex justify-center items-center">
-                        <p>Release</p>
-                      </div>
-                    ) : (
-                      // Render Pay button
+                    {data.release ? null : (
                       <button
-                        onClick={() => handleOpenPayment(data._id)}
-                        className="btn btn-active btn-accent mr-3 text-white"
+                        onClick={() => handleOpenReason(data._id)}
+                        type="button"
+                        className="focus:outline-none text-white bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-900"
                       >
-                        Pay
+                        Release
                       </button>
                     )}
                   </TableCell>
@@ -488,19 +466,10 @@ export default function BasicTable() {
                   </div>
                 </div>
               </div>
-              <div className=" flex justify-center gap-5">
-                <div className="my-2">
-                  <p className=" mx-2 text-center  ">Amount</p>
-                  <input
-                    className=" rounded-md  py-2"
-                    {...register("amount", { required: true })}
-                  />
-                  {errors.amount && (
-                    <div className=" text-white">This field is required</div>
-                  )}
-                </div>
-                <div className=" my-2">
+              <div className=" flex justify-center">
+                <div className=" mt-5">
                   <p className=" mx-2 text-center  ">Deadline</p>
+
                   <Controller
                     control={control}
                     name="deadLine"
@@ -549,162 +518,195 @@ export default function BasicTable() {
       </Modal>
 
       <Modal
-        open={openPayment}
-        onClose={handleClosePayment}
+        className="update-modal"
+        open={openUpdate}
+        onClose={handleCloseUpdate}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Typography
-            id="modal-modal-title"
-            variant="h6"
-            component="h2"
-            className="text-white"
-          >
-            <p className="text-center">Payment Transaction</p>
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            <div className="flex  justify-center items-center flex-col gap-2">
-              <div className=" w-1/2">
-                <label
-                  htmlFor="name"
-                  className="block text-sm font-medium leading-6"
-                >
-                  Name
-                </label>
-                <div className="">
-                  <input
-                    value={name}
-                    onChange={handleChangeName}
-                    id="name"
-                    name="name"
-                    type="text"
-                    autoComplete="name"
-                    required
-                    className="block font-bold px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  />
-                </div>
-              </div>
-              <div className=" w-1/2">
-                <label
-                  htmlFor="number"
-                  className="block text-sm font-medium leading-6"
-                >
-                  Number
-                </label>
-                <div className="mt-2">
-                  <input
-                    value={number}
-                    onChange={handleChangeNumber}
-                    id="number"
-                    name="number"
-                    type="text"
-                    autoComplete="tel"
-                    required
-                    className="block font-bold px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  />
-                </div>
-              </div>
-              <div className=" w-1/2">
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium leading-6"
-                >
-                  Email
-                </label>
-                <div className="mt-2">
-                  <input
-                    value={email}
-                    onChange={handleChangeEmail}
-                    id="email"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
-                    required
-                    className="block font-bold px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  />
-                </div>
-              </div>
-              <div className=" w-1/2">
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium leading-6"
-                >
-                  Amount
-                </label>
-                <div className="mt-2">
-                  <input
-                    value={20}
-                    onChange={handleChangeAmount}
-                    readOnly
-                    defaultValue={20}
-                    id="amount"
-                    name="amount"
-                    type="number"
-                    autoComplete="amount"
-                    required
-                    className="block font-bold px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  />
-                </div>
-              </div>
-              <div className=" w-1/2">
-                <label
-                  htmlFor="paymentMethod"
-                  className="block text-sm font-medium leading-6"
-                >
-                  Payment Method
-                </label>
-                <div className="mt-2">
-                  <select
-                    value={paymentMethod}
-                    onChange={handleChangePaymentMethod}
-                    id="paymentMethod"
-                    name="paymentMethod"
-                    autoComplete="paymentMethod"
-                    required
-                    className="block font-bold px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  >
-                    <option value="">Select Payment Method</option>
-                    <option value="Gcash">Gcash</option>
-                    <option value="Cash">Cash</option>
-                  </select>
-                </div>
-              </div>
-              <div className=" w-1/2">
-                <label
-                  htmlFor="image-upload"
-                  className="block text-sm font-medium leading-6"
-                >
-                  Attach Reciept
-                </label>
-                <div className="mt-2">
-                  <input
-                    onChange={handleImageChange} // Define this function to handle the image file
-                    id="image-upload"
-                    name="image-upload"
-                    type="file"
-                    accept="image/*" // This restricts the file input to image files only
-                    className="block w-full text-sm text-gray-900 px-2 py-1.5 rounded-md border-0 shadow-sm ring-1 ring-inset ring-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100"
-                  />
-                </div>
-              </div>
-            </div>
+          <form onSubmit={handleSubmit(onSubmitUpdate)}>
+            <div className="">
+              <h2 className=" text-center bg-green-400 text-black rounded-lg py-3 my-3">
+                Update Information
+              </h2>
+              <div className=" flex justify-center gap-5 mt-5">
+                <div>
+                  <p className=" mx-2  ">First Name</p>
 
-            <div className="flex justify-evenly my-10 gap-5">
-              <button
-                onClick={() => setOpenPayment(false)}
-                className="btn btn-error text-white"
-              >
-                Back
-              </button>
-              <button
-                onClick={payment}
-                className="btn btn-active btn-accent mr-3 text-white"
-              >
-                Confirm
-              </button>
+                  <input
+                    className=" rounded-md my-2 py-2 "
+                    {...register("firstName", { required: true })}
+                    defaultValue={formData.firstName}
+                  />
+                </div>
+                <div>
+                  <p className=" mx-2  ">Last Name</p>
+
+                  <input
+                    className=" rounded-md my-2 py-2"
+                    {...register("lastName", { required: true })}
+                    defaultValue={formData.lastName}
+                  />
+                </div>
+                <div className="">
+                  <p className=" mx-2 text-center  ">Age</p>
+
+                  <input
+                    className=" rounded-md my-2 py-2"
+                    {...register("age", { required: true })}
+                    defaultValue={formData.age}
+                  />
+                </div>
+              </div>
+              <div className=" flex gap-5 justify-center">
+                <div>
+                  <p className=" mx-2  ">Date Born</p>
+                  <Controller
+                    control={control}
+                    name="dateBorn"
+                    defaultValue={formData.born}
+                    rules={{ required: true }} //optional
+                    render={({
+                      field: { onChange, name, value },
+                      fieldState: { invalid, isDirty }, //optional
+                      formState: { errors }, //optional, but necessary if you want to show an error message
+                    }) => (
+                      <DatePicker
+                        value={value}
+                        onChange={(date: any) => {
+                          onChange(date?.isValid ? date : "");
+                        }}
+                        // Add margin and padding to the input field
+                        style={{ padding: "20px" }}
+                      />
+                    )}
+                  />
+                </div>
+                <div>
+                  <p className=" mx-2  ">Date Death</p>
+
+                  <Controller
+                    control={control}
+                    name="dateDie"
+                    defaultValue={formData.died}
+                    rules={{ required: true }} //optional
+                    render={({
+                      field: { onChange, name, value },
+                      fieldState: { invalid, isDirty }, //optional
+                      formState: { errors }, //optional, but necessary if you want to show an error message
+                    }) => (
+                      <DatePicker
+                        value={value}
+                        onChange={(date: any) => {
+                          onChange(date?.isValid ? date : "");
+                        }}
+                        // Add margin and padding to the input field
+                        style={{ padding: "20px" }}
+                      />
+                    )}
+                  />
+                </div>
+              </div>
+              <div className=" flex justify-center">
+                <div className=" mt-5">
+                  <p className=" mx-2 text-center  ">Deadline</p>
+
+                  <Controller
+                    control={control}
+                    name="deadLine"
+                    defaultValue={formData.deadLine}
+                    rules={{ required: true }} //optional
+                    render={({
+                      field: { onChange, name, value },
+                      fieldState: { invalid, isDirty }, //optional
+                      formState: { errors }, //optional, but necessary if you want to show an error message
+                    }) => (
+                      <DatePicker
+                        value={value}
+                        onChange={(date: any) => {
+                          onChange(date?.isValid ? date : "");
+                        }}
+                        // Add margin and padding to the input field
+                        style={{ padding: "20px" }}
+                      />
+                    )}
+                  />
+                </div>
+              </div>
+              <div className=" flex justify-end gap-3 mt-3">
+                <button
+                  onClick={() => setOpenUpdate(false)}
+                  className="btn btn-error text-white"
+                >
+                  Back
+                </button>
+                <button
+                  // onClick={handleOpen}
+                  className="btn btn-active btn-accent text-white"
+                >
+                  Confirm
+                </button>
+              </div>
             </div>
-          </Typography>
+          </form>
+        </Box>
+      </Modal>
+      <Modal
+        open={openReason}
+        onClose={handleCloseReason}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <p className="text-center font-bold my-5 border-">Claim Info</p>
+          <div className="flex justify-center items-center">
+            <form
+              onSubmit={handleSubmitReason}
+              className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+            >
+              <div className="mb-4">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                  htmlFor="claimInput"
+                >
+                  Claim By
+                </label>
+                <input
+                  id="claimInput"
+                  type="text"
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  placeholder="Enter your claim here"
+                  value={claim}
+                  onChange={(event) => setClaim(event.target.value)}
+                />
+              </div>
+              <div className="mb-4">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                  htmlFor="relationInput"
+                >
+                  Relation
+                </label>
+                <input
+                  id="relationInput"
+                  type="text"
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  placeholder="Enter your relation here"
+                  value={relation}
+                  onChange={(event) => setRelation(event.target.value)}
+                />
+              </div>
+              <div className="flex items-center justify-between">
+                <button
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  type="submit"
+                >
+                  Submit
+                </button>
+              </div>
+            </form>
+          </div>
         </Box>
       </Modal>
 

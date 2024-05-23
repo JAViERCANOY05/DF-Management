@@ -303,7 +303,7 @@ export default function BasicTable() {
 
               <TableCell align="left">Age</TableCell>
               <TableCell align="left">Date Born</TableCell>
-              <TableCell align="left">Date Die</TableCell>
+              <TableCell align="left">Date of Death</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

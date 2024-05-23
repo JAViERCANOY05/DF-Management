@@ -306,7 +306,7 @@ export default function BasicTable() {
               <TableCell align="left">Amount to Pay</TableCell>
               <TableCell align="left">Age</TableCell>
               <TableCell align="left">Date Born</TableCell>
-              <TableCell align="left">Date Die</TableCell>
+              <TableCell align="left">Date of Death</TableCell>
 
               <TableCell align="left">Date Deadline</TableCell>
               <TableCell align="right">Action</TableCell>
